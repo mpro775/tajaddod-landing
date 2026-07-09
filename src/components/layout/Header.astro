@@ -1,0 +1,35 @@
+---
+import { navigation } from '../../data/navigation';
+---
+<header class="site-header" data-header>
+  <div class="container header-inner">
+    <a class="brand-lockup" href="#top" aria-label="تجدد - العودة إلى بداية الصفحة">
+      <img src="/logos/tajaddod-logo.svg" alt="شعار تجدد" width="164" height="58" />
+    </a>
+    <nav class="desktop-nav" aria-label="التنقل الرئيسي">
+      {navigation.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+    <a class="header-cta" href="#contact">تواصل تجاري</a>
+    <button class="menu-toggle" type="button" aria-label="فتح القائمة" aria-expanded="false" aria-controls="mobile-nav" data-menu-toggle>
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <button class="mobile-nav-backdrop" type="button" aria-label="إغلاق القائمة" data-mobile-nav-backdrop></button>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="قائمة الجوال" data-mobile-nav>
+    <div class="mobile-nav__head">
+      <img src="/logos/tajaddod-logo-white.svg" alt="شعار تجدد" width="142" height="52" loading="lazy" />
+      <span>منظومة الكهرباء والطاقة</span>
+    </div>
+
+    <div class="mobile-nav__links">
+      {navigation.map((item, index) => (
+        <a href={item.href} data-mobile-nav-link>
+          <span class="mobile-nav__index">{String(index + 1).padStart(2, '0')}</span>
+          <span class="mobile-nav__label">{item.label}</span>
+        </a>
+      ))}
+    </div>
+
+    <a class="mobile-nav__cta" href="#contact" data-mobile-nav-link>تواصل تجاري</a>
+  </nav>
+</header>

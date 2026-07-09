@@ -1,0 +1,576 @@
+---
+/**
+ * Coverage Areas Section — مجالات التغطية
+ * Displays key fields of specialization categorized by brand.
+ * Includes interactive filtering tabs and cinematic dark glassmorphism styling.
+ */
+import Icon from '../ui/Icon.astro';
+import SectionHeader from '../layout/SectionHeader.astro';
+import { coverage } from '../../data/coverage';
+
+// Utility helper to convert brand names to lowercased IDs for filtering
+const getBrandIds = (brandStr: string) => {
+  return brandStr.toLowerCase().replace(/\s+/g, '').replace('/', ',');
+};
+
+// Utility helper to split brand string into array of single brand names
+const getBrandList = (brandStr: string) => {
+  return brandStr.split('/').map(b => b.trim());
+};
+---
+<section class="section coverage-section layer-cinematic" id="coverage">
+  <!-- Cinematic Background Elements -->
+  <div class="cv-bg" aria-hidden="true">
+    <div class="cv-bg__grid"></div>
+    <div class="cv-bg__glow cv-bg__glow--1"></div>
+    <div class="cv-bg__glow cv-bg__glow--2"></div>
+  </div>
+
+  <div class="container cv-container">
+    <div class="cv-header-wrapper" data-reveal>
+      <SectionHeader
+        align="center"
+        dark
+        eyebrow="مجالات التغطية"
+        title="تخصصات واضحة بدل عرض منتجات عشوائي"
+        description="كل مجال في الصفحة مرتبط ببراند أو أكثر، لتأسيس منظومة كهرباء متكاملة بدلاً من كروت بيع عشوائية."
+      />
+    </div>
+
+    <!-- Brand Filtering Tabs Container -->
+    <div class="cv-tabs-wrapper" data-reveal>
+      <div class="cv-tabs" role="tablist" aria-label="فلترة مجالات التغطية حسب العلامة">
+        <button class="cv-tab is-active" type="button" data-filter="all" aria-pressed="true">
+          <span class="cv-tab__dot"></span>
+          <span class="cv-tab__text">الكل</span>
+        </button>
+        <button class="cv-tab" type="button" data-filter="nader" aria-pressed="false">
+          <span class="cv-tab__dot" style="background: var(--tj-blue); box-shadow: 0 0 10px var(--tj-blue)"></span>
+          <span class="cv-tab__text">NADER</span>
+        </button>
+        <button class="cv-tab" type="button" data-filter="cnc" aria-pressed="false">
+          <span class="cv-tab__dot" style="background: #e63946; box-shadow: 0 0 10px #e63946"></span>
+          <span class="cv-tab__text">CNC</span>
+        </button>
+        <button class="cv-tab" type="button" data-filter="liper" aria-pressed="false">
+          <span class="cv-tab__dot" style="background: var(--tj-orange); box-shadow: 0 0 10px var(--tj-orange)"></span>
+          <span class="cv-tab__text">Liper</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="coverage-grid">
+      {coverage.map((item) => (
+        <article class="coverage-card" data-brands={getBrandIds(item.brand)} data-reveal>
+          <div class="cv-card__glow-bg"></div>
+          <div class="cv-card__inner">
+            <div class="cv-card__header">
+              <div class="coverage-icon">
+                <Icon name={item.icon} />
+              </div>
+              <!-- Brand Tags Badges -->
+              <div class="cv-card__badges">
+                {getBrandList(item.brand).map((brandName) => (
+                  <span class={`cv-badge cv-badge--${brandName.toLowerCase()}`}>{brandName}</span>
+                ))}
+              </div>
+            </div>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabsWrapper = document.querySelector('.cv-tabs-wrapper');
+    const grid = document.querySelector('.coverage-grid');
+    if (!tabsWrapper || !grid) return;
+
+    const tabs = tabsWrapper.querySelectorAll('.cv-tab');
+    const cards = grid.querySelectorAll('.coverage-card');
+    
+    // Prevent layout shift on filtering by locking grid height
+    const lockGridHeight = () => {
+      if (window.innerWidth > 520) { // Don't lock on very small screens where stacking changes drastically
+        (grid as HTMLElement).style.minHeight = 'auto';
+        const currentHeight = (grid as HTMLElement).offsetHeight;
+        (grid as HTMLElement).style.minHeight = `${currentHeight}px`;
+      } else {
+        (grid as HTMLElement).style.minHeight = 'auto';
+      }
+    };
+    
+    // Initial lock
+    setTimeout(lockGridHeight, 100);
+    
+    // Update on resize
+    window.addEventListener('resize', () => {
+      const activeTab = document.querySelector('.cv-tab.is-active');
+      if (activeTab && activeTab.getAttribute('data-filter') === 'all') {
+        lockGridHeight();
+      }
+    });
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Switch active tab
+        tabs.forEach(t => {
+          t.classList.remove('is-active');
+          t.setAttribute('aria-pressed', 'false');
+        });
+        tab.classList.add('is-active');
+        tab.setAttribute('aria-pressed', 'true');
+        (tab as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+
+        const filter = tab.getAttribute('data-filter');
+        if (!filter) return;
+
+        cards.forEach(card => {
+          const brandsStr = card.getAttribute('data-brands') || '';
+          const brands = brandsStr.split(',');
+
+          const isMatch = filter === 'all' || brands.includes(filter);
+
+          if (isMatch) {
+            // Un-hide matching cards
+            (card as HTMLElement).style.display = '';
+            // Force reflow
+            void (card as HTMLElement).offsetHeight;
+            card.classList.remove('is-hidden');
+          } else {
+            // Hide non-matching cards
+            card.classList.add('is-hidden');
+            
+            // Set display: none after transition completes
+            setTimeout(() => {
+              if (card.classList.contains('is-hidden')) {
+                (card as HTMLElement).style.display = 'none';
+              }
+            }, 350);
+          }
+        });
+      });
+    });
+  });
+</script>
+
+<style>
+/* ────────────────────────────────────────────────────────────────────────
+   Coverage Section — مجالات التغطية (Cinematic Dark Version)
+   Premium styling, glassmorphism cards, dynamic filters, dark mode
+   ──────────────────────────────────────────────────────────────────────── */
+
+.coverage-section {
+  position: relative;
+  background: #020609; /* Deep dark background matching the cinematic theme */
+  color: #fff;
+  overflow: hidden;
+  padding: clamp(90px, 12vw, 150px) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Background details */
+.cv-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cv-bg__grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.cv-bg__glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(140px);
+  opacity: 0.15;
+  transition: opacity 0.5s ease;
+}
+
+.cv-bg__glow--1 {
+  width: 500px;
+  height: 500px;
+  top: 10%;
+  left: -10%;
+  background: var(--tj-blue);
+}
+
+.cv-bg__glow--2 {
+  width: 600px;
+  height: 600px;
+  bottom: 0%;
+  right: -15%;
+  background: var(--tj-green);
+}
+
+.cv-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(40px, 6vw, 70px);
+}
+
+.cv-header-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Tabs styles */
+.cv-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 auto;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 100px;
+  max-width: 100%;
+  width: fit-content;
+}
+
+.cv-tab {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  border-radius: 100px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: var(--tj-font-semibold);
+  font-size: var(--tj-text-small);
+  cursor: pointer;
+  transition: all 0.3s var(--tj-ease-smooth);
+  user-select: none;
+}
+
+.cv-tab:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.cv-tab:active {
+  transform: scale(0.96);
+}
+
+.cv-tab.is-active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.cv-tab__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transition: transform 0.3s;
+}
+
+.cv-tab.is-active .cv-tab__dot {
+  transform: scale(1.3);
+  background: #fff;
+}
+
+/* Grid styles */
+.coverage-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+/* Cinematic Dark Card Glassmorphism */
+.coverage-card {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition:
+    opacity 0.35s ease,
+    transform 0.4s var(--tj-ease-smooth),
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+  will-change: transform, opacity;
+  min-height: 260px;
+}
+
+.cv-card__inner {
+  position: relative;
+  z-index: 2;
+  padding: 32px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.coverage-card.is-hidden {
+  opacity: 0;
+  transform: scale(0.9) translateY(20px);
+  pointer-events: none;
+}
+
+/* Brand specific card settings via attributes */
+.coverage-card[data-brands*="nader"] { --brand-primary: var(--tj-blue); --brand-primary-rgb: 30,153,211; }
+.coverage-card[data-brands*="cnc"] { --brand-primary: #e63946; --brand-primary-rgb: 230,57,70; }
+.coverage-card[data-brands*="liper"] { --brand-primary: var(--tj-orange); --brand-primary-rgb: 255,140,0; }
+
+/* Double brand special cases (e.g. CNC + Liper) */
+.coverage-card[data-brands="liper,cnc"] {
+  --brand-primary: #52af45; /* Blend of green & lime */
+  --brand-primary-rgb: 82, 175, 69;
+}
+
+.cv-card__glow-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: radial-gradient(circle at 50% 0%, rgba(var(--brand-primary-rgb), 0.15) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 1;
+}
+
+.coverage-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(var(--brand-primary-rgb), 0.4);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(var(--brand-primary-rgb), 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.coverage-card:hover .cv-card__glow-bg {
+  opacity: 1;
+}
+
+/* Card Header (Icon & Badges) */
+.cv-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 28px;
+}
+
+.coverage-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.4s ease;
+}
+
+.coverage-card:hover .coverage-icon {
+  background: rgba(var(--brand-primary-rgb), 0.15);
+  border-color: rgba(var(--brand-primary-rgb), 0.3);
+  color: var(--brand-primary);
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 0 15px rgba(var(--brand-primary-rgb), 0.3);
+}
+
+/* Badges stack */
+.cv-card__badges {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.cv-badge {
+  font-size: 0.65rem;
+  font-weight: var(--tj-font-bold);
+  padding: 4px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.4s ease;
+}
+
+.coverage-card:hover .cv-badge--nader { border-color: rgba(30,153,211,0.3); color: var(--tj-blue); background: rgba(30,153,211,0.1); }
+.coverage-card:hover .cv-badge--cnc { border-color: rgba(230,57,70,0.3); color: #e63946; background: rgba(230,57,70,0.1); }
+.coverage-card:hover .cv-badge--liper { border-color: rgba(255,140,0,0.3); color: var(--tj-orange); background: rgba(255,140,0,0.1); }
+
+/* Content */
+.coverage-card h3 {
+  color: #fff;
+  font-size: var(--tj-text-h4);
+  font-weight: var(--tj-font-bold);
+  margin-bottom: 12px;
+  line-height: 1.35;
+}
+
+.coverage-card p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: var(--tj-text-small);
+  line-height: 1.7;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.coverage-card:hover p {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Responsive
+   ──────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 1100px) {
+  .coverage-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 820px) {
+  .coverage-section {
+    padding: clamp(60px, 8vw, 100px) 0;
+  }
+
+  .cv-container {
+    gap: 26px;
+  }
+
+  .cv-tabs-wrapper {
+    position: sticky;
+    top: 74px;
+    z-index: 8;
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+    overflow-x: auto;
+    padding: 10px 20px 14px;
+    display: flex;
+    justify-content: flex-start;
+    background: linear-gradient(180deg, rgba(2,6,9,.94), rgba(2,6,9,.76));
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cv-tabs-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .cv-tabs {
+    margin: 0;
+    width: max-content;
+    flex-shrink: 0;
+    gap: 8px;
+    padding: 6px;
+  }
+
+  .cv-tab {
+    min-height: 44px;
+    padding: 10px 18px;
+    white-space: nowrap;
+  }
+
+  .cv-tab.is-active {
+    border-color: rgba(155,232,255,.24);
+    box-shadow: 0 12px 30px rgba(30,153,211,.16);
+  }
+
+  .coverage-grid {
+    gap: 14px;
+  }
+
+  .coverage-card {
+    min-height: auto;
+    border-radius: 22px;
+  }
+
+  .coverage-card:hover {
+    transform: none;
+  }
+
+  .cv-card__inner {
+    padding: 20px;
+  }
+
+  .cv-card__header {
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .coverage-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+  }
+
+  .cv-card__badges {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    min-width: 0;
+  }
+
+  .cv-badge {
+    max-width: 82px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .coverage-card h3 {
+    margin-bottom: 8px;
+    font-size: 1rem;
+  }
+
+  .coverage-card p {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: .88rem;
+    line-height: 1.65;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+}
+
+@media (max-width: 520px) {
+  .coverage-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .coverage-card {
+    min-height: auto;
+  }
+  
+  .cv-card__inner {
+    padding: 24px;
+  }
+}
+</style>

@@ -1,0 +1,456 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   motion.css — نظام الحركة والتفاعل لتجدد
+   طبقة Energy Motion: خطوط كهرباء، Glow، نبضات، مسارات طاقة
+   حركات الدخول، التحولات، وأنماط التفاعل
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ─── Energy Motion Keyframes ────────────────────────────────────────── */
+
+/* نبضة طاقة على خطوط الكهرباء */
+@keyframes energyPulse {
+  0%, 100% {
+    opacity: 0.3;
+    filter: blur(0px);
+  }
+  50% {
+    opacity: 0.9;
+    filter: blur(2px);
+  }
+}
+
+/* توهج كهربائي على الحواف */
+@keyframes electricGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px var(--glow-color, rgba(30, 153, 211, 0.3));
+  }
+  50% {
+    box-shadow:
+      0 0 20px var(--glow-color, rgba(30, 153, 211, 0.5)),
+      0 0 40px var(--glow-color, rgba(30, 153, 211, 0.2));
+  }
+}
+
+/* تدفق خطوط الطاقة */
+@keyframes lineFlow {
+  from {
+    transform: translateX(-24vw);
+  }
+  to {
+    transform: translateX(120vw);
+  }
+}
+
+/* جسيمات طاقة عائمة */
+@keyframes particleFloat {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(var(--particle-dx, 40px), var(--particle-dy, -60px)) scale(1.2);
+    opacity: 0.5;
+  }
+  90% {
+    opacity: 0.3;
+  }
+}
+
+/* حلقة نبضية حول Hotspots */
+@keyframes pulseRing {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* بريق على الأسطح */
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* كشف البراند مع Glow */
+@keyframes brandReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+    filter: blur(8px);
+  }
+  60% {
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0px);
+  }
+}
+
+/* طفو ناعم (مستمر) */
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+/* نبض ناعم */
+@keyframes softPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+/* دوران بطيء */
+@keyframes slowRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* تموج الطاقة */
+@keyframes energyWave {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ─── Entry Animations ───────────────────────────────────────────────── */
+
+/* دخول من الأسفل */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(36px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* دخول من الجانب (RTL-aware) */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* دخول بالتكبير */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* دخول تدريجي للنصوص */
+@keyframes textReveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* ─── Energy Line Elements ───────────────────────────────────────────── */
+
+.energy-line {
+  position: absolute;
+  height: 2px;
+  width: 44vw;
+  background: var(--tj-gradient-energy);
+  filter: drop-shadow(0 0 12px rgba(139, 197, 67, 0.6));
+  animation: lineFlow 7s linear infinite;
+  opacity: 0.58;
+  pointer-events: none;
+}
+
+.energy-line:nth-child(1) { top: 22%; right: -18vw; }
+.energy-line:nth-child(2) { top: 46%; left: -16vw; animation-delay: -2s; }
+.energy-line:nth-child(3) { top: 68%; right: 20vw; animation-delay: -4s; }
+.energy-line:nth-child(4) { top: 82%; left: 12vw; animation-delay: -5.5s; }
+
+/* ─── Energy Pulse Element ───────────────────────────────────────────── */
+
+.energy-pulse {
+  animation: energyPulse 3s ease-in-out infinite;
+}
+
+.energy-pulse-fast {
+  animation: energyPulse 1.5s ease-in-out infinite;
+}
+
+/* ─── Particle Elements ──────────────────────────────────────────────── */
+
+.particle {
+  position: absolute;
+  width: var(--particle-size, 4px);
+  height: var(--particle-size, 4px);
+  border-radius: 50%;
+  background: var(--particle-color, var(--tj-blue));
+  animation: particleFloat var(--particle-duration, 6s) ease-in-out infinite;
+  animation-delay: var(--particle-delay, 0s);
+  pointer-events: none;
+}
+
+/* ─── Hotspot Pulse ──────────────────────────────────────────────────── */
+
+.hotspot-pulse {
+  position: relative;
+}
+
+.hotspot-pulse::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid var(--accent, var(--tj-blue));
+  animation: pulseRing 2s ease-out infinite;
+}
+
+/* ─── Shimmer Effect ─────────────────────────────────────────────────── */
+
+.shimmer-effect {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ─── Float Animation (Continuous) ───────────────────────────────────── */
+
+.float-gentle {
+  animation: gentleFloat 3.8s ease-in-out infinite;
+}
+
+.float-slow {
+  animation: gentleFloat 5s ease-in-out infinite;
+}
+
+/* ─── Scroll Reveal Base Classes ─────────────────────────────────────── */
+/* Used with GSAP ScrollTrigger or IntersectionObserver */
+
+[data-reveal] {
+  will-change: transform, opacity;
+}
+
+[data-reveal="up"] {
+  opacity: 0;
+  transform: translateY(36px);
+}
+
+[data-reveal="in"] {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+[data-reveal="scale"] {
+  opacity: 0;
+  transform: scale(0.85);
+}
+
+[data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.75s var(--tj-ease-smooth),
+    transform 0.75s var(--tj-ease-smooth);
+}
+
+/* Staggered children reveal */
+[data-reveal-stagger] > * {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+[data-reveal-stagger].is-revealed > * {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.65s var(--tj-ease-smooth),
+    transform 0.65s var(--tj-ease-smooth);
+}
+
+[data-reveal-stagger].is-revealed > *:nth-child(1) { transition-delay: 0ms; }
+[data-reveal-stagger].is-revealed > *:nth-child(2) { transition-delay: 80ms; }
+[data-reveal-stagger].is-revealed > *:nth-child(3) { transition-delay: 160ms; }
+[data-reveal-stagger].is-revealed > *:nth-child(4) { transition-delay: 240ms; }
+[data-reveal-stagger].is-revealed > *:nth-child(5) { transition-delay: 320ms; }
+[data-reveal-stagger].is-revealed > *:nth-child(6) { transition-delay: 400ms; }
+
+/* ─── Interactive Hover Effects ──────────────────────────────────────── */
+
+/* Energy hover — Glow on hover */
+.hover-energy {
+  transition:
+    transform var(--tj-transition-base),
+    box-shadow var(--tj-transition-smooth);
+}
+
+.hover-energy:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 22px 58px rgba(33, 33, 36, 0.12),
+    0 0 30px var(--accent-glow, var(--tj-blue-glow));
+}
+
+/* Brand hover — changes scene lighting */
+.hover-brand-light {
+  transition:
+    background var(--tj-transition-smooth),
+    box-shadow var(--tj-transition-smooth);
+}
+
+.hover-brand-light:hover {
+  background: var(--accent-surface-soft, var(--tj-blue-surface-soft));
+  box-shadow: inset 0 0 60px var(--accent-glow, var(--tj-blue-glow));
+}
+
+/* Lift hover — subtle Y lift */
+.hover-lift {
+  transition:
+    transform var(--tj-transition-base),
+    box-shadow var(--tj-transition-base);
+}
+
+.hover-lift:hover {
+  transform: translateY(-3px);
+}
+
+/* ─── Section Transition Effects ─────────────────────────────────────── */
+
+/* Smooth gradient transitions between sections */
+.section-gradient-in {
+  position: relative;
+}
+
+.section-gradient-in::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(180deg, var(--section-from, transparent), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.section-gradient-out::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(0deg, var(--section-to, transparent), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ─── SVG Stroke Animation Utilities ─────────────────────────────────── */
+
+.svg-draw {
+  stroke-dasharray: var(--path-length, 1000);
+  stroke-dashoffset: var(--path-length, 1000);
+  transition: stroke-dashoffset 1.5s var(--tj-ease-energy);
+}
+
+.svg-draw.is-drawn {
+  stroke-dashoffset: 0;
+}
+
+/* ─── Reduced Motion ─────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .energy-line,
+  .particle,
+  .shimmer-effect {
+    display: none !important;
+  }
+
+  .hotspot-pulse::before {
+    animation: none;
+    opacity: 0.5;
+  }
+
+  [data-reveal],
+  [data-reveal-stagger] > * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .float-gentle,
+  .float-slow {
+    animation: none !important;
+  }
+}
+
+/* ─── Mobile Performance ─────────────────────────────────────────────── */
+
+@media (max-width: 820px) {
+  .energy-line {
+    opacity: 0.3;
+    width: 60vw;
+  }
+
+  .energy-line:nth-child(3),
+  .energy-line:nth-child(4) {
+    display: none;
+  }
+
+  .particle {
+    display: none;
+  }
+}

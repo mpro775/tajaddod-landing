@@ -1,0 +1,23 @@
+---
+interface Props {
+  label: string;
+  iconName: string;
+  description?: string;
+}
+
+const { label, iconName, description } = Astro.props;
+---
+<div class="hero-trust-item">
+  <img
+    src={`/assets/icons/${iconName}.svg`}
+    alt=""
+    width="24"
+    height="24"
+    class="trust-icon"
+    loading="lazy"
+  />
+  <span class="trust-copy">
+    <strong>{label}</strong>
+    {description && <small>{description}</small>}
+  </span>
+</div>

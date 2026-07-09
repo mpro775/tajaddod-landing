@@ -1,0 +1,376 @@
+---
+import { siteCopy } from '../../data/site-copy';
+
+const { appDownload } = siteCopy;
+---
+
+<section class="section app-section layer-cinematic" id="app-download">
+  <div class="app-bg" aria-hidden="true">
+    <div class="app-bg__grid"></div>
+    <div class="app-bg__glow app-bg__glow--1"></div>
+    <div class="app-bg__glow app-bg__glow--2"></div>
+  </div>
+
+  <div class="container app-container">
+    <div class="app-grid">
+      
+      <!-- Content Side -->
+      <div class="app-content" data-reveal="fade-up">
+        <div class="app-eyebrow">
+          <span class="app-eyebrow__line"></span>
+          <span class="app-eyebrow__text">{appDownload.eyebrow}</span>
+        </div>
+        
+        <h2 class="app-title">{appDownload.title}</h2>
+        <p class="app-desc">{appDownload.description}</p>
+        
+        <div class="app-actions">
+          <a href={appDownload.links.apple} class="store-btn store-btn--apple" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+              <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.19 2.31-.88 3.5-.8 1.19.06 2.21.57 2.87 1.48-2.6 1.54-2.14 4.88.38 5.92-.61 1.74-1.42 3.53-2.83 4.57zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.02 4.55-3.74 4.25z"/>
+            </svg>
+            <div class="store-btn__text">
+              <span class="store-btn__sub">Download on the</span>
+              <span class="store-btn__main">App Store</span>
+            </div>
+          </a>
+          
+          <a href={appDownload.links.google} class="store-btn store-btn--google" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+              <path d="M3.609 1.814L13.792 12l-10.183 10.186c-.221-.24-.359-.579-.359-.974V2.788c0-.395.138-.734.359-.974zM14.619 11.171l2.422-2.421-12.012-6.953 9.59 9.374zM15.461 12l4.887 4.887c.224-.128.411-.321.537-.557l2.588-4.33-2.588-4.33a1.455 1.455 0 0 0-.537-.557l-4.887 4.887zM14.619 12.829l-9.59 9.374 12.012-6.953-2.422-2.421z"/>
+            </svg>
+            <div class="store-btn__text">
+              <span class="store-btn__sub">GET IT ON</span>
+              <span class="store-btn__main">Google Play</span>
+            </div>
+          </a>
+        </div>
+        
+        <div class="app-web-action">
+          <a href={appDownload.links.web} class="web-btn" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            أو ادخل للمتجر الإلكتروني
+          </a>
+        </div>
+      </div>
+      
+      <!-- Image Side -->
+      <div class="app-visual" data-reveal="fade-up" style="--delay: 0.2s">
+        <div class="app-mockup-wrapper">
+          <img src="/assets/app-mockup.webp" alt="تطبيق تجدد" class="app-mockup" width="500" height="500" loading="lazy" />
+          
+          <!-- Floating UI Elements for depth -->
+          <div class="app-float app-float--1"></div>
+          <div class="app-float app-float--2"></div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<style>
+/* ────────────────────────────────────────────────────────────────────────
+   App Download Section
+   ──────────────────────────────────────────────────────────────────────── */
+
+.app-section {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(80px, 12vw, 160px) 0;
+  background: #020508 !important;
+  color: #fff;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Background Layers */
+.app-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.app-bg__grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+}
+
+.app-bg__glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(140px);
+  opacity: 0.15;
+}
+
+.app-bg__glow--1 {
+  top: 10%;
+  right: -10%;
+  background: var(--tj-blue);
+}
+
+.app-bg__glow--2 {
+  bottom: -20%;
+  left: -10%;
+  background: var(--tj-green);
+}
+
+.app-container {
+  position: relative;
+  z-index: 1;
+}
+
+.app-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .app-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+  }
+}
+
+/* Content */
+.app-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.app-eyebrow__line {
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--tj-blue-light));
+}
+
+.app-eyebrow__text {
+  color: var(--tj-blue-light);
+  font-size: var(--tj-text-small);
+  font-weight: var(--tj-font-semibold);
+  letter-spacing: 0.05em;
+}
+
+.app-title {
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  font-weight: var(--tj-font-bold);
+  line-height: 1.2;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, #fff, rgba(255,255,255,0.8));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.app-desc {
+  font-size: var(--tj-text-body-lg);
+  color: rgba(255,255,255,0.6);
+  line-height: 1.7;
+  margin-bottom: 40px;
+  max-width: 540px;
+}
+
+/* Actions */
+.app-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.store-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 10px 20px;
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.store-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.store-btn svg {
+  flex-shrink: 0;
+}
+
+.store-btn__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.store-btn__sub {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  line-height: 1;
+  margin-bottom: 2px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.store-btn__main {
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.app-web-action {
+  display: flex;
+}
+
+.web-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--tj-blue-light);
+  font-size: var(--tj-text-body);
+  font-weight: var(--tj-font-semibold);
+  text-decoration: none;
+  padding: 12px 0;
+  transition: all 0.3s ease;
+}
+
+.web-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.web-btn:hover {
+  color: #fff;
+}
+
+.web-btn:hover svg {
+  transform: scale(1.1);
+  color: var(--tj-blue-light);
+}
+
+/* Visual Side */
+.app-visual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-mockup-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.app-mockup-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 10%;
+  background: linear-gradient(135deg, var(--tj-blue), var(--tj-green));
+  filter: blur(60px);
+  opacity: 0.3;
+  border-radius: 50%;
+  z-index: 0;
+  animation: pulseGlow 4s ease-in-out infinite alternate;
+}
+
+.app-mockup {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: auto;
+  border-radius: 24px;
+  /* subtle floating animation */
+  animation: floatMockup 6s ease-in-out infinite;
+  mask-image: radial-gradient(circle at center, black 80%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle at center, black 80%, transparent 100%);
+}
+
+.app-float {
+  position: absolute;
+  z-index: 2;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.app-float--1 {
+  width: 120px;
+  height: 80px;
+  top: 20%;
+  right: -20px;
+  animation: floatElement 5s ease-in-out infinite 0.5s;
+}
+
+.app-float--2 {
+  width: 140px;
+  height: 60px;
+  bottom: 25%;
+  left: -10px;
+  animation: floatElement 7s ease-in-out infinite 1s;
+}
+
+@keyframes floatMockup {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes floatElement {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-10px) translateX(5px); }
+}
+
+@keyframes pulseGlow {
+  0% { opacity: 0.2; transform: scale(0.9); }
+  100% { opacity: 0.4; transform: scale(1.1); }
+}
+
+@media (max-width: 768px) {
+  .app-actions {
+    flex-direction: column;
+  }
+  .store-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .app-visual {
+    padding: 0 20px;
+  }
+  .app-float {
+    display: none; /* Hide floating elements on smaller screens for cleaner look */
+  }
+}
+</style>

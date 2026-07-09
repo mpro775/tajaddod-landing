@@ -1,0 +1,155 @@
+---
+import Button from '../ui/Button.astro';
+import HeroTrustItem from '../ui/HeroTrustItem.astro';
+import { siteCopy } from '../../data/site-copy';
+import '../../styles/hero.css';
+
+const { title, description, buttons } = siteCopy.hero;
+---
+<section class="cinematic-hero" id="hero" aria-labelledby="hero-title">
+  <!-- Static cinematic scene: background + products only -->
+  <img
+    class="hero-bg"
+    src="/assets/hero/hero-static-scene.webp"
+    data-desktop-src="/assets/hero/hero-static-scene.webp"
+    alt=""
+    loading="eager"
+    width="1920"
+    height="1080"
+    aria-hidden="true"
+  />
+
+  <div class="hero-overlay" aria-hidden="true"></div>
+  <div class="hero-center-glow" aria-hidden="true"></div>
+
+  <!-- Area-linked glow layers -->
+  <img
+    class="hero-glow hero-glow-blue"
+    src="/assets/hero/glows/glow-blue.svg"
+    alt=""
+    aria-hidden="true"
+  />
+  <img
+    class="hero-glow hero-glow-green"
+    src="/assets/hero/glows/glow-green.svg"
+    alt=""
+    aria-hidden="true"
+  />
+  <img
+    class="hero-glow hero-glow-cnc"
+    src="/assets/hero/glows/glow-cnc.svg"
+    alt=""
+    aria-hidden="true"
+  />
+
+  <!-- Energy flow: inline SVG so stroke animation stays controllable by CSS/GSAP -->
+  <svg
+    class="hero-energy-flow"
+    viewBox="0 0 1920 1080"
+    fill="none"
+    preserveAspectRatio="xMidYMid slice"
+    aria-hidden="true"
+  >
+    <defs>
+      <linearGradient id="flowBlue" x1="1380" y1="410" x2="1040" y2="500" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#1E99D3" stop-opacity="0.95" />
+        <stop offset="1" stop-color="#ff8c00" stop-opacity="0.72" />
+      </linearGradient>
+      <linearGradient id="flowGreen" x1="430" y1="245" x2="1025" y2="500" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#ff8c00" stop-opacity="0.96" />
+        <stop offset="1" stop-color="#1E99D3" stop-opacity="0.58" />
+      </linearGradient>
+      <linearGradient id="flowCnc" x1="420" y1="795" x2="1020" y2="535" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#E63636" stop-opacity="0.82" />
+        <stop offset="1" stop-color="#1E99D3" stop-opacity="0.46" />
+      </linearGradient>
+      <filter id="energyGlow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="5" result="blur" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+
+    <path
+      class="energy-path energy-path-nader"
+      d="M 1505 390 C 1360 400, 1248 440, 1115 500 C 1075 518, 1044 522, 1018 512"
+      stroke="url(#flowBlue)"
+      stroke-width="4"
+      stroke-linecap="round"
+      filter="url(#energyGlow)"
+    />
+    <path
+      class="energy-path energy-path-liper"
+      d="M 470 260 C 610 305, 715 350, 830 435 C 910 493, 972 520, 1024 506"
+      stroke="url(#flowGreen)"
+      stroke-width="4"
+      stroke-linecap="round"
+      filter="url(#energyGlow)"
+    />
+    <path
+      class="energy-path energy-path-cnc"
+      d="M 420 800 C 570 760, 708 690, 820 610 C 908 548, 966 522, 1020 532"
+      stroke="url(#flowCnc)"
+      stroke-width="3.5"
+      stroke-linecap="round"
+      filter="url(#energyGlow)"
+    />
+    <circle class="energy-core" cx="1024" cy="512" r="8" fill="#A7F05A" filter="url(#energyGlow)" />
+  </svg>
+
+  <!-- Brand anchors: real logos, visually tied to product zones -->
+  <div class="hero-brands-container" aria-label="العلامات التي تمثلها تجدد">
+    <div class="brand-anchor brand-anchor-liper" data-brand="liper" tabindex="0" role="button" aria-label="Liper — إضاءة ذكية وطاقة مستدامة">
+      <img src="/logos/liper-logo.svg" alt="Liper" width="138" height="58" />
+      <span>إضاءة ذكية وطاقة مستدامة</span>
+    </div>
+
+    <div class="brand-anchor brand-anchor-nader" data-brand="nader" tabindex="0" role="button" aria-label="NADER — مفاتيح وأفياش موثوقة">
+      <img src="/logos/nader-logo.svg" alt="NADER" width="140" height="70" />
+      <span>مفاتيح وأفياش موثوقة</span>
+    </div>
+
+    <div class="brand-anchor brand-anchor-cnc" data-brand="cnc" tabindex="0" role="button" aria-label="CNC — حماية وتحكم وتوزيع">
+      <img src="/logos/cnc-logo.svg" alt="CNC Electric" width="138" height="70" />
+      <span>حماية وتحكم وتوزيع</span>
+    </div>
+  </div>
+
+  <!-- Main copy -->
+  <div class="hero-content">
+    <img
+      class="tajaddod-logo-hero"
+      src="/logos/tajaddod-logo.svg"
+      alt="تجدد"
+      width="220"
+      height="108"
+    />
+
+    <h1 id="hero-title">{title}</h1>
+
+    <p>{description}</p>
+
+    <div class="hero-actions">
+      {buttons.map((btn) => (
+        <Button href={btn.href} variant={btn.variant}>
+          {btn.label}
+        </Button>
+      ))}
+    </div>
+  </div>
+
+  <!-- Unified trust panel -->
+  <div class="hero-trust-panel" aria-label="مؤشرات الثقة في تجدد">
+    <HeroTrustItem iconName="partnership" label="شراكات موثوقة" description="مع علامات عالمية رائدة" />
+    <HeroTrustItem iconName="quality" label="جودة معتمدة" description="مطابقة للمعايير الدولية" />
+    <HeroTrustItem iconName="integrated-solutions" label="حلول متكاملة" description="كهرباء | حماية | إضاءة | طاقة شمسية" />
+    <HeroTrustItem iconName="support" label="دعم فني وتجاري" description="بجانبك في كل خطوة" />
+  </div>
+</section>
+
+<script>
+  import { initHeroMotion } from '../../scripts/heroMotion';
+  initHeroMotion();
+</script>

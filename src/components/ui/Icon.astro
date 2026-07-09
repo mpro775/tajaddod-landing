@@ -1,0 +1,26 @@
+---
+interface Props { name: string; class?: string }
+const { name, class: className = '' } = Astro.props;
+const paths: Record<string, string> = {
+  lightbulb: 'M9 21h6m-5-4h4m-7-6a5 5 0 1 1 10 0c0 2-1.5 3.2-2.7 4.2-.8.7-1.3 1.3-1.3 2.3h-2c0-1-.5-1.6-1.3-2.3C8.5 14.2 7 13 7 11Z',
+  switch: 'M7 4h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3Zm5 4v8m-3-4h6',
+  shield: 'M12 3 5 6v5c0 5 3 8.5 7 10 4-1.5 7-5 7-10V6l-7-3Zm0 6v6m0 3h.01',
+  panel: 'M4 5h16v14H4V5Zm4 4h3m3 0h3M8 13h3m3 0h3',
+  cable: 'M7 7v4a5 5 0 0 0 10 0V7m-8 0V3m6 4V3M8 21h8',
+  solar: 'M12 4v2m0 12v2m8-8h-2M6 12H4m13.7-5.7-1.4 1.4M7.7 16.3l-1.4 1.4m0-11.4 1.4 1.4m8.6 8.6 1.4 1.4M8 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0Z',
+  store: 'M4 10h16l-1-5H5l-1 5Zm2 0v9h12v-9M9 19v-5h6v5',
+  helmet: 'M4 15a8 8 0 0 1 16 0v2H4v-2Zm4-1V8m8 6V8M3 17h18v3H3v-3Z',
+  tool: 'M14 6a4 4 0 0 0 5 5l-8 8a3 3 0 0 1-4-4l8-8Zm-8 12 3 3',
+  building: 'M5 21V4h9v17M14 9h5v12M8 8h3m-3 4h3m-3 4h3m8-3h-2m2 4h-2',
+  check: 'm5 12 4 4L19 6',
+  arrow: 'M19 12H5m6-6-6 6 6 6',
+  control: 'M4 7h16M4 17h16M8 7v6m8-6v10M7 13h2m6 4h2',
+  transfer: 'M7 7h11m0 0-4-4m4 4-4 4M17 17H6m0 0 4 4m-4-4 4-4',
+  spark: 'm13 2-2 7h7l-8 13 2-8H5l8-12Z',
+  globe: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm-9-9h18M12 3c2.5 2.5 3.5 5.5 3.5 9s-1 6.5-3.5 9c-2.5-2.5-3.5-5.5-3.5-9s1-6.5 3.5-9Z',
+};
+---
+
+<svg class={`icon ${className}`} viewBox="0 0 24 24" fill="none" aria-hidden="true" width="28" height="28">
+  <path d={paths[name] ?? paths.check} stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>

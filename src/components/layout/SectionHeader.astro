@@ -1,0 +1,15 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  align?: 'start' | 'center';
+  dark?: boolean;
+}
+const { eyebrow, title, description, align = 'start', dark = false } = Astro.props;
+---
+<header class={`section-header section-header-${align} ${dark ? 'is-dark' : ''}`} data-reveal>
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <h2>{title}</h2>
+  {description && <p>{description}</p>}
+</header>

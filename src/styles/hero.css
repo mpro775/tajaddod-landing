@@ -1,0 +1,767 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   hero.css — Tajaddod Cinematic Hero V3 Refinement
+   Static product scene + real logo anchors + animated energy flow
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.cinematic-hero {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  background: #020b12;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.04);
+  z-index: 1;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 46%, rgba(2, 11, 18, 0.18) 0%, rgba(2, 11, 18, 0.55) 58%, rgba(2, 11, 18, 0.82) 100%),
+    linear-gradient(to bottom, rgba(2, 11, 18, 0.55) 0%, rgba(2, 11, 18, 0.08) 45%, rgba(2, 11, 18, 0.75) 100%);
+}
+
+.hero-center-glow {
+  position: absolute;
+  z-index: 3;
+  top: 28%;
+  left: 50%;
+  width: min(42vw, 620px);
+  height: min(42vw, 620px);
+  transform: translateX(-50%);
+  border-radius: 999px;
+  pointer-events: none;
+  background:
+    radial-gradient(circle, rgba(30, 153, 211, 0.18), rgba(139, 197, 67, 0.10) 36%, transparent 66%);
+  mix-blend-mode: screen;
+  filter: blur(12px);
+  opacity: 0.78;
+}
+
+.hero-glow {
+  position: absolute;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  z-index: 3;
+  opacity: 0.25;
+  transform: translate3d(0, 0, 0);
+  transition: opacity 0.6s var(--tj-ease-smooth), transform 0.6s var(--tj-ease-smooth);
+  will-change: opacity, transform;
+}
+
+.hero-glow-blue {
+  top: 18%;
+  right: 8%;
+  width: min(34vw, 520px);
+  height: min(34vw, 520px);
+}
+
+.hero-glow-green {
+  top: 4%;
+  left: 8%;
+  width: min(36vw, 560px);
+  height: min(36vw, 560px);
+}
+
+.hero-glow-cnc {
+  bottom: 6%;
+  left: 7%;
+  width: min(30vw, 480px);
+  height: min(30vw, 480px);
+  opacity: 0.14;
+}
+
+.hero-energy-flow {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.88;
+  mix-blend-mode: screen;
+}
+
+.energy-path {
+  stroke-dasharray: 980;
+  stroke-dashoffset: 980;
+  opacity: 0.78;
+  will-change: stroke-dashoffset, opacity, filter;
+}
+
+.energy-core {
+  opacity: 0;
+  transform-origin: center;
+}
+
+/* Brand anchors are part of the visual scene, not separate glass cards */
+.hero-brands-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 7;
+}
+
+.brand-anchor {
+  position: absolute;
+  pointer-events: auto;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  cursor: pointer;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  outline: none;
+  isolation: isolate;
+  transform-origin: center;
+  /* Remove transform and opacity from CSS transitions to prevent conflict with GSAP */
+  transition: filter 0.45s var(--tj-ease-smooth);
+  will-change: transform, opacity, filter;
+}
+
+.brand-anchor::before {
+  content: '';
+  position: absolute;
+  inset: -18px -22px;
+  z-index: -1;
+  border-radius: 28px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.10), transparent 68%);
+  opacity: 0;
+  transform: scale(0.86);
+  transition: opacity 0.45s var(--tj-ease-smooth), transform 0.45s var(--tj-ease-smooth);
+}
+
+.brand-anchor::after {
+  content: '';
+  position: absolute;
+  width: 82px;
+  height: 1px;
+  top: 50%;
+  background: linear-gradient(90deg, currentColor, transparent);
+  opacity: 0.42;
+  transform-origin: center;
+}
+
+.brand-anchor img {
+  display: block;
+  width: auto;
+  max-width: 170px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 18px rgba(0, 0, 0, 0.55));
+  transition: transform 0.45s var(--tj-ease-smooth), filter 0.45s var(--tj-ease-smooth);
+}
+
+.brand-anchor span {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: var(--tj-text-small);
+  font-weight: var(--tj-font-medium);
+  line-height: 1.5;
+  text-shadow: 0 3px 16px rgba(0, 0, 0, 0.72);
+  background: rgba(2, 11, 18, 0.34);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 5px 12px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Hover transform handled smoothly by GSAP in heroMotion.ts to avoid conflict with parallax */
+
+.brand-anchor:hover::before,
+.brand-anchor:focus-visible::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.brand-anchor:hover img,
+.brand-anchor:focus-visible img {
+  transform: scale(1.06);
+}
+
+.brand-anchor-nader {
+  top: 16%;
+  right: 7.5%;
+  align-items: flex-end;
+  text-align: right;
+  color: #1E99D3;
+}
+
+.brand-anchor-nader::after {
+  right: 100%;
+  margin-right: 12px;
+  background: linear-gradient(270deg, #1E99D3, transparent);
+}
+
+.brand-anchor-liper {
+  top: 11%;
+  left: 7%;
+  color: #ff8c00;
+}
+
+.brand-anchor-liper::after {
+  left: 100%;
+  margin-left: 12px;
+  background: linear-gradient(90deg, #ff8c00, transparent);
+}
+
+.brand-anchor-cnc {
+  bottom: 23%;
+  left: 7%;
+  color: #E63636;
+}
+
+.brand-anchor-cnc::after {
+  left: 100%;
+  margin-left: 12px;
+  background: linear-gradient(90deg, #E63636, transparent);
+}
+
+.cinematic-hero.glow-active-nader .hero-glow-blue {
+  opacity: 0.72;
+  transform: scale(1.08);
+}
+
+.cinematic-hero.glow-active-liper .hero-glow-green {
+  opacity: 0.78;
+  transform: scale(1.08);
+}
+
+.cinematic-hero.glow-active-cnc .hero-glow-cnc {
+  opacity: 0.42;
+  transform: scale(1.07);
+}
+
+.cinematic-hero.glow-active-nader .energy-path-nader,
+.cinematic-hero.glow-active-liper .energy-path-liper,
+.cinematic-hero.glow-active-cnc .energy-path-cnc {
+  opacity: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 6;
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 126px 24px 176px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tajaddod-logo-hero {
+  height: clamp(72px, 7vw, 112px);
+  width: auto;
+  margin-bottom: 20px;
+  transform-origin: center;
+  filter:
+    drop-shadow(0 0 24px rgba(30, 153, 211, 0.45)) drop-shadow(0 0 28px rgba(139, 197, 67, 0.25));
+}
+
+.hero-content h1 {
+  font-family: var(--tj-font-family);
+  font-size: var(--tj-text-hero);
+  font-weight: var(--tj-font-bold);
+  color: var(--tj-white);
+  line-height: 1.15;
+  letter-spacing: var(--tj-tracking-tight);
+  margin-bottom: 22px;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.74);
+}
+
+.hero-content p {
+  font-family: var(--tj-font-family);
+  font-size: var(--tj-text-body-lg);
+  font-weight: var(--tj-font-regular);
+  color: rgba(255, 255, 255, 0.9);
+  line-height: var(--tj-leading-relaxed);
+  max-width: 720px;
+  margin-bottom: 38px;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.62);
+}
+
+.hero-actions {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-trust-panel {
+  position: absolute;
+  left: 50%;
+  bottom: 42px;
+  z-index: 8;
+  width: min(1120px, calc(100% - 48px));
+  transform: translateX(-50%);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025));
+  box-shadow:
+    0 22px 70px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  overflow: hidden;
+}
+
+.hero-trust-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 22px;
+  color: rgba(255, 255, 255, 0.86);
+  /* Remove transform from CSS transition to prevent conflict with GSAP */
+  transition: background-color 0.3s ease;
+}
+
+.hero-trust-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 20%;
+  bottom: 20%;
+  left: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.hero-trust-item:hover {
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.hero-trust-item .trust-icon {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 14px rgba(30, 153, 211, 0.42));
+}
+
+.trust-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.trust-copy strong {
+  color: var(--tj-white);
+  font-size: var(--tj-text-small);
+  font-weight: var(--tj-font-bold);
+  line-height: 1.35;
+}
+
+.trust-copy small {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: var(--tj-text-caption);
+  line-height: 1.45;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────────── */
+
+@media (max-width: 1280px) {
+  .brand-anchor-nader {
+    right: 4.5%;
+  }
+
+  .brand-anchor-liper,
+  .brand-anchor-cnc {
+    left: 4.5%;
+  }
+
+  .brand-anchor img {
+    max-width: 142px;
+  }
+
+  .brand-anchor span {
+    font-size: var(--tj-text-caption);
+  }
+}
+
+@media (max-width: 1024px) {
+  .hero-content {
+    max-width: 740px;
+  }
+
+  .hero-content h1 {
+    font-size: 3rem;
+  }
+
+  .hero-energy-flow {
+    opacity: 0.58;
+  }
+
+  .brand-anchor img {
+    max-width: 118px;
+  }
+
+  .brand-anchor span {
+    display: none;
+  }
+
+  .hero-trust-panel {
+    width: min(760px, calc(100% - 36px));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    bottom: 32px;
+  }
+
+  .hero-trust-item:nth-child(2)::after {
+    display: none;
+  }
+
+  .hero-trust-item:nth-child(-n + 2) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+  }
+}
+
+@media (max-width: 820px) {
+  .cinematic-hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100svh;
+    padding: 110px 0 32px;
+  }
+
+  .hero-bg {
+    transform: scale(1) !important;
+    object-position: center;
+    /* Blur and darken the desktop image to focus on the cards on mobile */
+    filter: blur(4px) brightness(0.65);
+  }
+
+  /* Richer, deeper gradient overlay for mobile */
+  .hero-overlay {
+    background:
+      radial-gradient(ellipse at 50% 35%, rgba(2, 11, 18, 0.45) 0%, rgba(2, 11, 18, 0.8) 55%, rgba(2, 11, 18, 0.96) 100%),
+      linear-gradient(to bottom, rgba(2, 11, 18, 0.5) 0%, rgba(2, 11, 18, 0.1) 20%, rgba(2, 11, 18, 0.85) 60%, #020b12 100%);
+  }
+
+  /* Bigger central glow for premium feel */
+  .hero-center-glow {
+    top: 30%;
+    width: 90vw;
+    height: 90vw;
+    filter: blur(16px);
+    opacity: 0.95;
+    background: radial-gradient(circle, rgba(30, 153, 211, 0.22), rgba(139, 197, 67, 0.12) 40%, transparent 75%);
+  }
+
+  .hero-energy-flow {
+    display: none;
+  }
+
+  .hero-glow {
+    width: 85vw;
+    height: 85vw;
+    opacity: 0.25;
+  }
+
+  .hero-glow-blue {
+    top: 15%;
+    right: -25%;
+  }
+
+  .hero-glow-green {
+    top: 5%;
+    left: -25%;
+  }
+
+  .hero-glow-cnc {
+    display: none;
+  }
+
+  /* Redesign Brands Container as a floating badge bar */
+  .hero-brands-container {
+    position: relative;
+    inset: auto;
+    z-index: 9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    width: calc(100% - 32px);
+    height: auto;
+    margin: 0 auto 32px;
+    padding: 14px 20px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 100px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    pointer-events: auto;
+  }
+
+  .brand-anchor {
+    position: relative !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    max-width: none;
+    transform: none !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+  }
+
+  .brand-anchor::before,
+  .brand-anchor::after {
+    display: none;
+  }
+
+  .brand-anchor img {
+    max-width: 72px;
+    max-height: 36px;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.15));
+    transition: transform 0.3s ease;
+  }
+  
+  .brand-anchor:active img {
+    transform: scale(0.95);
+  }
+
+  .brand-anchor span {
+    display: none;
+  }
+
+  /* Redesign Hero Content as a premium frosted card */
+  .hero-content {
+    z-index: 10;
+    width: calc(100% - 32px);
+    max-width: 480px;
+    margin: 0 auto 32px;
+    padding: 38px 24px;
+    text-align: center;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 32px;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(2, 11, 18, 0.5));
+    box-shadow: 
+      0 30px 60px rgba(0, 0, 0, 0.6), 
+      inset 0 1px 1px rgba(255, 255, 255, 0.15),
+      inset 0 -1px 20px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Top inner glow for the card */
+  .hero-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1.5px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+    opacity: 0.8;
+  }
+
+  .tajaddod-logo-hero {
+    align-self: center;
+    height: 68px;
+    margin-bottom: 24px;
+    filter: drop-shadow(0 0 24px rgba(30, 153, 211, 0.5));
+  }
+
+  .hero-content h1 {
+    font-size: clamp(2.3rem, 9vw, 3rem);
+    line-height: 1.25;
+    margin-bottom: 18px;
+    /* Premium text gradient */
+    background: linear-gradient(135deg, #ffffff 10%, #d4d4d4 90%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    max-width: 100%;
+  }
+
+  .hero-content p {
+    font-size: 1.08rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 32px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    max-width: 100%;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+  }
+
+  .hero-actions a,
+  .hero-actions .button {
+    width: 100%;
+    min-height: 56px;
+    border-radius: 100px;
+  }
+
+  /* Redesign Trust Panel */
+  .hero-trust-panel {
+    position: relative;
+    z-index: 9;
+    left: auto;
+    bottom: auto;
+    display: flex;
+    width: calc(100% - 16px);
+    margin: 0 auto;
+    padding: 0 8px 16px;
+    gap: 14px;
+    overflow-x: auto;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 8px;
+    -webkit-overflow-scrolling: touch;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .hero-trust-panel::-webkit-scrollbar,
+  .hero-brands-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hero-trust-item {
+    flex: 0 0 calc(78vw - 14px);
+    max-width: 320px;
+    min-height: 84px;
+    padding: 18px 22px;
+    gap: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.25));
+    scroll-snap-align: start;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  
+  .hero-trust-item:active {
+    transform: scale(0.98);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(0, 0, 0, 0.3));
+  }
+
+  .hero-trust-item::after {
+    display: none !important;
+  }
+
+  .hero-trust-item:nth-child(-n + 3) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  
+  .hero-trust-item .trust-icon {
+    width: 28px;
+    height: 28px;
+    filter: drop-shadow(0 0 16px rgba(30, 153, 211, 0.5));
+  }
+
+  .trust-copy {
+    gap: 4px;
+  }
+
+  .trust-copy strong {
+    font-size: 1.05rem;
+    color: #ffffff;
+  }
+
+  .trust-copy small {
+    display: block;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.65);
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content {
+    padding: 32px 20px;
+    border-radius: 28px;
+  }
+  .hero-content h1 {
+    font-size: 2.1rem;
+  }
+  .hero-content p {
+    font-size: 1rem;
+  }
+  .hero-brands-container {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+  .brand-anchor img {
+    max-width: 62px;
+    max-height: 32px;
+  }
+  .hero-trust-item {
+    flex: 0 0 calc(85vw - 14px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .hero-bg,
+  .hero-glow,
+  .brand-anchor,
+  .hero-energy-flow,
+  .tajaddod-logo-hero,
+  .hero-content>*,
+  .hero-trust-item {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ─── Prevent FOUC (Flash of Unstyled Content) when JS is active ─────── */
+.js .brand-anchor,
+.js .tajaddod-logo-hero,
+.js .hero-center-glow,
+.js .hero-content h1,
+.js .hero-content p,
+.js .hero-actions,
+.js .hero-trust-item {
+  opacity: 0;
+}
