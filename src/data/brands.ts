@@ -1,22 +1,5 @@
 export const brands = [
   {
-    id: 'nader',
-    name: 'NADER',
-    displayName: 'Nader',
-    arabicName: 'نادر',
-    title: 'مفاتيح وأفياش بتصميمات عملية للمنازل والمشاريع',
-    description:
-      'نادر في صفحة تجدد يُعرض كبراند متخصص في المفاتيح والأفياش فقط، مع إبراز تنوع الألوان والاستخدامات اليومية دون خلطه مع فئات أخرى.',
-    logo: '/logos/nader-logo.svg',
-    whiteLogo: '/logos/nader-logo-white.svg',
-    accent: 'nader',
-    focus: 'المفاتيح والأفياش',
-    orbit: 'نقطة التشغيل الأولى',
-    categories: ['مفاتيح', 'أفياش', 'بلاكات', 'USB', 'سخان'],
-    story:
-      'يبدأ حضور نادر من أكثر نقطة يلمسها المستخدم يومياً: المفتاح والفيش. لذلك يأخذ موقعه كواجهة التفاصيل الجمالية والعملية في أي مشروع كهربائي.',
-  },
-  {
     id: 'cnc',
     name: 'CNC',
     displayName: 'CNC',

@@ -4,23 +4,23 @@ import { siteCopy } from '../../data/site-copy';
 const { journey } = siteCopy;
 
 const brandColors: Record<string, string> = {
-  'NADER': 'var(--tj-blue)',
   'CNC': '#e63946', // Red
   'Liper': '#ff8c00', // Orange
+  'Liper / CNC': '#52af45', // Green blend
   'تجدد': 'rgba(255, 255, 255, 0.8)',
 };
 
 const brandLogos: Record<string, string> = {
-  'NADER': '/logos/nader-logo-white.svg',
   'CNC': '/logos/cnc-logo-white.svg',
   'Liper': '/logos/liper-logo-white.svg',
+  'Liper / CNC': '/logos/tajaddod-icon.svg',
   'تجدد': '/logos/tajaddod-icon.svg',
 };
 
 const brandIds: Record<string, string> = {
-  'NADER': 'nader',
   'CNC': 'cnc',
   'Liper': 'liper',
+  'Liper / CNC': 'liper-cnc',
   'تجدد': 'tajaddod',
 };
 
@@ -113,8 +113,6 @@ const brandIds: Record<string, string> = {
     <div class="ej-summary" data-reveal>
       <div class="ej-summary__line"></div>
       <div class="ej-summary__brands">
-        <img src="/logos/nader-logo-white.svg" alt="NADER" class="ej-summary__logo" loading="lazy" />
-        <span class="ej-summary__plus">+</span>
         <img src="/logos/cnc-logo-white.svg" alt="CNC" class="ej-summary__logo" loading="lazy" />
         <span class="ej-summary__plus">+</span>
         <img src="/logos/liper-logo-white.svg" alt="Liper" class="ej-summary__logo" loading="lazy" />
@@ -356,14 +354,14 @@ const brandIds: Record<string, string> = {
 }
 
 /* Dynamic background based on active brand */
-.ej-section[data-active-brand="nader"] {
-  background: radial-gradient(ellipse at 50% 50%, #0a2a3d 0%, #061a28 40%, #030a0f 100%) !important;
-}
 .ej-section[data-active-brand="cnc"] {
   background: radial-gradient(ellipse at 50% 50%, #3a0909 0%, #1f0404 40%, #030a0f 100%) !important;
 }
 .ej-section[data-active-brand="liper"] {
   background: radial-gradient(ellipse at 50% 50%, #3d210a 0%, #241103 40%, #030a0f 100%) !important;
+}
+.ej-section[data-active-brand="liper-cnc"] {
+  background: radial-gradient(ellipse at 50% 50%, #153d10 0%, #0b2108 40%, #030a0f 100%) !important;
 }
 .ej-section[data-active-brand="tajaddod"] {
   background: radial-gradient(ellipse at 50% 50%, #0d1820 0%, #080f16 40%, #030a0f 100%) !important;

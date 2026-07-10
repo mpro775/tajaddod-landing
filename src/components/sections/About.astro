@@ -44,7 +44,7 @@
 
       <p class="ph-lead">
         تجدد لا تبيع منتجات، بل تبني جسرًا بين العلامات المتخصصة واحتياج السوق الحقيقي.
-        نؤمن أن كل مفتاح، كل قاطع، وكل كشاف هو جزء من رحلة طاقة واحدة متكاملة.
+        نؤمن أن كل قاطع وكل كشاف هو جزء من رحلة طاقة واحدة متكاملة؛ من الحماية إلى الإضاءة والطاقة.
       </p>
     </div>
 
@@ -68,21 +68,12 @@
           <path class="ph-circuit__path-bg" d="M0 140 Q100 140 150 80 Q200 20 300 60 Q400 100 400 140 Q400 180 500 220 Q600 260 650 200 Q700 140 800 140" stroke="rgba(255,255,255,0.05)" stroke-width="2" fill="none"/>
           <path class="ph-circuit__path" d="M0 140 Q100 140 150 80 Q200 20 300 60 Q400 100 400 140 Q400 180 500 220 Q600 260 650 200 Q700 140 800 140" stroke="url(#circuitGrad)" stroke-width="2.5" fill="none" filter="url(#circuitGlow)" data-ph-path/>
           <!-- Junction dots -->
-          <circle class="ph-circuit__dot ph-circuit__dot--1" cx="150" cy="80" r="5" fill="#1e99d3"/>
           <circle class="ph-circuit__dot ph-circuit__dot--cnc" cx="300" cy="60" r="5" fill="#e63946"/>
           <circle class="ph-circuit__dot ph-circuit__dot--2" cx="400" cy="140" r="6" fill="#fff"/>
           <circle class="ph-circuit__dot ph-circuit__dot--3" cx="650" cy="200" r="5" fill="#ff8c00"/>
         </svg>
 
         <!-- Brand nodes positioned along the circuit -->
-        <div class="ph-circuit__node ph-circuit__node--nader" data-ph-node>
-          <div class="ph-node__beacon"></div>
-          <div class="ph-node__card">
-            <img src="/logos/nader-logo-white.svg" alt="NADER" loading="lazy"/>
-            <span>نقطة البداية</span>
-          </div>
-        </div>
-
         <div class="ph-circuit__node ph-circuit__node--cnc" data-ph-node>
           <div class="ph-node__beacon ph-node__beacon--cnc"></div>
           <div class="ph-node__card">
@@ -111,9 +102,8 @@
 
     <div class="ph-mobile-path" aria-label="مسار الطاقة بين علامات تجدد">
       {[
-        { name: 'NADER', logo: '/logos/nader-logo-white.svg', text: 'نقطة التشغيل الأولى', color: 'var(--tj-blue)' },
-        { name: 'تجدد', logo: '/logos/tajaddod-icon.svg', text: 'تحويل التعدد إلى منظومة', color: '#fff', hub: true },
         { name: 'CNC', logo: '/logos/cnc-logo-white.svg', text: 'حماية وتحكم وتوزيع', color: 'var(--tj-green)' },
+        { name: 'تجدد', logo: '/logos/tajaddod-icon.svg', text: 'تحويل التعدد إلى منظومة', color: '#fff', hub: true },
         { name: 'Liper', logo: '/logos/liper-logo-white.svg', text: 'ضوء وطاقة يكتمل بها المشروع', color: 'var(--tj-orange)' },
       ].map((node) => (
         <div class={`ph-mobile-node ${node.hub ? 'ph-mobile-node--hub' : ''}`} style={`--node-color: ${node.color};`}>
@@ -132,26 +122,6 @@
     <!-- ─── Philosophy Pillars ───────────────────────────── -->
     <div class="ph-pillars" data-ph-pillars>
 
-      <div class="ph-pillar" data-ph-pillar data-brand="nader">
-        <div class="ph-pillar__accent" style="--pillar-color: var(--tj-blue);"></div>
-        <div class="ph-pillar__head">
-          <div class="ph-pillar__icon" style="--pillar-color: var(--tj-blue);">
-            <svg viewBox="0 0 24 24" fill="none" width="24" height="24">
-              <path d="m13 2-2 7h7l-8 13 2-8H5l8-12Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <span class="ph-pillar__num">01</span>
-        </div>
-        <h3 class="ph-pillar__title">الأصل</h3>
-        <p class="ph-pillar__text">
-          كل منظومة كهربائية تبدأ من نقطة صغيرة — مفتاح أو فيش. في تجدد نؤمن أن البداية الصحيحة تصنع الفرق.
-        </p>
-        <div class="ph-pillar__brand">
-          <img src="/logos/nader-logo-white.svg" alt="NADER" loading="lazy"/>
-        </div>
-        <div class="ph-pillar__glow" style="--pillar-color: var(--tj-blue);"></div>
-      </div>
-
       <div class="ph-pillar" data-ph-pillar data-brand="cnc">
         <div class="ph-pillar__accent" style="--pillar-color: var(--tj-green);"></div>
         <div class="ph-pillar__head">
@@ -160,7 +130,7 @@
               <path d="M12 3 5 6v5c0 5 3 8.5 7 10 4-1.5 7-5 7-10V6l-7-3Zm0 6v6m0 3h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
-          <span class="ph-pillar__num">02</span>
+          <span class="ph-pillar__num">01</span>
         </div>
         <h3 class="ph-pillar__title">الحماية</h3>
         <p class="ph-pillar__text">
@@ -170,6 +140,26 @@
           <img src="/logos/cnc-logo-white.svg" alt="CNC" loading="lazy"/>
         </div>
         <div class="ph-pillar__glow" style="--pillar-color: var(--tj-green);"></div>
+      </div>
+
+      <div class="ph-pillar" data-ph-pillar data-brand="tajaddod">
+        <div class="ph-pillar__accent" style="--pillar-color: var(--tj-blue);"></div>
+        <div class="ph-pillar__head">
+          <div class="ph-pillar__icon" style="--pillar-color: var(--tj-blue);">
+            <svg viewBox="0 0 24 24" fill="none" width="24" height="24">
+              <path d="m13 2-2 7h7l-8 13 2-8H5l8-12Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="ph-pillar__num">02</span>
+        </div>
+        <h3 class="ph-pillar__title">المنظومة</h3>
+        <p class="ph-pillar__text">
+          تجدد هي المظلة التي تجمع العلامات المتخصصة لتوفير مسار طاقة متكامل وموثوق يخدم احتياج السوق.
+        </p>
+        <div class="ph-pillar__brand">
+          <img src="/logos/tajaddod-icon.svg" alt="تجدد" loading="lazy" style="height: 18px;"/>
+        </div>
+        <div class="ph-pillar__glow" style="--pillar-color: var(--tj-blue);"></div>
       </div>
 
       <div class="ph-pillar" data-ph-pillar data-brand="liper">
@@ -207,8 +197,6 @@
         <span class="ph-quote__mark">"</span>
       </blockquote>
       <div class="ph-closing__brands">
-        <img src="/logos/nader-logo-white.svg" alt="NADER" loading="lazy"/>
-        <span class="ph-closing__divider"></span>
         <img src="/logos/cnc-logo-white.svg" alt="CNC" loading="lazy"/>
         <span class="ph-closing__divider"></span>
         <img src="/logos/liper-logo-white.svg" alt="Liper" loading="lazy"/>
@@ -643,11 +631,6 @@
   z-index: 3;
 }
 
-.ph-circuit__node--nader {
-  top: -5%;
-  left: 10%;
-}
-
 .ph-circuit__node--cnc {
   top: -15%;
   left: 31%;
@@ -986,10 +969,6 @@
 
   .ph-circuit__visual {
     padding-bottom: 45%;
-  }
-
-  .ph-circuit__node--nader {
-    left: 8%;
   }
 
   .ph-circuit__node--liper {

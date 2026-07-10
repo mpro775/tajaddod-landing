@@ -13,7 +13,7 @@ const marketSegments = [
     title: 'التجار والموزعون',
     desc: 'تشكيلة واضحة قابلة للتسويق والتوريد.',
     accent: 'blue',
-    sources: 'nader,liper',
+    sources: 'cnc,liper',
   },
   {
     id: 'contractors',
@@ -21,7 +21,7 @@ const marketSegments = [
     title: 'المقاولون',
     desc: 'حلول متكاملة من المفتاح إلى الطاقة الشمسية.',
     accent: 'green',
-    sources: 'nader,cnc,liper',
+    sources: 'cnc,liper',
   },
   {
     id: 'technicians',
@@ -29,7 +29,7 @@ const marketSegments = [
     title: 'الفنيون',
     desc: 'منتجات موثوقة مرتبة حسب التخصص.',
     accent: 'lime',
-    sources: 'nader,cnc',
+    sources: 'cnc',
   },
   {
     id: 'owners',
@@ -37,12 +37,11 @@ const marketSegments = [
     title: 'أصحاب المشاريع',
     desc: 'منظومة كهرباء متكاملة وواضحة.',
     accent: 'blue',
-    sources: 'nader,cnc,liper',
+    sources: 'cnc,liper',
   },
 ];
 
 const brandSources = [
-  { id: 'nader', logo: '/logos/nader-logo.svg', name: 'NADER', role: 'المفاتيح والأفياش', targets: 'retailers,contractors,technicians,owners' },
   { id: 'cnc', logo: '/logos/cnc-logo.svg', name: 'CNC', role: 'الحماية والتحكم', targets: 'contractors,technicians,owners' },
   { id: 'liper', logo: '/logos/liper-logo.svg', name: 'Liper', role: 'الإضاءة والطاقة', targets: 'retailers,contractors,owners' },
 ];
@@ -103,14 +102,12 @@ const brandSources = [
         <div class="mr-flow__lines mr-flow__lines--in" aria-hidden="true">
           <svg viewBox="0 0 120 200" fill="none" preserveAspectRatio="none" class="mr-svg-lines">
             <!-- Background Static paths -->
-            <path d="M0 30 Q60 30 110 100" stroke="rgba(255,255,255,0.06)" stroke-width="2" class="mr-path-bg" />
-            <path d="M0 100 Q60 100 110 100" stroke="rgba(255,255,255,0.06)" stroke-width="2" class="mr-path-bg" />
-            <path d="M0 170 Q60 170 110 100" stroke="rgba(255,255,255,0.06)" stroke-width="2" class="mr-path-bg" />
+            <path d="M0 70 Q60 70 110 100" stroke="rgba(255,255,255,0.06)" stroke-width="2" class="mr-path-bg" />
+            <path d="M0 130 Q60 130 110 100" stroke="rgba(255,255,255,0.06)" stroke-width="2" class="mr-path-bg" />
             
             <!-- Glowing Laser path overlays -->
-            <path d="M0 30 Q60 30 110 100" stroke="var(--tj-blue)" stroke-width="2.5" class="mr-path-glow mr-path-glow--nader" data-path-in="nader" />
-            <path d="M0 100 Q60 100 110 100" stroke="#e63946" stroke-width="2.5" class="mr-path-glow mr-path-glow--cnc" data-path-in="cnc" />
-            <path d="M0 170 Q60 170 110 100" stroke="var(--tj-orange)" stroke-width="2.5" class="mr-path-glow mr-path-glow--liper" data-path-in="liper" />
+            <path d="M0 70 Q60 70 110 100" stroke="#e63946" stroke-width="2.5" class="mr-path-glow mr-path-glow--cnc" data-path-in="cnc" />
+            <path d="M0 130 Q60 130 110 100" stroke="var(--tj-orange)" stroke-width="2.5" class="mr-path-glow mr-path-glow--liper" data-path-in="liper" />
           </svg>
         </div>
 
@@ -169,7 +166,7 @@ const brandSources = [
       <article class="mr-mobile-flow__card">
         <span class="mr-mobile-flow__num">01</span>
         <h3>العلامات المتخصصة</h3>
-        <p>NADER / CNC / Liper</p>
+        <p>حلول الحماية والإضاءة والطاقة</p>
         <div class="mr-mobile-flow__logos">
           {brandSources.map((brand) => (
             <img src={brand.logo} alt={brand.name} width="58" height="28" loading="lazy" />
@@ -332,11 +329,6 @@ const brandSources = [
 }
 
 /* Background Gradients & Glows */
-.mr-section.layer-cinematic.hover-nader {
-  background: radial-gradient(circle at 50% 30%, #0b3447 0%, #061c28 60%, #030a0f 100%);
-  --active-brand-color: var(--tj-blue);
-  --active-brand-color-rgb: 30, 153, 211;
-}
 .mr-section.layer-cinematic.hover-cnc {
   background: radial-gradient(circle at 50% 30%, #3a0909 0%, #1f0404 60%, #020906 100%);
   --active-brand-color: #e63946;
@@ -383,7 +375,6 @@ const brandSources = [
   transform: translateX(-50%);
   background: rgba(30, 153, 211, 0.4);
 }
-.mr-section.layer-cinematic.hover-nader .mr-bg__glow--1 { background: rgba(30, 153, 211, 0.6); }
 .mr-section.layer-cinematic.hover-cnc .mr-bg__glow--1 { background: rgba(230, 57, 70, 0.5); }
 .mr-section.layer-cinematic.hover-liper .mr-bg__glow--1 { background: rgba(255, 140, 0, 0.55); }
 
@@ -579,7 +570,6 @@ const brandSources = [
 }
 
 /* Chip inner colors based on ID */
-.mr-brand-chip[data-id="nader"] { --chip-accent: var(--tj-blue); --chip-accent-rgb: 30, 153, 211; }
 .mr-brand-chip[data-id="cnc"] { --chip-accent: #e63946; --chip-accent-rgb: 230, 57, 70; }
 .mr-brand-chip[data-id="liper"] { --chip-accent: var(--tj-orange); --chip-accent-rgb: 255, 140, 0; }
 

@@ -32,8 +32,8 @@ const getBrandList = (brandStr: string) => {
         align="center"
         dark
         eyebrow="مجالات التغطية"
-        title="تخصصات واضحة بدل عرض منتجات عشوائي"
-        description="كل مجال في الصفحة مرتبط ببراند أو أكثر، لتأسيس منظومة كهرباء متكاملة بدلاً من كروت بيع عشوائية."
+        title="مجالات متخصصة في الحماية، التحكم، الإضاءة والطاقة"
+        description="تخصصات واضحة ومتكاملة لتأسيس منظومة كهرباء تغطي احتياجات مشاريعك بالكامل."
       />
     </div>
 
@@ -43,10 +43,6 @@ const getBrandList = (brandStr: string) => {
         <button class="cv-tab is-active" type="button" data-filter="all" aria-pressed="true">
           <span class="cv-tab__dot"></span>
           <span class="cv-tab__text">الكل</span>
-        </button>
-        <button class="cv-tab" type="button" data-filter="nader" aria-pressed="false">
-          <span class="cv-tab__dot" style="background: var(--tj-blue); box-shadow: 0 0 10px var(--tj-blue)"></span>
-          <span class="cv-tab__text">NADER</span>
         </button>
         <button class="cv-tab" type="button" data-filter="cnc" aria-pressed="false">
           <span class="cv-tab__dot" style="background: #e63946; box-shadow: 0 0 10px #e63946"></span>
@@ -335,7 +331,6 @@ const getBrandList = (brandStr: string) => {
 }
 
 /* Brand specific card settings via attributes */
-.coverage-card[data-brands*="nader"] { --brand-primary: var(--tj-blue); --brand-primary-rgb: 30,153,211; }
 .coverage-card[data-brands*="cnc"] { --brand-primary: #e63946; --brand-primary-rgb: 230,57,70; }
 .coverage-card[data-brands*="liper"] { --brand-primary: var(--tj-orange); --brand-primary-rgb: 255,140,0; }
 
@@ -419,7 +414,6 @@ const getBrandList = (brandStr: string) => {
   transition: all 0.4s ease;
 }
 
-.coverage-card:hover .cv-badge--nader { border-color: rgba(30,153,211,0.3); color: var(--tj-blue); background: rgba(30,153,211,0.1); }
 .coverage-card:hover .cv-badge--cnc { border-color: rgba(230,57,70,0.3); color: #e63946; background: rgba(230,57,70,0.1); }
 .coverage-card:hover .cv-badge--liper { border-color: rgba(255,140,0,0.3); color: var(--tj-orange); background: rgba(255,140,0,0.1); }
 

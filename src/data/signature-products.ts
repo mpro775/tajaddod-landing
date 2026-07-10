@@ -1,52 +1,5 @@
 import type { SignatureProduct, BrandBoard } from '../types/product';
 
-// ──────────────────────────────────────────────
-// NADER — واجهة الاستخدام اليومي
-// المفاتيح والأفياش فقط
-// ──────────────────────────────────────────────
-
-const naderProducts: SignatureProduct[] = [
-  {
-    id: '6a2694c52cd007328fdf1600',
-    brand: 'nader',
-    nameAr: 'مفتاح ثلاثي KY5-005',
-    nameEn: 'KY5-005 3-Gang Switch',
-    categoryAr: 'مفاتيح',
-    shortDescriptionAr: 'مفتاح إنارة ثلاثي أنيق للتحكم بعدة نقاط إضاءة من موقع واحد.',
-    image: '/assets/products/nader/gang-light-wall-switch-by-nader-ky5-005.svg',
-    hotspot: { x: 25, y: 30 },
-  },
-  {
-    id: '6a268f462cd007328fdf0f6f',
-    brand: 'nader',
-    nameAr: 'فيش مزدوج مع USB — KS10-049',
-    nameEn: 'KS10-049 Double Socket + USB',
-    categoryAr: 'أفياش',
-    shortDescriptionAr: 'فيش بريطاني مزدوج مع منافذ USB مدمجة بتصميم فاخر.',
-    image: '/assets/products/nader/double-13a-switched-electrical-socket-with-usb-ports-by-nader-ks10-04.svg',
-    hotspot: { x: 70, y: 35 },
-  },
-  {
-    id: '692ecc62c97b8e1de3438fd2',
-    brand: 'nader',
-    nameAr: 'مفتاح سخان ذهبي KX1-034',
-    nameEn: 'KX1-034 20A Heater Switch',
-    categoryAr: 'مفاتيح',
-    shortDescriptionAr: 'مفتاح 20 أمبير بلمسة ذهبية لتشغيل السخانات والأحمال الكبيرة.',
-    image: '/assets/products/nader/nader-switch-gold-heater-kx1-034-20a.svg',
-    hotspot: { x: 50, y: 65 },
-  },
-  {
-    id: '697dc27f99f3c389e5d3eb11',
-    brand: 'nader',
-    nameAr: 'مفتاح مع فيش ثنائي ذهبي KY7-063',
-    nameEn: 'KY7-063 Gold Switch + Socket',
-    categoryAr: 'مفاتيح وأفياش',
-    shortDescriptionAr: 'تصميم يجمع مفتاح تحكم ومقبس في وحدة ذهبية أنيقة.',
-    image: '/assets/products/nader/nader-ky7-gold-switch-with-twin-socket-ky7-063.svg',
-    hotspot: { x: 30, y: 72 },
-  },
-];
 
 // ──────────────────────────────────────────────
 // CNC — قلب الحماية والتحكم
@@ -169,13 +122,7 @@ const liperProducts: SignatureProduct[] = [
 // ──────────────────────────────────────────────
 
 export const brandBoards: BrandBoard[] = [
-  {
-    brand: 'nader',
-    titleAr: 'NADER Signature Board',
-    descriptionAr: 'مفاتيح وأفياش بتصميمات تجمع بين الأناقة والعملية لكل مساحة.',
-    sceneImage: '/assets/brands/nader/nader-wall-scene.webp',
-    products: naderProducts,
-  },
+
   {
     brand: 'cnc',
     titleAr: 'CNC Protection Board',
@@ -197,14 +144,12 @@ export const brandBoards: BrandBoard[] = [
 // ──────────────────────────────────────────────
 
 export const signatureProducts: SignatureProduct[] = [
-  ...naderProducts,
   ...cncProducts,
   ...liperProducts,
 ];
 
 /**
- * Total signature products: 14
- * ─ NADER: 4 (مفاتيح وأفياش فقط)
+ * Total signature products: 10
  * ─ CNC:   5 (قواطع، حماية، مؤقت، تحويل، طبلون)
  * ─ Liper: 5 (داونلايت، COB، خارجي، شمسي شوارع، شمسي فلود)
  *

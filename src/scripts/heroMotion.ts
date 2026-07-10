@@ -128,16 +128,6 @@ export function initHeroMotion() {
       y: 0,
       duration: 0.68,
     }, '-=0.52')
-    .fromTo('.brand-anchor-nader', {
-      opacity: 0,
-      x: 30,
-      y: -10,
-    }, {
-      opacity: 1,
-      x: 0,
-      y: 0,
-      duration: 0.68,
-    }, '-=0.5')
     .to('.energy-path', {
       strokeDashoffset: 0,
       duration: 1.8,

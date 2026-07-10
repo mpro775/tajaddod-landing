@@ -10,7 +10,7 @@ export type SignatureProduct = {
   /** Unique identifier (matches store product id when available) */
   id: string;
   /** Brand owner of this product */
-  brand: 'nader' | 'cnc' | 'liper';
+  brand: 'cnc' | 'liper';
   /** Arabic product name */
   nameAr: string;
   /** Optional English product name / model number */
@@ -32,7 +32,7 @@ export type SignatureProduct = {
 
 export type BrandBoard = {
   /** Brand identifier */
-  brand: 'nader' | 'cnc' | 'liper';
+  brand: 'cnc' | 'liper';
   /** Board title in Arabic */
   titleAr: string;
   /** Board description in Arabic */

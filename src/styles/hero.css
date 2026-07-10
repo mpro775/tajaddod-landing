@@ -198,20 +198,6 @@
   transform: scale(1.06);
 }
 
-.brand-anchor-nader {
-  top: 16%;
-  right: 7.5%;
-  align-items: flex-end;
-  text-align: right;
-  color: #1E99D3;
-}
-
-.brand-anchor-nader::after {
-  right: 100%;
-  margin-right: 12px;
-  background: linear-gradient(270deg, #1E99D3, transparent);
-}
-
 .brand-anchor-liper {
   top: 11%;
   left: 7%;
@@ -236,11 +222,6 @@
   background: linear-gradient(90deg, #E63636, transparent);
 }
 
-.cinematic-hero.glow-active-nader .hero-glow-blue {
-  opacity: 0.72;
-  transform: scale(1.08);
-}
-
 .cinematic-hero.glow-active-liper .hero-glow-green {
   opacity: 0.78;
   transform: scale(1.08);
@@ -251,7 +232,6 @@
   transform: scale(1.07);
 }
 
-.cinematic-hero.glow-active-nader .energy-path-nader,
 .cinematic-hero.glow-active-liper .energy-path-liper,
 .cinematic-hero.glow-active-cnc .energy-path-cnc {
   opacity: 1;
@@ -386,10 +366,6 @@
 /* ─── Responsive ─────────────────────────────────────────────────────── */
 
 @media (max-width: 1280px) {
-  .brand-anchor-nader {
-    right: 4.5%;
-  }
-
   .brand-anchor-liper,
   .brand-anchor-cnc {
     left: 4.5%;
