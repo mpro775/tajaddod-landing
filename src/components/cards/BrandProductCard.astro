@@ -1,0 +1,107 @@
+---
+interface Props {
+  product: any;
+  brandColor: string;
+}
+
+const { product, brandColor } = Astro.props;
+---
+<article class="brand-product-card" style={`--brand-color: ${brandColor};`}>
+  <div class="brand-product-card__image-wrap">
+    <img src={product.image} alt={product.name} class="brand-product-card__image" loading="lazy" />
+    {product.badges && product.badges.length > 0 && (
+      <div class="brand-product-card__badges">
+        {product.badges.map((badge: string) => (
+          <span class="badge">{badge}</span>
+        ))}
+      </div>
+    )}
+  </div>
+  
+  <div class="brand-product-card__content">
+    <span class="brand-product-card__category">{product.category}</span>
+    <h3 class="brand-product-card__title">{product.name}</h3>
+    <p class="brand-product-card__desc">{product.description}</p>
+  </div>
+</article>
+
+<style>
+  .brand-product-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .brand-product-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--brand-color);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  }
+  .brand-product-card__image-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .brand-product-card__image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.5s ease;
+  }
+  .brand-product-card:hover .brand-product-card__image {
+    transform: scale(1.05);
+  }
+  .brand-product-card__badges {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .badge {
+    background: var(--brand-color);
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: var(--tj-font-medium);
+  }
+  .brand-product-card__content {
+    padding: 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .brand-product-card__category {
+    font-size: 0.85rem;
+    color: var(--brand-color);
+    margin-bottom: 8px;
+    font-weight: var(--tj-font-medium);
+  }
+  .brand-product-card__title {
+    font-size: 1.1rem;
+    color: #fff;
+    margin: 0 0 12px 0;
+    line-height: 1.4;
+  }
+  .brand-product-card__desc {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

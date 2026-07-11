@@ -1,0 +1,206 @@
+---
+import { projects } from '../../data/projects';
+
+// Pick 1 large featured project and up to 3 smaller ones.
+const featuredProject = projects[0];
+const sideProjects = projects.slice(1, 4);
+---
+<section class="featured-projects section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">مشاريع نفذتها تجدد</h2>
+      <p class="section-desc">لا تكتفي تجدد بتوريد المنتجات، بل تشارك في تنفيذ حلول كهربائية وطاقة شمسية متكاملة للمشاريع السكنية والتجارية والخدمية.</p>
+    </div>
+    
+    <div class="projects-layout">
+      {featuredProject && (
+        <a href={`/projects/${featuredProject.slug}`} class="project-card featured-card">
+          <div class="card-bg">
+            <img src={featuredProject.coverImage} alt={featuredProject.title} loading="lazy" />
+            <div class="overlay"></div>
+          </div>
+          <div class="card-content">
+            <span class="project-category">{featuredProject.category}</span>
+            <h3 class="project-title">{featuredProject.title}</h3>
+            <div class="project-meta">
+              <span class="meta-item"><i class="icon-location"></i> {featuredProject.location}</span>
+              <span class="meta-item"><i class="icon-calendar"></i> {featuredProject.year}</span>
+              {featuredProject.stats && featuredProject.stats[0] && (
+                <span class="meta-item"><i class="icon-zap"></i> {featuredProject.stats[0].value}</span>
+              )}
+            </div>
+            <span class="btn btn--primary">عرض تفاصيل المشروع</span>
+          </div>
+        </a>
+      )}
+      
+      <div class="side-projects">
+        {sideProjects.map((project) => (
+          <a href={`/projects/${project.slug}`} class="project-card side-card">
+            <div class="card-bg">
+              <img src={project.coverImage} alt={project.title} loading="lazy" />
+              <div class="overlay"></div>
+            </div>
+            <div class="card-content">
+              <span class="project-category">{project.category}</span>
+              <h3 class="project-title">{project.title}</h3>
+              <div class="project-meta">
+                <span class="meta-item">{project.location}</span>
+                <span class="meta-item">{project.year}</span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+    
+    <div class="projects-action">
+      <a href="/projects" class="btn btn--outline">تصفح جميع المشاريع</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .featured-projects {
+    padding: clamp(80px, 10vw, 120px) 0;
+    background: #061219;
+    color: #fff;
+  }
+  .section-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 48px;
+  }
+  .section-title {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: var(--tj-font-bold);
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #fff, #9be8ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .section-desc {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.15rem;
+    line-height: 1.8;
+  }
+  .projects-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+  @media (min-width: 992px) {
+    .projects-layout {
+      grid-template-columns: 1.5fr 1fr;
+    }
+  }
+  .project-card {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    text-decoration: none;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+  .project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  }
+  .card-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .card-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .project-card:hover .card-bg img {
+    transform: scale(1.05);
+  }
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0) 100%);
+  }
+  .card-content {
+    position: relative;
+    z-index: 1;
+    padding: 32px;
+  }
+  .project-category {
+    display: inline-block;
+    padding: 6px 12px;
+    background: var(--tj-primary);
+    color: #fff;
+    font-size: 0.85rem;
+    border-radius: 999px;
+    margin-bottom: 16px;
+    font-weight: var(--tj-font-medium);
+  }
+  .project-title {
+    font-size: 1.6rem;
+    font-weight: var(--tj-font-bold);
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+  .featured-card .project-title {
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+  }
+  .project-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .meta-item {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .side-projects {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .side-card {
+    min-height: 240px;
+  }
+  .projects-action {
+    text-align: center;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-weight: var(--tj-font-medium);
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  .btn--primary {
+    background: var(--tj-primary);
+    color: #fff;
+  }
+  .btn--primary:hover {
+    background: var(--tj-primary-dark);
+  }
+  .btn--outline {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+  }
+  .btn--outline:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+</style>

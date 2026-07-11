@@ -1,0 +1,145 @@
+---
+import type { Brand } from '../../data/brands';
+import BrandProductCard from '../cards/BrandProductCard.astro';
+
+interface Props {
+  brand: Brand;
+  products: any[];
+}
+
+const { brand, products } = Astro.props;
+const brandColor = brand.id === 'cnc' ? '#e63946' : '#ff8c00';
+---
+<section class="brand-products section">
+  <div class="container">
+    <div class="products-header">
+      <h2 class="section-title">منتجات <span style={`color: ${brandColor};`}>{brand.name}</span></h2>
+      <p class="section-desc">اكتشف أحدث المنتجات والحلول التي نقدمها من {brand.name}.</p>
+    </div>
+    
+    {products.length > 0 ? (
+      <div class="products-grid">
+        {products.map((product) => (
+          <BrandProductCard product={product} brandColor={brandColor} />
+        ))}
+      </div>
+    ) : (
+      <div class="no-products">
+        <p>لا توجد منتجات متاحة حالياً.</p>
+      </div>
+    )}
+    
+    <div class="products-cta">
+      <div class="cta-box" style={`--brand-color: ${brandColor};`}>
+        <h3>هل تبحث عن المزيد من منتجات {brand.name}؟</h3>
+        <p>تفضل بتصفح الكتالوج الشامل أو تواصل معنا للاستفسار عن منتج معين.</p>
+        <div class="cta-actions">
+          <a href="#" class="btn btn--primary">اطلب كتالوج البراند</a>
+          <a href="#contact" class="btn btn--outline">تواصل مع تجدد بخصوص هذه العلامة</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .brand-products {
+    padding: clamp(60px, 8vw, 100px) 0;
+    color: #fff;
+  }
+  .products-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .section-title {
+    font-size: clamp(2rem, 3vw, 2.5rem);
+    font-weight: var(--tj-font-bold);
+    margin-bottom: 16px;
+  }
+  .section-desc {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.1rem;
+  }
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    margin-bottom: 64px;
+  }
+  .no-products {
+    text-align: center;
+    padding: 60px 0;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 16px;
+    margin-bottom: 64px;
+  }
+  
+  .products-cta {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .cta-box {
+    background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 48px 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--brand-color);
+  }
+  .cta-box h3 {
+    font-size: 1.8rem;
+    margin-bottom: 16px;
+    color: #fff;
+  }
+  .cta-box p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.1rem;
+    margin-bottom: 32px;
+  }
+  .cta-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-weight: var(--tj-font-medium);
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  .btn--primary {
+    background: var(--brand-color);
+    color: #fff;
+  }
+  .btn--primary:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+  }
+  .btn--outline {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .btn--outline:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+  }
+</style>

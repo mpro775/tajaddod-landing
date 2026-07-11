@@ -1,5 +1,5 @@
 export const marketSteps = [
-  { label: 'العلامة', detail: 'Nader وCNC وLiper كل علامة لها دور واضح ومتخصص.' },
+  { label: 'العلامة', detail: 'CNC وLiper كل علامة لها دور واضح ومتخصص.' },
   { label: 'تجدد', detail: 'تنظم الحضور التجاري وتجمع التخصصات تحت مظلة واحدة.' },
   { label: 'التاجر والموزع', detail: 'يحصل على تشكيلة واضحة قابلة للتسويق والتوريد.' },
   { label: 'المقاول والفني', detail: 'يجد حلولاً مرتبة حسب الحاجة: مفاتيح، حماية، إنارة، وطاقة.' },
@@ -7,12 +7,6 @@ export const marketSteps = [
 ];
 
 export const energyStory = [
-  {
-    label: 'نقطة التشغيل',
-    brand: 'Nader',
-    title: 'مفتاح وفيش',
-    description: 'التفاصيل التي يراها المستخدم ويلمسها يومياً.',
-  },
   {
     label: 'الأمان',
     brand: 'CNC',

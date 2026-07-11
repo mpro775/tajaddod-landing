@@ -230,17 +230,6 @@
 
 /* ─── Brand World Accents ────────────────────────────────────────────── */
 
-/* NADER — واجهة الاستخدام اليومي */
-.brand-world--nader,
-.accent-nader {
-  --accent: var(--tj-blue);
-  --accent-glow: var(--tj-blue-glow);
-  --accent-surface: var(--tj-blue-surface);
-  --accent-surface-soft: var(--tj-blue-surface-soft);
-  --accent-gradient: linear-gradient(135deg, #1e99d3, #0d6f9e);
-  --accent-scene-bg: linear-gradient(145deg, rgba(30, 153, 211, 0.08), rgba(30, 153, 211, 0.03));
-}
-
 /* CNC — قلب الحماية والتحكم */
 .brand-world--cnc,
 .accent-cnc {
@@ -337,11 +326,9 @@
 }
 
 /* Brand-specific glows */
-.brand-glow--nader { --glow-color: var(--tj-blue-glow); }
 .brand-glow--cnc { --glow-color: var(--tj-green-glow); }
 .brand-glow--liper { --glow-color: rgba(255, 140, 0, 0.4); }
 
-.brand-glow--nader::after,
 .brand-glow--cnc::after,
 .brand-glow--liper::after {
   background: var(--glow-color);

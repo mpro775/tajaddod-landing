@@ -1,0 +1,37 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import BrandHero from '../../components/sections/BrandHero.astro';
+import BrandOverview from '../../components/sections/BrandOverview.astro';
+import BrandApplications from '../../components/sections/BrandApplications.astro';
+import BrandProducts from '../../components/sections/BrandProducts.astro';
+import { brands } from '../../data/brands';
+import generatedProducts from '../../data/generated-products.json';
+
+export function getStaticPaths() {
+  return brands.map((brand) => ({
+    params: { slug: brand.slug },
+    props: { brand },
+  }));
+}
+
+const { brand } = Astro.props;
+
+// Filter products for this brand
+const products = generatedProducts.filter((p) => p.brandSlug === brand.slug);
+---
+
+<Layout title={`${brand.name} | تجدد`} description={brand.shortDescription}>
+  <main class="brand-page">
+    <BrandHero brand={brand} />
+    <BrandOverview brand={brand} />
+    <BrandApplications brand={brand} />
+    <BrandProducts brand={brand} products={products} />
+  </main>
+</Layout>
+
+<style>
+  .brand-page {
+    background: #040d12; /* Dark, immersive background matching Tajaddod's theme */
+    min-height: 100vh;
+  }
+</style>

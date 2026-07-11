@@ -1,0 +1,334 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { projects } from '../../data/projects';
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+---
+
+<Layout title={`${project.title} | مشاريع تجدد`} description={project.summary}>
+  <main class="project-details">
+    <!-- Hero Section -->
+    <section class="project-hero">
+      <div class="project-hero__bg">
+        <img src={project.coverImage} alt={project.title} />
+        <div class="overlay"></div>
+      </div>
+      <div class="container project-hero__content">
+        <span class="project-category">{project.category}</span>
+        <h1 class="project-title">{project.title}</h1>
+        
+        <div class="quick-stats">
+          <div class="stat-item">
+            <span class="stat-label">الموقع</span>
+            <span class="stat-value">{project.location}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">السنة</span>
+            <span class="stat-value">{project.year}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">الحالة</span>
+            <span class="stat-value">{project.status}</span>
+          </div>
+          {project.stats && project.stats.map(stat => (
+            <div class="stat-item">
+              <span class="stat-label">{stat.label}</span>
+              <span class="stat-value">{stat.value}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Details Section -->
+    <section class="project-content section">
+      <div class="container">
+        <div class="content-grid">
+          
+          <div class="main-content">
+            {project.challenge && (
+              <div class="content-block">
+                <h2>التحدي</h2>
+                <p>{project.challenge}</p>
+              </div>
+            )}
+            
+            {project.solution && (
+              <div class="content-block">
+                <h2>الحل المقدم</h2>
+                <p>{project.solution}</p>
+              </div>
+            )}
+            
+            {project.gallery && project.gallery.length > 0 && (
+              <div class="content-block gallery-block">
+                <h2>معرض الصور</h2>
+                <div class="gallery-grid">
+                  {project.gallery.map(img => (
+                    <div class="gallery-item">
+                      <img src={img} alt="صورة من المشروع" loading="lazy" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+          
+          <aside class="sidebar">
+            {project.scope && project.scope.length > 0 && (
+              <div class="sidebar-widget">
+                <h3>نطاق العمل</h3>
+                <ul class="scope-list">
+                  {project.scope.map(item => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            
+            {project.brands && project.brands.length > 0 && (
+              <div class="sidebar-widget">
+                <h3>العلامات التجارية المستخدمة</h3>
+                <div class="brands-tags">
+                  {project.brands.map(brand => (
+                    <span class="brand-tag">{brand}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </aside>
+          
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="project-cta">
+      <div class="container">
+        <div class="cta-box">
+          <h2>هل تخطط لمشروع مشابه؟</h2>
+          <p>فريقنا من المهندسين والخبراء مستعد لدراسة مشروعك وتقديم أفضل الحلول المتكاملة.</p>
+          <a href="#contact" class="btn btn--primary">تواصل معنا الآن</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .project-details {
+    background: #040d12;
+    color: #fff;
+    min-height: 100vh;
+  }
+  .project-hero {
+    position: relative;
+    padding: clamp(150px, 20vw, 220px) 0 clamp(60px, 8vw, 100px);
+    min-height: 60vh;
+    display: flex;
+    align-items: flex-end;
+  }
+  .project-hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .project-hero__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, #040d12 0%, rgba(4, 13, 18, 0.8) 50%, rgba(4, 13, 18, 0.4) 100%);
+  }
+  .project-hero__content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+  .project-category {
+    display: inline-block;
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    border-radius: 999px;
+    margin-bottom: 24px;
+    font-weight: var(--tj-font-medium);
+  }
+  .project-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: var(--tj-font-bold);
+    margin-bottom: 48px;
+    line-height: 1.2;
+    max-width: 900px;
+  }
+  .quick-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .stat-label {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.5);
+  }
+  .stat-value {
+    font-size: 1.2rem;
+    font-weight: var(--tj-font-semibold);
+    color: #fff;
+  }
+  
+  .project-content {
+    padding: clamp(60px, 8vw, 100px) 0;
+  }
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  @media (min-width: 992px) {
+    .content-grid {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+  .content-block {
+    margin-bottom: 48px;
+  }
+  .content-block h2 {
+    font-size: 1.8rem;
+    font-weight: var(--tj-font-bold);
+    margin-bottom: 20px;
+    color: #fff;
+  }
+  .content-block p {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.8;
+  }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .gallery-item {
+    aspect-ratio: 4/3;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  .gallery-item:hover img {
+    transform: scale(1.05);
+  }
+  
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .sidebar-widget {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 32px;
+  }
+  .sidebar-widget h3 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 12px;
+  }
+  .scope-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .scope-list li {
+    position: relative;
+    padding-right: 24px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.6;
+  }
+  .scope-list li::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 10px;
+    width: 6px;
+    height: 6px;
+    background: var(--tj-primary);
+    border-radius: 50%;
+  }
+  .brands-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .brand-tag {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+  }
+  
+  .project-cta {
+    padding-bottom: 100px;
+  }
+  .cta-box {
+    background: linear-gradient(135deg, rgba(30,153,211,0.1), rgba(30,153,211,0.02));
+    border: 1px solid rgba(30,153,211,0.2);
+    border-radius: 24px;
+    padding: 64px 32px;
+    text-align: center;
+  }
+  .cta-box h2 {
+    font-size: 2rem;
+    margin-bottom: 16px;
+  }
+  .cta-box p {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 32px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .btn {
+    display: inline-flex;
+    padding: 14px 32px;
+    background: var(--tj-primary);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+  }
+  .btn:hover {
+    background: var(--tj-primary-dark);
+  }
+</style>

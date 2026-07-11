@@ -6,12 +6,15 @@ import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import CinematicHero from '../components/sections/CinematicHero.astro';
 import About from '../components/sections/About.astro';
+import Achievements from '../components/sections/Achievements.astro';
 import Brands from '../components/sections/Brands.astro';
+import FeaturedProjects from '../components/sections/FeaturedProjects.astro';
 import MarketRole from '../components/sections/MarketRole.astro';
 import Coverage from '../components/sections/Coverage.astro';
 import Sectors from '../components/sections/Sectors.astro';
 import EnergyJourney from '../components/sections/EnergyJourney.astro';
 import AppDownload from '../components/sections/AppDownload.astro';
+import LatestNews from '../components/sections/LatestNews.astro';
 import ContactCTA from '../components/sections/ContactCTA.astro';
 import { site } from '../data/site';
 
@@ -21,7 +24,7 @@ const organizationSchema = {
   '@type': 'Organization',
   name: site.name,
   description: site.description,
-  brand: ['Nader', 'CNC', 'Liper'],
+  brand: ['CNC', 'Liper'],
   email: site.email || undefined,
 };
 ---
@@ -53,12 +56,15 @@ const organizationSchema = {
     <main>
       <CinematicHero />
       <About />
+      <Achievements />
       <Brands />
+      <FeaturedProjects />
       <MarketRole />
       <Coverage />
       <Sectors />
       <EnergyJourney />
       <AppDownload />
+      <LatestNews />
       <ContactCTA />
     </main>
     <Footer />

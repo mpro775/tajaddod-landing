@@ -122,7 +122,6 @@ strong { font-weight: var(--tj-font-bold); }
 .orbit-brand img { width: 82px; height: 48px; object-fit: contain; border-radius: 12px; background: rgba(255,255,255,.92); padding: 7px; }
 .orbit-brand strong { display: block; color: #fff; }
 .orbit-brand span { display: block; color: rgba(255,255,255,.65); font-size: var(--tj-text-caption); font-weight: var(--tj-font-regular); }
-.orbit-nader { transform: translateX(-42px); }
 .orbit-cnc { transform: translateX(16px); }
 .orbit-liper { transform: translateX(-18px); }
 
@@ -130,7 +129,6 @@ strong { font-weight: var(--tj-font-bold); }
 
 /* Brand Worlds — styles handled via scoped CSS in Brands.astro */
 /* Accent utilities (used across multiple components) */
-.accent-nader { --accent: var(--tj-blue); }
 .accent-cnc { --accent: var(--tj-green); }
 .accent-liper { --accent: var(--tj-orange); }
 

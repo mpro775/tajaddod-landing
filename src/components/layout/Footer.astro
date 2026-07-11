@@ -52,22 +52,45 @@ const { navigation, brands, brand } = siteCopy;
         </div>
       </div>
 
-      <!-- Brands Column -->
+      <!-- Brands & Projects Column -->
       <div class="footer-col footer-accordion-item" data-footer-accordion-item>
         <button class="footer-accordion-trigger" type="button" aria-expanded="false" data-footer-accordion-trigger>
-          <span>علاماتنا</span>
+          <span>العلامات والمشاريع</span>
           <span class="footer-accordion-trigger__icon" aria-hidden="true"></span>
         </button>
-        <h3 class="footer-title">علاماتنا</h3>
+        <h3 class="footer-title">العلامات والمشاريع</h3>
         <div class="footer-panel" data-footer-panel>
-          <ul class="footer-list">
-            {brands.map((b) => (
-              <li class="footer-list__item">
-                <strong>{b.displayName}</strong>
-                <span>{b.roleTitle}</span>
-              </li>
-            ))}
-          </ul>
+          <div class="footer-links-group">
+            <h4 class="footer-subtitle">العلامات التجارية</h4>
+            <nav class="footer-nav">
+              <a href="/brands/cnc" class="footer-link"><span class="footer-link__icon">›</span> CNC</a>
+              <a href="/brands/liper" class="footer-link"><span class="footer-link__icon">›</span> Liper</a>
+            </nav>
+          </div>
+          <div class="footer-links-group" style="margin-top: 20px;">
+            <h4 class="footer-subtitle">المشاريع</h4>
+            <nav class="footer-nav">
+              <a href="/projects" class="footer-link"><span class="footer-link__icon">›</span> كل المشاريع</a>
+              <a href="/projects" class="footer-link"><span class="footer-link__icon">›</span> مشاريع الطاقة الشمسية</a>
+              <a href="/projects" class="footer-link"><span class="footer-link__icon">›</span> مشاريع الإنارة</a>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <!-- News Column -->
+      <div class="footer-col footer-accordion-item" data-footer-accordion-item>
+        <button class="footer-accordion-trigger" type="button" aria-expanded="false" data-footer-accordion-trigger>
+          <span>الأخبار</span>
+          <span class="footer-accordion-trigger__icon" aria-hidden="true"></span>
+        </button>
+        <h3 class="footer-title">الأخبار</h3>
+        <div class="footer-panel" data-footer-panel>
+          <nav class="footer-nav">
+            <a href="/news" class="footer-link"><span class="footer-link__icon">›</span> أخبار الشركة</a>
+            <a href="/news" class="footer-link"><span class="footer-link__icon">›</span> الفعاليات</a>
+            <a href="/news" class="footer-link"><span class="footer-link__icon">›</span> التدريب</a>
+          </nav>
         </div>
       </div>
 
@@ -204,8 +227,8 @@ const { navigation, brands, brand } = siteCopy;
 
 @media (min-width: 1024px) {
   .footer-top {
-    grid-template-columns: 2fr 1fr 1.5fr 1.5fr;
-    gap: 40px;
+    grid-template-columns: 2fr 1fr 1.2fr 1fr 1.5fr;
+    gap: 30px;
   }
 }
 
@@ -259,8 +282,15 @@ const { navigation, brands, brand } = siteCopy;
   font-size: var(--tj-text-body-lg);
   font-weight: var(--tj-font-bold);
   color: #fff;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
   position: relative;
+}
+
+.footer-subtitle {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 12px;
+  font-weight: var(--tj-font-semibold);
 }
 
 /* Navigation Links */

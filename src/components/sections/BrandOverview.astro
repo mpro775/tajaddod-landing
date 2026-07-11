@@ -1,0 +1,130 @@
+---
+import type { Brand } from '../../data/brands';
+
+interface Props {
+  brand: Brand;
+}
+
+const { brand } = Astro.props;
+const brandColor = brand.id === 'cnc' ? '#e63946' : '#ff8c00';
+---
+<section class="brand-overview section">
+  <div class="container">
+    <div class="overview-grid">
+      <div class="overview-content">
+        <h2 class="section-title">عن <span style={`color: ${brandColor};`}>{brand.name}</span></h2>
+        <p class="overview-text">{brand.longDescription}</p>
+        
+        <div class="overview-why">
+          <h3 style={`color: ${brandColor};`}>لماذا تمثلها تجدد؟</h3>
+          <p>شراكتنا مع {brand.name} تأتي ضمن رؤيتنا لتوفير أعلى معايير الجودة في السوق اليمني. تعتبر {brand.name} رائدة في تخصصها وتوفر حلولاً موثوقة تلبي احتياجات مشاريعنا بكفاءة عالية وبضمان معتمد.</p>
+        </div>
+      </div>
+      
+      <div class="overview-specialties">
+        <h3>مجالات التخصص</h3>
+        <ul class="specialties-list">
+          {brand.specialties.map((spec) => (
+            <li class="specialty-item" style={`--brand-color: ${brandColor};`}>
+              <div class="specialty-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              {spec}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .brand-overview {
+    padding: clamp(60px, 8vw, 100px) 0;
+    color: #fff;
+    position: relative;
+    z-index: 1;
+  }
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  @media (min-width: 992px) {
+    .overview-grid {
+      grid-template-columns: 3fr 2fr;
+      gap: 60px;
+    }
+  }
+  .section-title {
+    font-size: clamp(2rem, 3vw, 2.5rem);
+    font-weight: var(--tj-font-bold);
+    margin-bottom: 24px;
+  }
+  .overview-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 32px;
+  }
+  .overview-why {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(10px);
+  }
+  .overview-why h3 {
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+  }
+  .overview-why p {
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.7;
+    margin: 0;
+  }
+  .overview-specialties {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    padding: 32px;
+    height: fit-content;
+  }
+  .overview-specialties h3 {
+    font-size: 1.5rem;
+    margin-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 16px;
+  }
+  .specialties-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .specialty-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  .specialty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .specialty-item svg {
+    width: 18px;
+    height: 18px;
+    color: var(--brand-color);
+  }
+</style>

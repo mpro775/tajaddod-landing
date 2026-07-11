@@ -1,0 +1,199 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { projects } from '../../data/projects';
+
+// Extract unique categories
+const categories = ['الكل', ...new Set(projects.map(p => p.category))];
+---
+
+<Layout title="مشاريع تجدد | حلول متكاملة" description="استعرض مجموعة من المشاريع التي نفذتها تجدد في مجالات الطاقة الشمسية، الإضاءة، والتحكم الكهربائي.">
+  <main class="projects-page">
+    <div class="page-header">
+      <div class="container">
+        <h1 class="page-title">مشاريع نفذتها تجدد</h1>
+        <p class="page-desc">نشارك في تنفيذ حلول كهربائية وطاقة شمسية متكاملة للمشاريع السكنية والتجارية والخدمية.</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Static filter UI -->
+      <div class="filters">
+        {categories.map((cat, index) => (
+          <button class={`filter-btn ${index === 0 ? 'active' : ''}`} data-filter={cat === 'الكل' ? 'all' : cat}>
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <div class="projects-grid">
+        {projects.map((project) => (
+          <a href={`/projects/${project.slug}`} class="project-card" data-category={project.category}>
+            <div class="card-image">
+              <img src={project.coverImage} alt={project.title} loading="lazy" />
+              <span class="card-badge">{project.category}</span>
+            </div>
+            <div class="card-content">
+              <h2 class="card-title">{project.title}</h2>
+              <div class="card-meta">
+                <span class="meta-item">{project.location}</span>
+                <span class="meta-item">{project.year}</span>
+              </div>
+              <p class="card-summary">{project.summary}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  // Simple static filtering
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const projectCards = document.querySelectorAll('.project-card');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Update active state
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filterValue = btn.getAttribute('data-filter');
+
+      projectCards.forEach(card => {
+        const cardCategory = card.getAttribute('data-category');
+        if (filterValue === 'all' || filterValue === cardCategory) {
+          (card as HTMLElement).style.display = 'flex';
+        } else {
+          (card as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .projects-page {
+    background: #040d12;
+    min-height: 100vh;
+    padding-bottom: 100px;
+    color: #fff;
+  }
+  .page-header {
+    padding: clamp(120px, 15vw, 160px) 0 clamp(60px, 8vw, 80px);
+    text-align: center;
+    background: linear-gradient(180deg, rgba(30,153,211,0.1) 0%, transparent 100%);
+  }
+  .page-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: var(--tj-font-bold);
+    margin-bottom: 24px;
+  }
+  .page-desc {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 48px;
+  }
+  .filter-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 10px 24px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  .filter-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .filter-btn.active {
+    background: var(--tj-primary);
+    color: #fff;
+    border-color: var(--tj-primary);
+  }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 32px;
+  }
+  .project-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.4s ease;
+  }
+  .project-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  .card-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/10;
+    overflow: hidden;
+  }
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .project-card:hover .card-image img {
+    transform: scale(1.05);
+  }
+  .card-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--tj-primary);
+    color: #fff;
+    font-size: 0.8rem;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-weight: var(--tj-font-medium);
+  }
+  .card-content {
+    padding: 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-title {
+    font-size: 1.4rem;
+    color: #fff;
+    margin-bottom: 12px;
+    font-weight: var(--tj-font-bold);
+  }
+  .card-meta {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  .card-summary {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

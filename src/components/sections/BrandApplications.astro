@@ -1,0 +1,96 @@
+---
+import type { Brand } from '../../data/brands';
+
+interface Props {
+  brand: Brand;
+}
+
+const { brand } = Astro.props;
+const brandColor = brand.id === 'cnc' ? '#e63946' : '#ff8c00';
+---
+<section class="brand-applications section">
+  <div class="container">
+    <div class="apps-header">
+      <h2 class="section-title">أين تستخدم منتجات <span style={`color: ${brandColor};`}>{brand.name}</span>؟</h2>
+      <p class="section-desc">تغطي منتجاتنا قطاعات واسعة تلبي احتياجات مختلف المشاريع.</p>
+    </div>
+    
+    <div class="apps-grid">
+      {brand.applications.map((app) => (
+        <div class="app-card" style={`--brand-color: ${brandColor};`}>
+          <div class="app-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+              <path d="M8 12L11 15L16 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="app-card__title">{app}</h3>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .brand-applications {
+    padding: clamp(60px, 8vw, 100px) 0;
+    color: #fff;
+    background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.01) 50%, transparent);
+  }
+  .apps-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .section-title {
+    font-size: clamp(2rem, 3vw, 2.5rem);
+    font-weight: var(--tj-font-bold);
+    margin-bottom: 16px;
+  }
+  .section-desc {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .apps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+  }
+  .app-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 32px 24px;
+    text-align: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+  .app-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+  .app-card__icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--brand-color);
+  }
+  .app-card__icon svg {
+    width: 32px;
+    height: 32px;
+  }
+  .app-card__title {
+    font-size: 1.2rem;
+    font-weight: var(--tj-font-medium);
+    color: #fff;
+    margin: 0;
+  }
+</style>

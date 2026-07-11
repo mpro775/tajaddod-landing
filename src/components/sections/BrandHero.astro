@@ -1,0 +1,160 @@
+---
+import type { Brand } from '../../data/brands';
+
+interface Props {
+  brand: Brand;
+}
+
+const { brand } = Astro.props;
+
+const brandColor = brand.id === 'cnc' ? '#e63946' : '#ff8c00';
+---
+<section class="brand-hero">
+  <!-- Background effects -->
+  <div class="brand-hero__bg">
+    <div class="brand-hero__glow" style={`background-color: ${brandColor};`}></div>
+    <div class="brand-hero__grid"></div>
+  </div>
+
+  <div class="container brand-hero__container">
+    <div class="brand-hero__content">
+      <div class="brand-hero__logo-wrapper" style={`border-color: ${brandColor}40; box-shadow: 0 0 30px ${brandColor}20;`}>
+        <img src={brand.whiteLogo} alt={brand.name} class="brand-hero__logo" />
+      </div>
+      
+      <span class="brand-hero__category" style={`color: ${brandColor};`}>{brand.category}</span>
+      <h1 class="brand-hero__title">{brand.heroTitle}</h1>
+      <p class="brand-hero__desc">{brand.shortDescription}</p>
+      
+      <div class="brand-hero__actions">
+        <a href="#contact" class="btn btn--primary" style={`--btn-bg: ${brandColor}; --btn-hover: ${brandColor};`}>تواصل معنا بخصوص {brand.name}</a>
+        {brand.officialWebsite && (
+          <a href={brand.officialWebsite} target="_blank" rel="noopener noreferrer" class="btn btn--outline">الموقع الرسمي</a>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .brand-hero {
+    position: relative;
+    padding: clamp(120px, 15vw, 180px) 0 clamp(80px, 10vw, 120px);
+    overflow: hidden;
+    color: #fff;
+    text-align: center;
+  }
+  .brand-hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .brand-hero__glow {
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(150px);
+    opacity: 0.15;
+  }
+  .brand-hero__grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.05;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(ellipse at 50% 0%, #000 10%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 0%, #000 10%, transparent 75%);
+  }
+  .brand-hero__container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .brand-hero__content {
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .brand-hero__logo-wrapper {
+    width: 160px;
+    height: 160px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 32px;
+    padding: 30px;
+  }
+  .brand-hero__logo {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  .brand-hero__category {
+    font-size: var(--tj-text-small);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+    font-weight: bold;
+  }
+  .brand-hero__title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: var(--tj-font-bold);
+    line-height: 1.2;
+    margin-bottom: 24px;
+  }
+  .brand-hero__desc {
+    font-size: clamp(1.1rem, 2vw, 1.25rem);
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.8;
+    margin-bottom: 40px;
+    max-width: 600px;
+  }
+  .brand-hero__actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-weight: var(--tj-font-medium);
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  .btn--primary {
+    background: var(--btn-bg, var(--tj-primary));
+    color: #fff;
+  }
+  .btn--primary:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+  }
+  .btn--outline {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .btn--outline:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+  }
+</style>

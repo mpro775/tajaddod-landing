@@ -1,0 +1,178 @@
+---
+import { news } from '../../data/news';
+
+// Get latest 3 news items
+const latestNews = news.slice(0, 3);
+---
+<section class="latest-news section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">آخر الأخبار والفعاليات</h2>
+      <p class="section-desc">تابع مستجدات تجدد، المشاريع، الأنشطة التدريبية، والشراكات في مجال الكهرباء والطاقة.</p>
+    </div>
+    
+    <div class="news-grid">
+      {latestNews.map((item) => (
+        <a href={`/news/${item.slug}`} class="news-card">
+          <div class="news-card__image-wrap">
+            <img src={item.coverImage} alt={item.title} class="news-card__image" loading="lazy" />
+            <span class="news-card__category">{item.category}</span>
+          </div>
+          <div class="news-card__content">
+            <div class="news-card__meta">
+              <span class="meta-date">
+                <svg viewBox="0 0 24 24" fill="none" width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 10H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                {item.date}
+              </span>
+            </div>
+            <h3 class="news-card__title">{item.title}</h3>
+            <p class="news-card__excerpt">{item.excerpt}</p>
+            <span class="news-card__read-more">اقرأ المزيد <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+        </a>
+      ))}
+    </div>
+    
+    <div class="news-action">
+      <a href="/news" class="btn btn--outline">تصفح كل الأخبار</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .latest-news {
+    padding: clamp(80px, 10vw, 120px) 0;
+    background: #040d12;
+    color: #fff;
+  }
+  .section-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 48px;
+  }
+  .section-title {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: var(--tj-font-bold);
+    margin-bottom: 16px;
+  }
+  .section-desc {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.15rem;
+    line-height: 1.8;
+  }
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 32px;
+    margin-bottom: 48px;
+  }
+  .news-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    overflow: hidden;
+    text-decoration: none;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.4s ease;
+  }
+  .news-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(30,153,211,0.3);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+  }
+  .news-card__image-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/10;
+    overflow: hidden;
+  }
+  .news-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .news-card:hover .news-card__image {
+    transform: scale(1.05);
+  }
+  .news-card__category {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--tj-primary);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: var(--tj-font-medium);
+    padding: 6px 14px;
+    border-radius: 999px;
+    backdrop-filter: blur(10px);
+  }
+  .news-card__content {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .news-card__meta {
+    margin-bottom: 12px;
+  }
+  .meta-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+  }
+  .news-card__title {
+    font-size: 1.4rem;
+    font-weight: var(--tj-font-bold);
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+  .news-card__excerpt {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
+  }
+  .news-card__read-more {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--tj-primary);
+    font-weight: var(--tj-font-semibold);
+    transition: gap 0.3s ease;
+  }
+  .news-card:hover .news-card__read-more {
+    gap: 12px;
+  }
+  .news-action {
+    text-align: center;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-weight: var(--tj-font-medium);
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  .btn--outline {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+  }
+  .btn--outline:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+</style>
