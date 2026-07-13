@@ -1,9 +1,5 @@
 ---
-import '../styles/theme.css';
-import '../styles/motion.css';
-import '../styles/global.css';
-import Header from '../components/layout/Header.astro';
-import Footer from '../components/layout/Footer.astro';
+import Layout from '../layouts/Layout.astro';
 import CinematicHero from '../components/sections/CinematicHero.astro';
 import About from '../components/sections/About.astro';
 import Achievements from '../components/sections/Achievements.astro';
@@ -28,48 +24,22 @@ const organizationSchema = {
   email: site.email || undefined,
 };
 ---
-<!doctype html>
-<html lang="ar" dir="rtl">
-  <head>
-    <script is:inline>
-      document.documentElement.classList.add('js');
-    </script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={site.description} />
-    <meta name="theme-color" content="#1E99D3" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={site.description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="ar" />
-    <meta property="og:image" content="/og-image.svg" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={site.description} />
-    <meta name="twitter:image" content="/og-image.svg" />
-    <link rel="icon" type="image/svg+xml" href="/logos/tajaddod-icon.svg" />
-    <title>{title}</title>
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
-  </head>
-  <body>
-    <Header />
-    <main>
-      <CinematicHero />
-      <About />
-      <Achievements />
-      <Brands />
-      <FeaturedProjects />
-      <MarketRole />
-      <Coverage />
-      <Sectors />
-      <EnergyJourney />
-      <AppDownload />
-      <LatestNews />
-      <ContactCTA />
-    </main>
-    <Footer />
-    <script>
-      import '../scripts/animations';
-    </script>
-  </body>
-</html>
+
+<Layout title={title} description={site.description}>
+  <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+  
+  <main>
+    <CinematicHero />
+    <About />
+    <Achievements />
+    <Brands />
+    <FeaturedProjects />
+    <MarketRole />
+    <Coverage />
+    <Sectors />
+    <EnergyJourney />
+    <AppDownload />
+    <LatestNews />
+    <ContactCTA />
+  </main>
+</Layout>
