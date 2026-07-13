@@ -3,13 +3,13 @@ import { navigation } from '../../data/navigation';
 ---
 <header class="site-header" data-header>
   <div class="container header-inner">
-    <a class="brand-lockup" href="#top" aria-label="تجدد - العودة إلى بداية الصفحة">
+    <a class="brand-lockup" href="/" aria-label="تجدد - العودة للرئيسية">
       <img src="/logos/tajaddod-logo.svg" alt="شعار تجدد" width="164" height="58" />
     </a>
     <nav class="desktop-nav" aria-label="التنقل الرئيسي">
       {navigation.map((item) => <a href={item.href}>{item.label}</a>)}
     </nav>
-    <a class="header-cta" href="#contact">تواصل تجاري</a>
+    <a class="header-cta" href="/#contact">تواصل تجاري</a>
     <button class="menu-toggle" type="button" aria-label="فتح القائمة" aria-expanded="false" aria-controls="mobile-nav" data-menu-toggle>
       <span></span><span></span><span></span>
     </button>
@@ -30,6 +30,6 @@ import { navigation } from '../../data/navigation';
       ))}
     </div>
 
-    <a class="mobile-nav__cta" href="#contact" data-mobile-nav-link>تواصل تجاري</a>
+    <a class="mobile-nav__cta" href="/#contact" data-mobile-nav-link>تواصل تجاري</a>
   </nav>
 </header>

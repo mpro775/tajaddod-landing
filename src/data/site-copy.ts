@@ -41,15 +41,6 @@ export const siteCopy = {
       'حلول الحماية والتحكم والإضاءة والطاقة الشمسية عبر منظومة تجدد.',
   },
 
-  navigation: [
-    { label: 'الرئيسية', href: '#hero' },
-    { label: 'فلسفتنا', href: '#about' },
-    { label: 'العلامات', href: '#brands' },
-    { label: 'رحلة الطاقة', href: '#journey' },
-    { label: 'دور تجدد', href: '#market-flow' },
-    { label: 'تواصل معنا', href: '#contact' },
-  ],
-
   hero: {
     eyebrow: 'وكالات كهرباء وطاقة شمسية',
     title: 'جدّد مشروعك بطاقة أوثق',

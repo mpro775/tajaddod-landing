@@ -1,8 +1,9 @@
 ---
 import { siteCopy } from '../../data/site-copy';
 import { site, contactLinks } from '../../data/site';
+import { navigation } from '../../data/navigation';
 
-const { navigation, brands, brand } = siteCopy;
+const { brands, brand } = siteCopy;
 ---
 
 <footer class="site-footer">
@@ -21,7 +22,7 @@ const { navigation, brands, brand } = siteCopy;
           <span class="footer-accordion-trigger__icon" aria-hidden="true"></span>
         </button>
         <div class="footer-panel" data-footer-panel>
-          <a href="#hero" class="footer-logo">
+          <a href="/#hero" class="footer-logo">
             <img src="/logos/tajaddod-logo-white.svg" alt="شعار تجدد" width="160" height="58" loading="lazy" />
           </a>
           <p class="footer-desc">
@@ -136,7 +137,7 @@ const { navigation, brands, brand } = siteCopy;
       <p class="footer-copyright">
         &copy; {new Date().getFullYear()} تجدد للطاقة والكهرباء. جميع الحقوق محفوظة.
       </p>
-      <a href="#top" class="footer-back-top" aria-label="العودة للأعلى">
+      <a href="/" class="footer-back-top" aria-label="العودة للأعلى">
         <span>العودة للأعلى</span>
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="12" y1="19" x2="12" y2="5"></line>

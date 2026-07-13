@@ -27,7 +27,7 @@ const brandColor = brand.id === 'cnc' ? '#e63946' : '#ff8c00';
       <p class="brand-hero__desc">{brand.shortDescription}</p>
       
       <div class="brand-hero__actions">
-        <a href="#contact" class="btn btn--primary" style={`--btn-bg: ${brandColor}; --btn-hover: ${brandColor};`}>تواصل معنا بخصوص {brand.name}</a>
+        <a href="/#contact" class="btn btn--primary" style={`--btn-bg: ${brandColor}; --btn-hover: ${brandColor};`}>تواصل معنا بخصوص {brand.name}</a>
         {brand.officialWebsite && (
           <a href={brand.officialWebsite} target="_blank" rel="noopener noreferrer" class="btn btn--outline">الموقع الرسمي</a>
         )}

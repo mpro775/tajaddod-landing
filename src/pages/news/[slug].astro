@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { news } from '../../data/news';
+import { site } from '../../data/site';
 
 export function getStaticPaths() {
   return news.map((item) => ({
@@ -10,7 +11,7 @@ export function getStaticPaths() {
 }
 
 const { item } = Astro.props;
-const siteUrl = 'https://tajaddod.com'; // Change this to actual domain
+const siteUrl = site.url || 'https://tagadodgroup.com';
 const imageUrl = `${siteUrl}${item.coverImage}`;
 
 const articleSchema = {

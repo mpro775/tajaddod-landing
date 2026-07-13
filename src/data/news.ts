@@ -10,7 +10,7 @@ export const news = [
     ],
     category: 'تدريب',
     date: '2025-01-17',
-    coverImage: '/assets/news/training-program.webp',
+    coverImage: '/assets/news/news.webp',
     author: 'فريق تجدد',
     gallery: []
   },
@@ -25,7 +25,7 @@ export const news = [
     ],
     category: 'أخبار الشركة',
     date: '2025-02-10',
-    coverImage: '/assets/news/partnership.webp',
+    coverImage: '/assets/news/news.webp',
     author: 'المركز الإعلامي',
     gallery: []
   },
@@ -39,7 +39,7 @@ export const news = [
     ],
     category: 'مشاريع',
     date: '2025-03-05',
-    coverImage: '/assets/news/smart-grid.webp',
+    coverImage: '/assets/news/news.webp',
     author: 'إدارة المشاريع',
     gallery: []
   }
