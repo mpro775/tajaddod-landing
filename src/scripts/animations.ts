@@ -81,16 +81,12 @@ if (!reduceMotion) {
     ease: 'sine.inOut',
   });
 
-  gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((element) => {
-    gsap.from(element, {
-      y: 36,
-      opacity: 0,
-      duration: 0.75,
-      ease: 'power2.out',
-      scrollTrigger: {
-        trigger: element,
-        start: 'top 86%',
-      },
+  gsap.utils.toArray<HTMLElement>('[data-reveal], [data-reveal-stagger]').forEach((element) => {
+    ScrollTrigger.create({
+      trigger: element,
+      start: 'top 86%',
+      onEnter: () => element.classList.add('is-revealed'),
+      once: true,
     });
   });
 

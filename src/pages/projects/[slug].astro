@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { projects } from '../../data/projects';
+import { site } from '../../data/site';
 
 export function getStaticPaths() {
   return projects.map((project) => ({
@@ -10,69 +11,162 @@ export function getStaticPaths() {
 }
 
 const { project } = Astro.props;
+const siteUrl = site.url || 'https://tagadodgroup.com';
+
+// Status badge color
+const statusMap: Record<string, { color: string; bg: string }> = {
+  'منجز': { color: '#8bc543', bg: 'rgba(139,197,67,0.12)' },
+  'قيد التنفيذ': { color: '#ffb340', bg: 'rgba(255,179,64,0.12)' },
+};
+const statusStyle = statusMap[project.status] || statusMap['منجز'];
+
+// Get related projects (same category, excluding current)
+const relatedProjects = projects.filter(p => p.slug !== project.slug && p.category === project.category).slice(0, 2);
+// If not enough from same category, add from other categories
+const extraProjects = relatedProjects.length < 2 
+  ? projects.filter(p => p.slug !== project.slug && p.category !== project.category).slice(0, 2 - relatedProjects.length) 
+  : [];
+const related = [...relatedProjects, ...extraProjects];
+
+// Brand logo map
+const brandLogos: Record<string, string> = {
+  'CNC': '/assets/brands/cnc-logo.png',
+  'Liper': '/assets/brands/liper-logo.png',
+};
 ---
 
 <Layout title={`${project.title} | مشاريع تجدد`} description={project.summary}>
-  <main class="project-details">
-    <!-- Hero Section -->
-    <section class="project-hero">
-      <div class="project-hero__bg">
+  <Fragment slot="head">
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content={`${siteUrl}${project.coverImage}`} />
+  </Fragment>
+
+  <main class="pd-page" id="project-detail-page">
+    
+    <!-- ═══ Cinematic Hero ═══ -->
+    <section class="pd-hero">
+      <div class="pd-hero__bg">
         <img src={project.coverImage} alt={project.title} />
-        <div class="overlay"></div>
+        <div class="pd-hero__overlay"></div>
       </div>
-      <div class="container project-hero__content">
-        <span class="project-category">{project.category}</span>
-        <h1 class="project-title">{project.title}</h1>
-        
-        <div class="quick-stats">
-          <div class="stat-item">
-            <span class="stat-label">الموقع</span>
-            <span class="stat-value">{project.location}</span>
+      <!-- Animated grid pattern -->
+      <div class="pd-hero__grid-pattern"></div>
+      <!-- Energy lines -->
+      <div class="pd-hero__lines">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <div class="container pd-hero__inner">
+        <!-- Breadcrumb -->
+        <nav class="pd-breadcrumb" aria-label="التنقل التفصيلي">
+          <a href="/" class="pd-breadcrumb__link">الرئيسية</a>
+          <svg class="pd-breadcrumb__sep" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <a href="/projects" class="pd-breadcrumb__link">المشاريع</a>
+          <svg class="pd-breadcrumb__sep" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <span class="pd-breadcrumb__current">{project.title.length > 35 ? project.title.slice(0, 35) + '...' : project.title}</span>
+        </nav>
+
+        <!-- Category + Status -->
+        <div class="pd-hero__badges">
+          <span class="pd-badge pd-badge--category">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            {project.category}
+          </span>
+          <span class="pd-badge pd-badge--status" style={`--status-color: ${statusStyle.color}; --status-bg: ${statusStyle.bg}`}>
+            <span class="pd-badge__dot"></span>
+            {project.status}
+          </span>
+        </div>
+
+        <h1 class="pd-hero__title">{project.title}</h1>
+        <p class="pd-hero__summary">{project.summary}</p>
+
+        <!-- Quick Stats Bar -->
+        <div class="pd-stats-bar">
+          <div class="pd-stat">
+            <div class="pd-stat__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div class="pd-stat__text">
+              <span class="pd-stat__label">الموقع</span>
+              <span class="pd-stat__value">{project.location}</span>
+            </div>
           </div>
-          <div class="stat-item">
-            <span class="stat-label">السنة</span>
-            <span class="stat-value">{project.year}</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">الحالة</span>
-            <span class="stat-value">{project.status}</span>
+          <div class="pd-stat__sep"></div>
+          <div class="pd-stat">
+            <div class="pd-stat__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div class="pd-stat__text">
+              <span class="pd-stat__label">السنة</span>
+              <span class="pd-stat__value">{project.year}</span>
+            </div>
           </div>
           {project.stats && project.stats.map(stat => (
-            <div class="stat-item">
-              <span class="stat-label">{stat.label}</span>
-              <span class="stat-value">{stat.value}</span>
-            </div>
+            <>
+              <div class="pd-stat__sep"></div>
+              <div class="pd-stat">
+                <div class="pd-stat__icon pd-stat__icon--accent">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                </div>
+                <div class="pd-stat__text">
+                  <span class="pd-stat__label">{stat.label}</span>
+                  <span class="pd-stat__value pd-stat__value--highlight">{stat.value}</span>
+                </div>
+              </div>
+            </>
           ))}
         </div>
       </div>
     </section>
 
-    <!-- Details Section -->
-    <section class="project-content section">
+    <!-- ═══ Project Details Content ═══ -->
+    <section class="pd-content">
       <div class="container">
-        <div class="content-grid">
+        <div class="pd-content__layout">
           
-          <div class="main-content">
+          <!-- Main Content Column -->
+          <div class="pd-main">
+            <!-- Challenge Section -->
             {project.challenge && (
-              <div class="content-block">
-                <h2>التحدي</h2>
-                <p>{project.challenge}</p>
+              <div class="pd-block pd-block--challenge">
+                <div class="pd-block__header">
+                  <div class="pd-block__icon pd-block__icon--red">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  </div>
+                  <h2 class="pd-block__title">التحدي</h2>
+                </div>
+                <p class="pd-block__text">{project.challenge}</p>
               </div>
             )}
-            
+
+            <!-- Solution Section -->
             {project.solution && (
-              <div class="content-block">
-                <h2>الحل المقدم</h2>
-                <p>{project.solution}</p>
+              <div class="pd-block pd-block--solution">
+                <div class="pd-block__header">
+                  <div class="pd-block__icon pd-block__icon--green">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  </div>
+                  <h2 class="pd-block__title">الحل المقدم</h2>
+                </div>
+                <p class="pd-block__text">{project.solution}</p>
               </div>
             )}
-            
+
+            <!-- Gallery Section -->
             {project.gallery && project.gallery.length > 0 && (
-              <div class="content-block gallery-block">
-                <h2>معرض الصور</h2>
-                <div class="gallery-grid">
-                  {project.gallery.map(img => (
-                    <div class="gallery-item">
+              <div class="pd-block pd-block--gallery">
+                <div class="pd-block__header">
+                  <div class="pd-block__icon pd-block__icon--blue">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  </div>
+                  <h2 class="pd-block__title">معرض الصور</h2>
+                </div>
+                <div class="pd-gallery-grid">
+                  {project.gallery.map((img: string) => (
+                    <div class="pd-gallery-item">
                       <img src={img} alt="صورة من المشروع" loading="lazy" />
                     </div>
                   ))}
@@ -80,42 +174,165 @@ const { project } = Astro.props;
               </div>
             )}
           </div>
-          
-          <aside class="sidebar">
+
+          <!-- Sidebar Column -->
+          <aside class="pd-sidebar">
+            
+            <!-- Scope Widget -->
             {project.scope && project.scope.length > 0 && (
-              <div class="sidebar-widget">
-                <h3>نطاق العمل</h3>
-                <ul class="scope-list">
-                  {project.scope.map(item => (
-                    <li>{item}</li>
+              <div class="pd-widget" id="scope-widget">
+                <h3 class="pd-widget__title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                  نطاق العمل
+                </h3>
+                <ul class="pd-scope-list">
+                  {project.scope.map((item: string, i: number) => (
+                    <li class="pd-scope-item" style={`--i: ${i}`}>
+                      <span class="pd-scope-num">{String(i + 1).padStart(2, '0')}</span>
+                      <span class="pd-scope-text">{item}</span>
+                    </li>
                   ))}
                 </ul>
               </div>
             )}
-            
+
+            <!-- Brands Widget -->
             {project.brands && project.brands.length > 0 && (
-              <div class="sidebar-widget">
-                <h3>العلامات التجارية المستخدمة</h3>
-                <div class="brands-tags">
-                  {project.brands.map(brand => (
-                    <span class="brand-tag">{brand}</span>
+              <div class="pd-widget" id="brands-widget">
+                <h3 class="pd-widget__title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                  العلامات التجارية المستخدمة
+                </h3>
+                <div class="pd-brands-grid">
+                  {project.brands.map((brand: string) => (
+                    <a href={`/brands/${brand.toLowerCase()}`} class="pd-brand-card" id={`brand-${brand.toLowerCase()}`}>
+                      <div class="pd-brand-card__logo">
+                        {brandLogos[brand] ? (
+                          <img src={brandLogos[brand]} alt={brand} />
+                        ) : (
+                          <span class="pd-brand-card__fallback">{brand}</span>
+                        )}
+                      </div>
+                      <span class="pd-brand-card__name">{brand}</span>
+                      <svg class="pd-brand-card__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
                   ))}
                 </div>
               </div>
             )}
+
+            <!-- Project Info Widget -->
+            <div class="pd-widget" id="info-widget">
+              <h3 class="pd-widget__title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                ملخص المشروع
+              </h3>
+              <ul class="pd-info-list">
+                <li class="pd-info-item">
+                  <span class="pd-info-label">التصنيف</span>
+                  <span class="pd-info-value">{project.category}</span>
+                </li>
+                <li class="pd-info-item">
+                  <span class="pd-info-label">الموقع</span>
+                  <span class="pd-info-value">{project.location}</span>
+                </li>
+                <li class="pd-info-item">
+                  <span class="pd-info-label">السنة</span>
+                  <span class="pd-info-value">{project.year}</span>
+                </li>
+                <li class="pd-info-item">
+                  <span class="pd-info-label">الحالة</span>
+                  <span class="pd-info-value" style={`color: ${statusStyle.color}`}>{project.status}</span>
+                </li>
+                {project.stats && project.stats.map(stat => (
+                  <li class="pd-info-item">
+                    <span class="pd-info-label">{stat.label}</span>
+                    <span class="pd-info-value pd-info-value--accent">{stat.value}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <!-- Contact CTA -->
+            <div class="pd-widget pd-widget--cta" id="sidebar-cta">
+              <div class="pd-widget-cta__glow"></div>
+              <h3 class="pd-widget-cta__title">هل تريد مشروعاً مشابهاً؟</h3>
+              <p class="pd-widget-cta__desc">فريقنا جاهز لتقديم دراسة مجانية لمشروعك</p>
+              <a href="/#contact" class="button button-primary pd-widget-cta__btn">تواصل معنا</a>
+            </div>
+
+            <!-- Back to Projects -->
+            <a href="/projects" class="pd-back-link" id="back-to-projects">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              العودة إلى المشاريع
+            </a>
           </aside>
-          
         </div>
       </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="project-cta">
+    <!-- ═══ Related Projects ═══ -->
+    {related.length > 0 && (
+      <section class="pd-related" id="related-projects">
+        <div class="container">
+          <div class="pd-related__header">
+            <span class="pd-related__eyebrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              مشاريع مشابهة
+            </span>
+            <h2 class="pd-related__title">اكتشف المزيد من أعمالنا</h2>
+          </div>
+          <div class="pd-related__grid">
+            {related.map((rp) => (
+              <a href={`/projects/${rp.slug}`} class="pd-related-card" id={`related-${rp.slug}`}>
+                <div class="pd-related-card__img">
+                  <img src={rp.coverImage} alt={rp.title} loading="lazy" />
+                  <div class="pd-related-card__img-overlay"></div>
+                  <div class="pd-related-card__badges">
+                    <span class="pd-related-card__cat">{rp.category}</span>
+                    <span class="pd-related-card__year">{rp.year}</span>
+                  </div>
+                </div>
+                <div class="pd-related-card__body">
+                  <h3 class="pd-related-card__title">{rp.title}</h3>
+                  <div class="pd-related-card__meta">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <span>{rp.location}</span>
+                  </div>
+                  <p class="pd-related-card__summary">{rp.summary}</p>
+                  <span class="pd-related-card__cta">
+                    عرض التفاصيل
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- ═══ CTA Section ═══ -->
+    <section class="pd-cta">
       <div class="container">
-        <div class="cta-box">
-          <h2>هل تخطط لمشروع مشابه؟</h2>
-          <p>فريقنا من المهندسين والخبراء مستعد لدراسة مشروعك وتقديم أفضل الحلول المتكاملة.</p>
-          <a href="/#contact" class="btn btn--primary">تواصل معنا الآن</a>
+        <div class="pd-cta__box">
+          <div class="pd-cta__glow-1"></div>
+          <div class="pd-cta__glow-2"></div>
+          <div class="pd-cta__content">
+            <span class="pd-cta__eyebrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              ابدأ مشروعك معنا
+            </span>
+            <h2 class="pd-cta__title">هل تخطط لمشروع مشابه؟</h2>
+            <p class="pd-cta__desc">فريقنا من المهندسين والخبراء مستعد لدراسة مشروعك وتقديم أفضل الحلول المتكاملة بأعلى معايير الجودة.</p>
+          </div>
+          <div class="pd-cta__actions">
+            <a href="/#contact" class="button button-primary" id="cta-contact">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              تواصل معنا الآن
+            </a>
+            <a href="/projects" class="button pd-cta__ghost" id="cta-all-projects">جميع المشاريع</a>
+          </div>
         </div>
       </div>
     </section>
@@ -123,212 +340,927 @@ const { project } = Astro.props;
 </Layout>
 
 <style>
-  .project-details {
+  /* ═══════════════════════════════════════════════════════════════════════
+     Project Detail Page — Premium Cinematic Design
+     ═══════════════════════════════════════════════════════════════════════ */
+
+  .pd-page {
     background: #040d12;
     color: #fff;
     min-height: 100vh;
   }
-  .project-hero {
+
+  /* ─── Hero ──────────────────────────────────────────────────────────── */
+  .pd-hero {
     position: relative;
-    padding: clamp(150px, 20vw, 220px) 0 clamp(60px, 8vw, 100px);
-    min-height: 60vh;
+    padding: clamp(130px, 18vw, 200px) 0 clamp(50px, 7vw, 80px);
+    min-height: 65vh;
     display: flex;
     align-items: flex-end;
+    overflow: hidden;
   }
-  .project-hero__bg {
+
+  .pd-hero__bg {
     position: absolute;
     inset: 0;
     z-index: 0;
   }
-  .project-hero__bg img {
+
+  .pd-hero__bg img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    filter: saturate(0.6) brightness(0.45);
   }
-  .overlay {
+
+  .pd-hero__overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, #040d12 0%, rgba(4, 13, 18, 0.8) 50%, rgba(4, 13, 18, 0.4) 100%);
+    background:
+      linear-gradient(180deg, rgba(4,13,18,0.5) 0%, rgba(4,13,18,0.2) 25%, rgba(4,13,18,0.7) 60%, #040d12 100%),
+      radial-gradient(ellipse at 10% 90%, rgba(30,153,211,0.2), transparent 50%),
+      radial-gradient(ellipse at 90% 10%, rgba(139,197,67,0.1), transparent 50%);
   }
-  .project-hero__content {
-    position: relative;
+
+  .pd-hero__grid-pattern {
+    position: absolute;
+    inset: 0;
     z-index: 1;
+    opacity: 0.04;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(circle at 50% 60%, #000, transparent 70%);
+    pointer-events: none;
+  }
+
+  .pd-hero__lines {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .pd-hero__lines span {
+    position: absolute;
+    height: 1.5px;
+    width: 35vw;
+    background: linear-gradient(90deg, transparent, rgba(30,153,211,0.5), rgba(139,197,67,0.3), transparent);
+    animation: pdLineFlow 9s linear infinite;
+    opacity: 0.35;
+  }
+
+  .pd-hero__lines span:nth-child(1) { top: 25%; right: -18vw; }
+  .pd-hero__lines span:nth-child(2) { top: 55%; left: -20vw; animation-delay: -3s; }
+  .pd-hero__lines span:nth-child(3) { top: 80%; right: 10vw; animation-delay: -6s; opacity: 0.2; }
+
+  @keyframes pdLineFlow {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100vw); }
+  }
+
+  .pd-hero__inner {
+    position: relative;
+    z-index: 2;
     width: 100%;
   }
-  .project-category {
-    display: inline-block;
-    padding: 8px 16px;
-    background: rgba(255,255,255,0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.2);
-    color: #fff;
-    border-radius: 999px;
-    margin-bottom: 24px;
-    font-weight: var(--tj-font-medium);
+
+  /* Breadcrumb */
+  .pd-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 28px;
+    font-size: 0.85rem;
   }
-  .project-title {
-    font-size: clamp(2.5rem, 5vw, 4rem);
+
+  .pd-breadcrumb__link {
+    color: rgba(255,255,255,0.5);
+    transition: color 200ms ease;
+  }
+
+  .pd-breadcrumb__link:hover {
+    color: var(--tj-blue-light);
+  }
+
+  .pd-breadcrumb__sep {
+    color: rgba(255,255,255,0.2);
+    flex-shrink: 0;
+  }
+
+  .pd-breadcrumb__current {
+    color: rgba(255,255,255,0.75);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 280px;
+  }
+
+  /* Badges */
+  .pd-hero__badges {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .pd-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    border-radius: var(--tj-radius-pill);
+    font-size: 0.85rem;
+    font-weight: var(--tj-font-semibold);
+  }
+
+  .pd-badge--category {
+    background: var(--tj-gradient-brand);
+    color: #fff;
+  }
+
+  .pd-badge--category svg {
+    opacity: 0.8;
+  }
+
+  .pd-badge--status {
+    background: var(--status-bg);
+    color: var(--status-color);
+    border: 1px solid color-mix(in srgb, var(--status-color) 30%, transparent);
+  }
+
+  .pd-badge__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--status-color);
+    animation: pdPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pdPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* Title */
+  .pd-hero__title {
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
     font-weight: var(--tj-font-bold);
-    margin-bottom: 48px;
-    line-height: 1.2;
+    line-height: 1.25;
+    margin-bottom: 18px;
+    letter-spacing: var(--tj-tracking-tight);
     max-width: 900px;
   }
-  .quick-stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 32px;
-    padding-top: 32px;
-    border-top: 1px solid rgba(255,255,255,0.1);
+
+  .pd-hero__summary {
+    font-size: clamp(1rem, 1.5vw, 1.15rem);
+    line-height: 1.9;
+    color: rgba(255,255,255,0.6);
+    max-width: 750px;
+    margin-bottom: 36px;
   }
-  .stat-item {
+
+  /* Stats Bar */
+  .pd-stats-bar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 0;
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: var(--tj-radius-2xl);
+    overflow: hidden;
+    flex-wrap: wrap;
+  }
+
+  .pd-stat {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px 24px;
+    flex: 1 1 auto;
+    min-width: 160px;
+  }
+
+  .pd-stat__sep {
+    width: 1px;
+    height: 40px;
+    background: rgba(255,255,255,0.08);
+    flex-shrink: 0;
+  }
+
+  .pd-stat__icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: var(--tj-radius-md);
+    background: rgba(30,153,211,0.1);
+    color: var(--tj-blue);
+    flex-shrink: 0;
+  }
+
+  .pd-stat__icon--accent {
+    background: rgba(139,197,67,0.1);
+    color: var(--tj-green-light);
+  }
+
+  .pd-stat__text {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 2px;
   }
-  .stat-label {
-    font-size: 0.9rem;
-    color: rgba(255,255,255,0.5);
+
+  .pd-stat__label {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.4);
+    font-weight: var(--tj-font-regular);
   }
-  .stat-value {
-    font-size: 1.2rem;
+
+  .pd-stat__value {
+    font-size: 1rem;
     font-weight: var(--tj-font-semibold);
     color: #fff;
   }
-  
-  .project-content {
-    padding: clamp(60px, 8vw, 100px) 0;
+
+  .pd-stat__value--highlight {
+    color: var(--tj-blue-light);
   }
-  .content-grid {
+
+  /* ─── Content Section ──────────────────────────────────────────────── */
+  .pd-content {
+    padding: clamp(48px, 7vw, 80px) 0;
+    position: relative;
+  }
+
+  .pd-content::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(30,153,211,0.2), rgba(139,197,67,0.15), transparent);
+  }
+
+  .pd-content__layout {
     display: grid;
     grid-template-columns: 1fr;
     gap: 48px;
   }
-  @media (min-width: 992px) {
-    .content-grid {
-      grid-template-columns: 2fr 1fr;
+
+  @media (min-width: 960px) {
+    .pd-content__layout {
+      grid-template-columns: 1fr 340px;
+      gap: 56px;
     }
   }
-  .content-block {
-    margin-bottom: 48px;
+
+  /* Content Blocks */
+  .pd-main {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
   }
-  .content-block h2 {
-    font-size: 1.8rem;
-    font-weight: var(--tj-font-bold);
-    margin-bottom: 20px;
-    color: #fff;
+
+  .pd-block {
+    padding: 36px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
   }
-  .content-block p {
-    font-size: 1.1rem;
-    color: rgba(255,255,255,0.7);
-    line-height: 1.8;
+
+  .pd-block:first-child {
+    padding-top: 0;
   }
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+  .pd-block:last-child {
+    border-bottom: none;
+  }
+
+  .pd-block__header {
+    display: flex;
+    align-items: center;
     gap: 16px;
+    margin-bottom: 20px;
   }
-  .gallery-item {
+
+  .pd-block__icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--tj-radius-lg);
+    flex-shrink: 0;
+  }
+
+  .pd-block__icon--red {
+    background: rgba(224,27,27,0.1);
+    color: #ff6b6b;
+  }
+
+  .pd-block__icon--green {
+    background: rgba(21,150,71,0.1);
+    color: var(--tj-green-light);
+  }
+
+  .pd-block__icon--blue {
+    background: rgba(30,153,211,0.1);
+    color: var(--tj-blue);
+  }
+
+  .pd-block__title {
+    font-size: 1.5rem;
+    font-weight: var(--tj-font-bold);
+    color: #fff;
+    margin: 0;
+  }
+
+  .pd-block__text {
+    font-size: clamp(1rem, 1.3vw, 1.12rem);
+    line-height: 2;
+    color: rgba(255,255,255,0.72);
+    margin: 0;
+    padding-right: 64px;
+  }
+
+  /* Gallery */
+  .pd-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    padding-right: 64px;
+  }
+
+  .pd-gallery-item {
     aspect-ratio: 4/3;
-    border-radius: 12px;
+    border-radius: var(--tj-radius-lg);
     overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+    position: relative;
   }
-  .gallery-item img {
+
+  .pd-gallery-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 500ms var(--tj-ease-smooth);
   }
-  .gallery-item:hover img {
-    transform: scale(1.05);
+
+  .pd-gallery-item:hover img {
+    transform: scale(1.06);
   }
-  
-  .sidebar {
+
+  /* ─── Sidebar ──────────────────────────────────────────────────────── */
+  .pd-sidebar {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 24px;
   }
-  .sidebar-widget {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 16px;
-    padding: 32px;
+
+  @media (min-width: 960px) {
+    .pd-sidebar {
+      position: sticky;
+      top: 110px;
+      align-self: start;
+    }
   }
-  .sidebar-widget h3 {
-    font-size: 1.2rem;
+
+  .pd-widget {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--tj-radius-2xl);
+    padding: 28px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .pd-widget__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    font-weight: var(--tj-font-semibold);
+    color: #fff;
     margin-bottom: 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    padding-bottom: 12px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
   }
-  .scope-list {
+
+  .pd-widget__title svg {
+    color: var(--tj-blue);
+    flex-shrink: 0;
+  }
+
+  /* Scope List */
+  .pd-scope-list {
     list-style: none;
-    padding: 0;
     margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
+    gap: 10px;
+  }
+
+  .pd-scope-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: var(--tj-radius-md);
+    transition: all 250ms var(--tj-ease-smooth);
+  }
+
+  .pd-scope-item:hover {
+    background: rgba(30,153,211,0.06);
+    border-color: rgba(30,153,211,0.12);
+  }
+
+  .pd-scope-num {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: var(--tj-gradient-brand);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: var(--tj-font-bold);
+    flex-shrink: 0;
+  }
+
+  .pd-scope-text {
+    font-size: 0.92rem;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.5;
+  }
+
+  /* Brands Grid */
+  .pd-brands-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pd-brand-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--tj-radius-md);
+    text-decoration: none;
+    color: #fff;
+    transition: all 300ms var(--tj-ease-smooth);
+  }
+
+  .pd-brand-card:hover {
+    background: rgba(30,153,211,0.08);
+    border-color: rgba(30,153,211,0.2);
+    transform: translateX(-4px);
+  }
+
+  .pd-brand-card__logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.9);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .pd-brand-card__logo img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+  }
+
+  .pd-brand-card__fallback {
+    font-size: 0.75rem;
+    font-weight: var(--tj-font-bold);
+    color: var(--tj-ink);
+  }
+
+  .pd-brand-card__name {
+    flex: 1;
+    font-weight: var(--tj-font-semibold);
+    font-size: 0.95rem;
+  }
+
+  .pd-brand-card__arrow {
+    color: rgba(255,255,255,0.3);
+    transition: color 200ms ease, transform 200ms ease;
+    flex-shrink: 0;
+  }
+
+  .pd-brand-card:hover .pd-brand-card__arrow {
+    color: var(--tj-blue);
+    transform: translateX(-4px);
+  }
+
+  /* Info List */
+  .pd-info-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .pd-info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     gap: 12px;
   }
-  .scope-list li {
+
+  .pd-info-label {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .pd-info-value {
+    font-size: 0.92rem;
+    color: rgba(255,255,255,0.85);
+    font-weight: var(--tj-font-semibold);
+  }
+
+  .pd-info-value--accent {
+    color: var(--tj-blue-light);
+  }
+
+  /* Sidebar CTA Widget */
+  .pd-widget--cta {
     position: relative;
-    padding-right: 24px;
-    color: rgba(255,255,255,0.8);
-    line-height: 1.6;
-  }
-  .scope-list li::before {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 10px;
-    width: 6px;
-    height: 6px;
-    background: var(--tj-primary);
-    border-radius: 50%;
-  }
-  .brands-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .brand-tag {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-  }
-  
-  .project-cta {
-    padding-bottom: 100px;
-  }
-  .cta-box {
-    background: linear-gradient(135deg, rgba(30,153,211,0.1), rgba(30,153,211,0.02));
-    border: 1px solid rgba(30,153,211,0.2);
-    border-radius: 24px;
-    padding: 64px 32px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(30,153,211,0.08), rgba(21,150,71,0.05));
+    border-color: rgba(30,153,211,0.15);
     text-align: center;
   }
-  .cta-box h2 {
-    font-size: 2rem;
-    margin-bottom: 16px;
+
+  .pd-widget-cta__glow {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    top: -100px;
+    right: -50px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(30,153,211,0.15), transparent 60%);
+    pointer-events: none;
   }
-  .cta-box p {
-    font-size: 1.1rem;
-    color: rgba(255,255,255,0.7);
-    margin-bottom: 32px;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .btn {
-    display: inline-flex;
-    padding: 14px 32px;
-    background: var(--tj-primary);
+
+  .pd-widget-cta__title {
+    position: relative;
+    font-size: 1.15rem;
+    font-weight: var(--tj-font-bold);
     color: #fff;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
-    transition: background 0.3s ease;
+    margin-bottom: 8px;
   }
-  .btn:hover {
-    background: var(--tj-primary-dark);
+
+  .pd-widget-cta__desc {
+    position: relative;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  .pd-widget-cta__btn {
+    position: relative;
+    width: 100%;
+    font-size: 0.95rem;
+  }
+
+  /* Back Link */
+  .pd-back-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 22px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--tj-radius-xl);
+    color: rgba(255,255,255,0.7);
+    font-weight: var(--tj-font-semibold);
+    font-size: 0.92rem;
+    transition: all 250ms var(--tj-ease-smooth);
+  }
+
+  .pd-back-link:hover {
+    background: rgba(30,153,211,0.1);
+    border-color: rgba(30,153,211,0.2);
+    color: var(--tj-blue-light);
+    transform: translateX(4px);
+  }
+
+  /* ─── Related Projects ─────────────────────────────────────────────── */
+  .pd-related {
+    padding: clamp(60px, 8vw, 100px) 0;
+    position: relative;
+  }
+
+  .pd-related::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(30,153,211,0.15), transparent);
+  }
+
+  .pd-related__header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .pd-related__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--tj-blue);
+    font-size: 0.88rem;
+    font-weight: var(--tj-font-semibold);
+    margin-bottom: 12px;
+  }
+
+  .pd-related__title {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: var(--tj-font-bold);
+    color: #fff;
+  }
+
+  .pd-related__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 28px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .pd-related-card {
+    position: relative;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--tj-radius-2xl);
+    overflow: hidden;
+    text-decoration: none;
+    color: #fff;
+    transition: all 400ms var(--tj-ease-smooth);
+  }
+
+  .pd-related-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(30,153,211,0.2);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(30,153,211,0.08);
+  }
+
+  .pd-related-card__img {
+    position: relative;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+  }
+
+  .pd-related-card__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 600ms var(--tj-ease-smooth);
+  }
+
+  .pd-related-card:hover .pd-related-card__img img {
+    transform: scale(1.06);
+  }
+
+  .pd-related-card__img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 30%, rgba(4,13,18,0.6) 100%);
+  }
+
+  .pd-related-card__badges {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    gap: 8px;
+  }
+
+  .pd-related-card__cat, .pd-related-card__year {
+    padding: 5px 12px;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--tj-radius-pill);
+    font-size: 0.75rem;
+    font-weight: var(--tj-font-semibold);
+  }
+
+  .pd-related-card__body {
+    padding: 24px;
+  }
+
+  .pd-related-card__title {
+    font-size: 1.15rem;
+    font-weight: var(--tj-font-bold);
+    line-height: 1.4;
+    margin-bottom: 10px;
+    color: #fff;
+  }
+
+  .pd-related-card__meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 12px;
+  }
+
+  .pd-related-card__summary {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.55);
+    margin: 0 0 16px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .pd-related-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.88rem;
+    font-weight: var(--tj-font-semibold);
+    color: var(--tj-blue);
+    transition: gap 250ms ease;
+  }
+
+  .pd-related-card:hover .pd-related-card__cta {
+    gap: 10px;
+  }
+
+  /* ─── CTA Section ──────────────────────────────────────────────────── */
+  .pd-cta {
+    padding: 0 0 clamp(60px, 8vw, 100px);
+  }
+
+  .pd-cta__box {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--tj-radius-4xl);
+    padding: clamp(48px, 6vw, 72px) clamp(24px, 4vw, 56px);
+    background: linear-gradient(135deg, var(--tj-cinematic-deep), var(--tj-cinematic-green-deep));
+    border: 1px solid rgba(255,255,255,0.06);
+    text-align: center;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.25);
+  }
+
+  .pd-cta__glow-1 {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    top: -250px;
+    left: -100px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(30,153,211,0.2), transparent 60%);
+    pointer-events: none;
+  }
+
+  .pd-cta__glow-2 {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    bottom: -200px;
+    right: -100px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(139,197,67,0.15), transparent 60%);
+    pointer-events: none;
+  }
+
+  .pd-cta__content {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 32px;
+  }
+
+  .pd-cta__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--tj-blue-light);
+    font-size: 0.88rem;
+    font-weight: var(--tj-font-semibold);
+    margin-bottom: 14px;
+  }
+
+  .pd-cta__title {
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-weight: var(--tj-font-bold);
+    margin-bottom: 14px;
+    color: #fff;
+  }
+
+  .pd-cta__desc {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.6);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  .pd-cta__actions {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .pd-cta__actions .button-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pd-cta__ghost {
+    color: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    padding: 13px 22px;
+    font-weight: var(--tj-font-semibold);
+    display: inline-flex;
+    min-height: 52px;
+    align-items: center;
+    justify-content: center;
+    transition: transform 190ms ease, background 190ms ease, border-color 190ms ease;
+    white-space: nowrap;
+  }
+
+  .pd-cta__ghost:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.2);
+    transform: translateY(-3px);
+  }
+
+  /* ─── Mobile Responsive ────────────────────────────────────────────── */
+  @media (max-width: 820px) {
+    .pd-hero {
+      min-height: auto;
+    }
+
+    .pd-stats-bar {
+      flex-direction: column;
+    }
+
+    .pd-stat__sep {
+      width: 100%;
+      height: 1px;
+    }
+
+    .pd-stat {
+      width: 100%;
+    }
+
+    .pd-block__text,
+    .pd-gallery-grid {
+      padding-right: 0;
+    }
+
+    .pd-related__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .pd-breadcrumb__current {
+      max-width: 160px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .pd-cta__actions {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .pd-hero__badges {
+      gap: 8px;
+    }
   }
 </style>
