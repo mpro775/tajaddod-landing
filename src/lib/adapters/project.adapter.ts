@@ -20,7 +20,9 @@ export function formatProjectPeriod(project: ProjectSummary, locale: Locale): st
       ? project.periodLabelEn || project.periodLabelAr
       : project.periodLabelAr || project.periodLabelEn;
   if (custom) return custom;
+  if (project.periodType === 'lta') return locale === 'en' ? 'Long-Term Agreement (LTA)' : 'اتفاقية طويلة الأجل (LTA)';
   if (project.periodType === 'ongoing') return locale === 'en' ? 'Ongoing' : 'مستمر';
+  if (project.periodType === 'unknown') return locale === 'en' ? 'Not specified' : 'غير محدد';
   if (project.startYear && project.endYear && project.startYear !== project.endYear) {
     return `${project.startYear}–${project.endYear}`;
   }

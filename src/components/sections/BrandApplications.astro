@@ -1,0 +1,309 @@
+---
+import type { Locale } from '../../lib/api/types';
+import type { VisualBrand } from '../../lib/visual/legacy-view';
+
+interface Props {
+  brand: VisualBrand;
+  locale: Locale;
+}
+
+const { brand, locale } = Astro.props;
+const isEn = locale === 'en';
+
+const accentMap: Record<string, { color: string; rgb: string }> = {
+  cnc: { color: '#e63946', rgb: '230, 57, 70' },
+  liper: { color: '#ff8c00', rgb: '255, 140, 0' },
+};
+
+const accent = accentMap[brand.id] || accentMap.cnc;
+
+// Application icons mapped by name patterns
+const appIcons: Record<string, string> = {
+  'المشاريع السكنية': 'M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10',
+  'المنازل': 'M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10',
+  'المصانع والورش': 'M2 20h20 M4 20V10l4-6h8l4 6v10 M9 20v-4h6v4 M9 10h6',
+  'المكاتب والمباني التجارية': 'M6 2h12l4 8v12H2V10l4-8z M10 22V16h4v6 M10 8h4 M10 12h4',
+  'المرافق التجارية': 'M6 2h12l4 8v12H2V10l4-8z M10 22V16h4v6 M10 8h4 M10 12h4',
+  'منظومات الطاقة الشمسية': 'M12 2v4 M12 18v4 M4.93 4.93l2.83 2.83 M16.24 16.24l2.83 2.83 M2 12h4 M18 12h4 M4.93 19.07l2.83-2.83 M16.24 7.76l2.83-2.83',
+  'الشوارع والساحات': 'M9 18V6l6-3v12 M3 22v-2a3 3 0 013-3h12a3 3 0 013 3v2',
+  'الحدائق والمزارع': 'M12 22V10 M6 14c0-3.3 2.7-6 6-6s6 2.7 6 6 M8 22h8',
+  'Residential projects': 'M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10',
+  'Homes': 'M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10',
+  'Factories and workshops': 'M2 20h20 M4 20V10l4-6h8l4 6v10 M9 20v-4h6v4 M9 10h6',
+  'Commercial facilities': 'M6 2h12l4 8v12H2V10l4-8z M10 22V16h4v6 M10 8h4 M10 12h4',
+  'Offices and commercial buildings': 'M6 2h12l4 8v12H2V10l4-8z M10 22V16h4v6 M10 8h4 M10 12h4',
+  'Solar energy systems': 'M12 2v4 M12 18v4 M4.93 4.93l2.83 2.83 M16.24 16.24l2.83 2.83 M2 12h4 M18 12h4 M4.93 19.07l2.83-2.83 M16.24 7.76l2.83-2.83',
+  'Streets and public spaces': 'M9 18V6l6-3v12 M3 22v-2a3 3 0 013-3h12a3 3 0 013 3v2',
+  'Gardens and farms': 'M12 22V10 M6 14c0-3.3 2.7-6 6-6s6 2.7 6 6 M8 22h8',
+};
+
+const getIconPath = (app: string) => {
+  return appIcons[app] || Object.entries(appIcons).find(([key]) => app.includes(key.split(' ')[0]))?.[1]
+    || 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2';
+};
+---
+
+<section class="brand-apps section" style={`--accent: ${accent.color}; --accent-rgb: ${accent.rgb};`}>
+  <!-- Section background accent -->
+  <div class="brand-apps__bg" aria-hidden="true">
+    <div class="brand-apps__glow"></div>
+  </div>
+
+  <div class="container">
+    <!-- Section header -->
+    <div class="brand-apps__header">
+      <div class="brand-apps__eyebrow">
+        <span class="brand-apps__eyebrow-line"></span>
+        <span class="brand-apps__eyebrow-tag">{isEn ? 'Applications' : 'مجالات التطبيق'}</span>
+        <span class="brand-apps__eyebrow-line"></span>
+      </div>
+      <h2 class="brand-apps__title">
+        {isEn ? 'Where are' : 'أين تستخدم منتجات'} <span>{brand.name}</span>{isEn ? ' products used?' : '؟'}
+      </h2>
+      <p class="brand-apps__desc">{isEn ? 'These solutions serve a wide range of sectors, projects and operating environments.' : 'تغطي منتجاتنا قطاعات واسعة تلبي احتياجات مختلف المشاريع والبيئات'}</p>
+    </div>
+
+    <!-- Applications grid -->
+    <div class="brand-apps__grid">
+      {brand.applications.map((app, index) => (
+        <div class="app-card" style={`animation-delay: ${index * 100}ms;`}>
+          <!-- Decorative glow -->
+          <div class="app-card__glow"></div>
+
+          <!-- Number indicator -->
+          <span class="app-card__num">{String(index + 1).padStart(2, '0')}</span>
+
+          <!-- Icon -->
+          <div class="app-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d={getIconPath(app)} />
+            </svg>
+          </div>
+
+          <!-- Title -->
+          <h3 class="app-card__title">{app}</h3>
+
+          <!-- Decorative line -->
+          <div class="app-card__line"></div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .brand-apps {
+    padding: clamp(70px, 9vw, 110px) 0;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ── Background ────────────────────────────────────────────── */
+  .brand-apps__bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .brand-apps__glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(var(--accent-rgb), 0.05), transparent 65%);
+    filter: blur(80px);
+  }
+
+  /* ── Section header ────────────────────────────────────────── */
+  .brand-apps__header {
+    text-align: center;
+    margin-bottom: clamp(40px, 5vw, 60px);
+  }
+
+  .brand-apps__eyebrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+
+  .brand-apps__eyebrow-line {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.4));
+  }
+
+  .brand-apps__eyebrow-line:last-child {
+    background: linear-gradient(90deg, rgba(var(--accent-rgb), 0.4), transparent);
+  }
+
+  .brand-apps__eyebrow-tag {
+    color: var(--accent);
+    font-size: var(--tj-text-small);
+    font-weight: var(--tj-font-semibold);
+    letter-spacing: 0.05em;
+  }
+
+  .brand-apps__title {
+    font-size: clamp(2rem, 3.5vw, 2.6rem);
+    font-weight: var(--tj-font-bold);
+    margin-bottom: 16px;
+    color: #fff;
+  }
+
+  .brand-apps__title span {
+    color: var(--accent);
+  }
+
+  .brand-apps__desc {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.05rem;
+    max-width: 550px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  /* ── Applications grid ─────────────────────────────────────── */
+  .brand-apps__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  /* ── Application card ──────────────────────────────────────── */
+  .app-card {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 24px;
+    padding: 32px 28px;
+    backdrop-filter: blur(10px);
+    transition: all 0.4s var(--tj-ease-smooth);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .app-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(var(--accent-rgb), 0.2);
+    background: rgba(var(--accent-rgb), 0.04);
+    box-shadow:
+      0 20px 50px rgba(0, 0, 0, 0.25),
+      0 0 40px rgba(var(--accent-rgb), 0.06);
+  }
+
+  /* Card glow */
+  .app-card__glow {
+    position: absolute;
+    top: -60%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(var(--accent-rgb), 0.12), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+  }
+
+  .app-card:hover .app-card__glow {
+    opacity: 1;
+  }
+
+  /* Card number */
+  .app-card__num {
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    font-size: var(--tj-text-micro);
+    color: rgba(255, 255, 255, 0.15);
+    font-weight: var(--tj-font-bold);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Card icon */
+  .app-card__icon {
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.12), rgba(var(--accent-rgb), 0.04));
+    border: 1px solid rgba(var(--accent-rgb), 0.12);
+    color: var(--accent);
+    transition: all 0.4s ease;
+  }
+
+  .app-card:hover .app-card__icon {
+    background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.2), rgba(var(--accent-rgb), 0.08));
+    box-shadow: 0 0 24px rgba(var(--accent-rgb), 0.15);
+    transform: scale(1.05);
+  }
+
+  .app-card__icon svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Card title */
+  .app-card__title {
+    font-size: 1.15rem;
+    font-weight: var(--tj-font-semibold);
+    color: #fff;
+    margin: 0;
+    transition: color 0.3s ease;
+  }
+
+  /* Decorative bottom line */
+  .app-card__line {
+    width: 40px;
+    height: 2px;
+    border-radius: 2px;
+    background: rgba(var(--accent-rgb), 0.15);
+    transition: all 0.4s ease;
+    margin-top: auto;
+  }
+
+  .app-card:hover .app-card__line {
+    width: 60px;
+    background: var(--accent);
+  }
+
+  /* ── Responsive ────────────────────────────────────────────── */
+  @media (max-width: 820px) {
+    .brand-apps__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .app-card {
+      padding: 24px 20px;
+    }
+
+    .app-card__icon {
+      width: 60px;
+      height: 60px;
+    }
+
+    .app-card__icon svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .brand-apps__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

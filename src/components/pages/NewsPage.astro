@@ -1,35 +1,99 @@
 ---
 import type { ArticleCollection, Locale } from '../../lib/api/types';
-import { dictionary } from '../../i18n';
-import { localePath, mediaAlt, text } from '../../lib/content';
+import { localePath } from '../../lib/content';
+import { toLegacyArticle } from '../../lib/visual/legacy-view';
 
-const { locale, collection, error, query } = Astro.props as {
-  locale: Locale; collection?: ArticleCollection; error?: string; query: Record<string, string>;
-};
-const copy = dictionary(locale);
-const articles = collection?.articles || [];
-const page = collection?.pagination.page || 1;
-const totalPages = collection?.pagination.totalPages || 0;
-const action = localePath(locale, '/news');
-const pageHref = (target: number) => {
-  const params = new URLSearchParams(query);
-  params.set('page', String(target));
-  return `${action}?${params}`;
-};
-const dateFormatter = new Intl.DateTimeFormat(locale === 'ar' ? 'ar-YE' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+interface Props {
+  locale: Locale;
+  collection?: ArticleCollection;
+  error?: string;
+  query?: Record<string, string>;
+}
+
+const { locale, collection, error } = Astro.props;
+const isEn = locale === 'en';
+const news = (collection?.articles || []).map((article) => toLegacyArticle(article, locale));
+const allLabel = isEn ? 'All' : 'الكل';
+const categories = [allLabel, ...new Set(news.map((item) => item.category).filter(Boolean))];
+const dateFormatter = new Intl.DateTimeFormat(isEn ? 'en-US' : 'ar-YE', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
-<main class="page-shell">
-  <section class="page-hero"><div class="container"><span class="eyebrow">{copy.nav.news}</span><h1>{copy.news.title}</h1><p>{copy.news.intro}</p></div></section>
-  <div class="container"><form class="filter-form news-filter" action={action} method="get"><input type="search" name="search" value={query.search} placeholder={copy.news.search} /><select name="type"><option value="">{copy.common.all}</option><option value="article" selected={query.type === 'article'}>{locale === 'ar' ? 'مقال' : 'Article'}</option><option value="news" selected={query.type === 'news'}>{locale === 'ar' ? 'خبر' : 'News'}</option></select><button class="primary-button" type="submit">{locale === 'ar' ? 'بحث' : 'Search'}</button></form></div>
-  <section class="content-section"><div class="container">
-    {error ? <div class="error-state">{error}</div> : articles.length === 0 ? <div class="empty-state">{copy.common.noResults}</div> : <div class="cards-grid">{articles.map((article) => {
-      const title = text(article, 'title', locale);
-      const excerpt = text(article, 'excerpt', locale);
-      return <article class="content-card"><div class="content-card__media">{article.cover?.url && <img src={article.cover.url} alt={mediaAlt(article.cover, locale, title)} loading="lazy" width="720" height="450" />}</div><div class="content-card__body"><div class="content-card__meta">{article.publishDate && <span>{dateFormatter.format(new Date(article.publishDate))}</span>}<span>{article.readTime} {copy.common.minutes}</span></div><h2>{title}</h2>{excerpt && <p>{excerpt}</p>}<a class="content-card__link" href={localePath(locale, `/news/${article.slug}`)}>{copy.common.readMore}</a></div></article>;
-    })}</div>}
-    {totalPages > 1 && <nav class="pagination" aria-label="Pagination">{page > 1 && <a href={pageHref(page - 1)}>{copy.common.previous}</a>}<span class="active">{page} / {totalPages}</span>{page < totalPages && <a href={pageHref(page + 1)}>{copy.common.next}</a>}</nav>}
-  </div></section>
+<main class="news-index">
+  <div class="page-header">
+    <div class="container">
+      <h1 class="page-title">{isEn ? 'News & events' : 'الأخبار والفعاليات'}</h1>
+      <p class="page-desc">{isEn ? 'Follow Tajaddod updates, projects, training activities and partnerships across electricity and energy.' : 'تابع مستجدات تجدد، المشاريع، الأنشطة التدريبية، والشراكات في مجال الكهرباء والطاقة.'}</p>
+    </div>
+  </div>
+
+  <div class="container">
+    {error && <div class="news-error" role="status">{error}</div>}
+    {news.length > 0 ? (
+      <>
+        <div class="filters" aria-label={isEn ? 'News categories' : 'تصنيفات الأخبار'}>
+          {categories.map((cat, index) => (
+            <button class={`filter-btn ${index === 0 ? 'active' : ''}`} data-filter={index === 0 ? 'all' : cat}>{cat}</button>
+          ))}
+        </div>
+
+        <div class="news-grid">
+          {news.map((item) => (
+            <a href={localePath(locale, `/news/${item.slug}`)} class="news-card" data-category={item.category}>
+              <div class="news-card__image-wrap">
+                <img src={item.coverImage} alt={item.title} loading="lazy" />
+                <span class="news-card__category">{item.category}</span>
+              </div>
+              <div class="news-card__content">
+                <div class="news-card__meta">
+                  <span class="meta-date">{item.date ? dateFormatter.format(new Date(item.date)) : ''}</span>
+                </div>
+                <h2 class="news-card__title">{item.title}</h2>
+                {item.excerpt && <p class="news-card__excerpt">{item.excerpt}</p>}
+              </div>
+            </a>
+          ))}
+        </div>
+      </>
+    ) : !error && <div class="news-empty">{isEn ? 'No published news is available yet.' : 'لا توجد أخبار منشورة حاليًا.'}</div>}
+  </div>
 </main>
 
-<style>.news-filter{grid-template-columns:3fr 1fr auto}</style>
+<script>
+  const filterBtns = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+  const newsCards = document.querySelectorAll<HTMLElement>('.news-card');
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach((button) => button.classList.remove('active'));
+      btn.classList.add('active');
+      const filterValue = btn.getAttribute('data-filter');
+      newsCards.forEach((card) => {
+        const cardCategory = card.getAttribute('data-category');
+        card.style.display = filterValue === 'all' || filterValue === cardCategory ? 'flex' : 'none';
+      });
+    });
+  });
+</script>
+
+<style>
+  .news-index { background: #040d12; min-height: 100vh; padding-bottom: 100px; color: #fff; }
+  .page-header { padding: clamp(120px, 15vw, 160px) 0 clamp(60px, 8vw, 80px); text-align: center; background: linear-gradient(180deg, rgba(30,153,211,0.1) 0%, transparent 100%); }
+  .page-title { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: var(--tj-font-bold); margin-bottom: 24px; color:#fff; }
+  .page-desc { font-size: 1.2rem; color: rgba(255, 255, 255, 0.7); max-width: 700px; margin: 0 auto; line-height: 1.8; }
+  .news-error,.news-empty{max-width:760px;margin:0 auto 36px;padding:18px 22px;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.75);text-align:center}
+  .filters { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 48px; }
+  .filter-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.8); padding: 10px 24px; border-radius: 999px; cursor: pointer; font-size: 1rem; transition: all 0.3s ease; }
+  .filter-btn:hover { background: rgba(255, 255, 255, 0.1); }
+  .filter-btn.active { background: var(--tj-primary); color: #fff; border-color: var(--tj-primary); }
+  .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 32px; }
+  .news-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px; overflow: hidden; text-decoration: none; color: #fff; display: flex; flex-direction: column; transition: all 0.4s ease; }
+  .news-card:hover { transform: translateY(-8px); border-color: rgba(30,153,211,0.3); box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
+  .news-card__image-wrap { position: relative; width: 100%; aspect-ratio: 16/10; overflow: hidden; background:#0b1e26; }
+  .news-card__image-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+  .news-card:hover .news-card__image-wrap img { transform: scale(1.05); }
+  .news-card__category { position: absolute; top: 16px; inset-inline-end: 16px; background: var(--tj-primary); color: #fff; font-size: 0.8rem; font-weight: var(--tj-font-medium); padding: 6px 14px; border-radius: 999px; }
+  .news-card__content { padding: 24px; display: flex; flex-direction: column; flex: 1; }
+  .news-card__meta { margin-bottom: 12px; font-size: 0.9rem; color: rgba(255, 255, 255, 0.5); }
+  .news-card__title { font-size: 1.4rem; font-weight: var(--tj-font-bold); margin-bottom: 12px; line-height: 1.4; color:#fff; }
+  .news-card__excerpt { color: rgba(255, 255, 255, 0.7); font-size: 0.95rem; line-height: 1.6; margin: 0; }
+  @media(max-width:560px){.news-grid{grid-template-columns:1fr}.filter-btn{padding:9px 17px;font-size:.9rem}}
+</style>

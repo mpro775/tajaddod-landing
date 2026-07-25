@@ -13,7 +13,7 @@ const query = {
 let collection;
 let error: string | undefined;
 try {
-  collection = await getArticles(locale, { ...query, limit: 12 });
+  collection = await getArticles(locale, { ...query, limit: 100 });
 } catch (cause) {
   Astro.response.status = 503;
   error = cause instanceof Error ? cause.message : copy.common.unavailable;

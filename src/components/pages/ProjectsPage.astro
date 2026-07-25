@@ -1,76 +1,147 @@
 ---
 import type { Locale, ProjectCollection } from '../../lib/api/types';
-import { categoryLabels, dictionary, sectorLabels, serviceLabels } from '../../i18n';
-import { localePath, mediaAlt, projectPeriod, text } from '../../lib/content';
+import { localePath } from '../../lib/content';
+import { toLegacyProject } from '../../lib/visual/legacy-view';
 
 interface Props {
   locale: Locale;
   collection?: ProjectCollection;
   error?: string;
-  query: Record<string, string>;
+  query?: Record<string, string>;
 }
-const { locale, collection, error, query } = Astro.props;
-const copy = dictionary(locale);
-const projects = collection?.projects || [];
-const page = collection?.pagination.page || 1;
-const totalPages = collection?.pagination.totalPages || 0;
-const action = localePath(locale, '/projects');
-const pageHref = (target: number) => {
-  const params = new URLSearchParams(query);
-  params.set('page', String(target));
-  return `${action}?${params}`;
-};
+
+const { locale, collection, error } = Astro.props;
+const isEn = locale === 'en';
+const projects = (collection?.projects || []).map((project) => toLegacyProject(project, locale));
+const allLabel = isEn ? 'All' : 'الكل';
+const categories = [allLabel, ...new Set(projects.map((p) => p.category).filter(Boolean))];
 ---
 
-<main class="page-shell">
-  <section class="page-hero"><div class="container"><span class="eyebrow">{copy.nav.projects}</span><h1>{copy.projects.title}</h1><p>{copy.projects.intro}</p></div></section>
-  <div class="container">
-    <form class="filter-form" action={action} method="get">
-      <input type="search" name="search" value={query.search} placeholder={copy.projects.search} />
-      <select name="category" aria-label={copy.projects.category}>
-        <option value="">{copy.projects.category}: {copy.common.all}</option>
-        {Object.entries(categoryLabels[locale]).map(([value, label]) => <option value={value} selected={query.category === value}>{label}</option>)}
-      </select>
-      <select name="service" aria-label={copy.projects.service}>
-        <option value="">{copy.projects.service}: {copy.common.all}</option>
-        {Object.entries(serviceLabels[locale]).map(([value, label]) => <option value={value} selected={query.service === value}>{label}</option>)}
-      </select>
-      <select name="sector" aria-label={copy.projects.sector}>
-        <option value="">{copy.projects.sector}: {copy.common.all}</option>
-        {Object.entries(sectorLabels[locale]).map(([value, label]) => <option value={value} selected={query.sector === value}>{label}</option>)}
-      </select>
-      <input type="search" name="client" value={query.client} placeholder={copy.projects.client} />
-      <input type="number" name="year" min="1900" max="2100" value={query.year} placeholder={copy.projects.year} />
-      <button class="primary-button" type="submit">{locale === 'ar' ? 'تصفية' : 'Filter'}</button>
-    </form>
+<main class="projects-page">
+  <div class="page-header">
+    <div class="container">
+      <h1 class="page-title">{isEn ? 'Projects delivered by Tajaddod' : 'مشاريع نفذتها تجدد'}</h1>
+      <p class="page-desc">{isEn ? 'Integrated electrical and solar-energy work delivered for commercial, service and infrastructure projects.' : 'نشارك في تنفيذ حلول كهربائية وطاقة شمسية متكاملة للمشاريع السكنية والتجارية والخدمية.'}</p>
+    </div>
   </div>
 
-  <section class="content-section">
-    <div class="container">
-      {error ? <div class="error-state">{error}</div> : projects.length === 0 ? <div class="empty-state">{copy.common.noResults}</div> : (
-        <div class="cards-grid">
-          {projects.map((project) => {
-            const title = text(project, 'title', locale);
-            const description = text(project, 'shortDescription', locale);
-            const location = text(project, 'location', locale);
-            return (
-              <article class="content-card">
-                <div class="content-card__media">{project.cover?.url && <img src={project.cover.url} alt={mediaAlt(project.cover, locale, title)} loading="lazy" width="720" height="450" />}</div>
-                <div class="content-card__body">
-                  <div class="content-card__meta"><span>{categoryLabels[locale][project.category] || project.category}</span>{projectPeriod(project, locale) && <span>{projectPeriod(project, locale)}</span>}{location && <span>{location}</span>}</div>
-                  <h2>{title}</h2>{description && <p>{description}</p>}
-                  <a class="content-card__link" href={localePath(locale, `/projects/${project.slug}`)}>{copy.common.details}</a>
-                </div>
-              </article>
-            );
-          })}
+  <div class="container">
+    {error && <div class="projects-error" role="status">{error}</div>}
+
+    {projects.length > 0 ? (
+      <>
+        <div class="filters" aria-label={isEn ? 'Project categories' : 'تصنيفات المشاريع'}>
+          {categories.map((cat, index) => (
+            <button class={`filter-btn ${index === 0 ? 'active' : ''}`} data-filter={index === 0 ? 'all' : cat}>
+              {cat}
+            </button>
+          ))}
         </div>
-      )}
-      {totalPages > 1 && <nav class="pagination" aria-label="Pagination">
-        {page > 1 && <a href={pageHref(page - 1)}>{copy.common.previous}</a>}
-        <span class="active">{page} / {totalPages}</span>
-        {page < totalPages && <a href={pageHref(page + 1)}>{copy.common.next}</a>}
-      </nav>}
-    </div>
-  </section>
+
+        <div class="projects-grid">
+          {projects.map((project) => (
+            <a href={localePath(locale, `/projects/${project.slug}`)} class="project-card" data-category={project.category}>
+              <div class="card-image">
+                <img src={project.coverImage} alt={project.title} loading="lazy" />
+                <span class="card-badge">{project.category}</span>
+              </div>
+              <div class="card-content">
+                <h2 class="card-title">{project.title}</h2>
+                <div class="card-meta">
+                  <span class="meta-item">{project.location}</span>
+                  <span class="meta-item">{project.year}</span>
+                </div>
+                {project.summary && <p class="card-summary">{project.summary}</p>}
+              </div>
+            </a>
+          ))}
+        </div>
+      </>
+    ) : !error && <div class="projects-empty">{isEn ? 'No published projects are available yet.' : 'لا توجد مشاريع منشورة حاليًا.'}</div>}
+  </div>
 </main>
+
+<script>
+  const filterBtns = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+  const projectCards = document.querySelectorAll<HTMLElement>('.project-card');
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach((button) => button.classList.remove('active'));
+      btn.classList.add('active');
+      const filterValue = btn.getAttribute('data-filter');
+      projectCards.forEach((card) => {
+        const cardCategory = card.getAttribute('data-category');
+        card.style.display = filterValue === 'all' || filterValue === cardCategory ? 'flex' : 'none';
+      });
+    });
+  });
+</script>
+
+<style>
+  .projects-page {
+    background: #040d12;
+    min-height: 100vh;
+    padding-bottom: 100px;
+    color: #fff;
+  }
+  .page-header {
+    padding: clamp(120px, 15vw, 160px) 0 clamp(60px, 8vw, 80px);
+    text-align: center;
+    background: linear-gradient(180deg, rgba(30,153,211,0.1) 0%, transparent 100%);
+  }
+  .page-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: var(--tj-font-bold);
+    margin-bottom: 24px;
+    color: #fff;
+  }
+  .page-desc {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+  .projects-error,.projects-empty{max-width:760px;margin:0 auto 36px;padding:18px 22px;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.75);text-align:center}
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 48px;
+  }
+  .filter-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 10px 24px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  .filter-btn:hover { background: rgba(255, 255, 255, 0.1); }
+  .filter-btn.active { background: var(--tj-primary); color: #fff; border-color: var(--tj-primary); }
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 32px; }
+  .project-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.4s ease;
+  }
+  .project-card:hover { transform: translateY(-5px); border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
+  .card-image { position: relative; width: 100%; aspect-ratio: 16/10; overflow: hidden; background:#0b1e26; }
+  .card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+  .project-card:hover .card-image img { transform: scale(1.05); }
+  .card-badge { position: absolute; top: 16px; inset-inline-end: 16px; background: var(--tj-primary); color: #fff; font-size: 0.8rem; padding: 4px 12px; border-radius: 999px; font-weight: var(--tj-font-medium); }
+  .card-content { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+  .card-title { font-size: 1.4rem; color: #fff; margin-bottom: 12px; font-weight: var(--tj-font-bold); }
+  .card-meta { display: flex; gap: 16px; margin-bottom: 16px; font-size: 0.9rem; color: rgba(255, 255, 255, 0.5); }
+  .card-summary { color: rgba(255, 255, 255, 0.7); font-size: 0.95rem; line-height: 1.6; margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  @media(max-width:560px){.projects-grid{grid-template-columns:1fr}.filter-btn{padding:9px 17px;font-size:.9rem}.card-meta{flex-wrap:wrap}}
+</style>

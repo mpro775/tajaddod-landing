@@ -32,7 +32,7 @@ export interface ProjectSummary {
   countryCode: string;
   locationAr?: string;
   locationEn?: string;
-  periodType: 'single_year' | 'year_range' | 'ongoing' | 'text_only';
+  periodType: 'single_year' | 'year_range' | 'lta' | 'ongoing' | 'unknown';
   startYear?: number;
   endYear?: number;
   periodLabelAr?: string;

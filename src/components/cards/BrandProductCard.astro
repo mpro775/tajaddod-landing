@@ -1,10 +1,14 @@
 ---
+import type { Locale } from '../../lib/api/types';
+
 interface Props {
   product: any;
   brandColor: string;
+  locale: Locale;
 }
 
-const { product, brandColor } = Astro.props;
+const { product, brandColor, locale } = Astro.props;
+const isEn = locale === 'en';
 
 // Extract RGB from hex
 const hexToRgb = (hex: string) => {
@@ -31,7 +35,7 @@ const rgb = hexToRgb(brandColor);
 
     <!-- Hover overlay -->
     <div class="product-card__overlay">
-      <span class="product-card__view-text">عرض التفاصيل</span>
+      <span class="product-card__view-text">{isEn ? 'View details' : 'عرض التفاصيل'}</span>
     </div>
   </div>
 
@@ -54,7 +58,7 @@ const rgb = hexToRgb(brandColor);
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           </svg>
-          <span>ضمان {product.warrantyYears} سنوات</span>
+          <span>{isEn ? `${product.warrantyYears}-year warranty` : `ضمان ${product.warrantyYears} سنوات`}</span>
         </div>
       )}
     </div>
