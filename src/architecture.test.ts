@@ -17,15 +17,25 @@ describe('Astro production architecture', () => {
     expect(source).not.toMatch(/data\/(projects|news|brands|generated-products)/);
   });
 
-  it('renders the home, project, news, product, and brand data from the website aggregator', () => {
+  it('renders the restored home design from the website aggregator and keeps landing products dynamic', () => {
     const homePage = readFileSync(join(sourceRoot, 'pages', 'index.astro'), 'utf8');
     const homeComponent = readFileSync(join(sourceRoot, 'components', 'pages', 'HomePage.astro'), 'utf8');
+    const brandRoute = readFileSync(join(sourceRoot, 'pages', 'brands', '[slug].astro'), 'utf8');
+    const brandComponent = readFileSync(join(sourceRoot, 'components', 'pages', 'BrandPage.astro'), 'utf8');
+
     expect(homePage).toContain('getWebsiteHome');
-    expect(homeComponent).toContain('adaptHome(home)');
-    expect(homeComponent).toContain('projects, products, articles, brands');
-    expect(homeComponent).toContain('PUBLIC_STORE_URL');
-    expect(homeComponent).toContain('/products/${encodeURIComponent(product.slug)}');
-    expect(homeComponent).toContain('sectionPosition');
+    expect(homeComponent).toContain('home?.brands');
+    expect(homeComponent).toContain('home?.projects');
+    expect(homeComponent).toContain('home?.articles');
+    expect(homeComponent).toContain('<Brands');
+    expect(homeComponent).toContain('<FeaturedProjects');
+    expect(homeComponent).toContain('<LatestNews');
+
+    // Products are presented inside the restored brand-detail experience rather than
+    // the temporary generic product cards that were introduced during the SSR migration.
+    expect(brandRoute).toContain('getWebsiteHome');
+    expect(brandRoute).toContain('home.products.filter');
+    expect(brandComponent).toContain('<BrandProducts');
   });
 
   it('keeps API resources and response adapters separated by domain', () => {
@@ -59,7 +69,7 @@ describe('Astro production architecture', () => {
       'utf8',
     );
     expect(projectList).toContain('name="client"');
-    expect(projectDetail).toContain("project.displayMode === 'case_study'");
+    expect(projectDetail).toContain("sourceProject.displayMode === 'case_study'");
     expect(articleDetail).toContain('getArticles');
     expect(articleDetail).toContain('related');
   });

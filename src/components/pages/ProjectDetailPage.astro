@@ -7,6 +7,7 @@ import { toLegacyProject } from '../../lib/visual/legacy-view';
 const { locale, project: sourceProject } = Astro.props as { locale: Locale; project: ProjectDetail };
 const isEn = locale === 'en';
 const project = toLegacyProject(sourceProject, locale);
+const isCaseStudy = sourceProject.displayMode === 'case_study';
 const statusStyle = sourceProject.status === 'completed'
   ? { color: '#8bc543', bg: 'rgba(139,197,67,0.12)' }
   : sourceProject.status === 'in_progress'
@@ -125,7 +126,7 @@ const labels = {
           <!-- Main Content Column -->
           <div class="pd-main">
             <!-- Challenge Section -->
-            {project.challenge && (
+            {isCaseStudy && project.challenge && (
               <div class="pd-block pd-block--challenge">
                 <div class="pd-block__header">
                   <div class="pd-block__icon pd-block__icon--red">
@@ -138,7 +139,7 @@ const labels = {
             )}
 
             <!-- Solution Section -->
-            {project.solution && (
+            {isCaseStudy && project.solution && (
               <div class="pd-block pd-block--solution">
                 <div class="pd-block__header">
                   <div class="pd-block__icon pd-block__icon--green">
@@ -174,7 +175,7 @@ const labels = {
           <aside class="pd-sidebar">
             
             <!-- Scope Widget -->
-            {project.scope && project.scope.length > 0 && (
+            {isCaseStudy && project.scope && project.scope.length > 0 && (
               <div class="pd-widget" id="scope-widget">
                 <h3 class="pd-widget__title">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>

@@ -1,6 +1,7 @@
 ---
 import type { Locale, ProjectCollection } from '../../lib/api/types';
 import { localePath } from '../../lib/content';
+import { categoryLabels, sectorLabels, serviceLabels } from '../../i18n';
 import { toLegacyProject } from '../../lib/visual/legacy-view';
 
 interface Props {
@@ -10,7 +11,7 @@ interface Props {
   query?: Record<string, string>;
 }
 
-const { locale, collection, error } = Astro.props;
+const { locale, collection, error, query = {} } = Astro.props;
 const isEn = locale === 'en';
 const projects = (collection?.projects || []).map((project) => toLegacyProject(project, locale));
 const allLabel = isEn ? 'All' : 'الكل';
@@ -32,11 +33,42 @@ const categories = [allLabel, ...new Set(projects.map((p) => p.category).filter(
       <>
         <div class="filters" aria-label={isEn ? 'Project categories' : 'تصنيفات المشاريع'}>
           {categories.map((cat, index) => (
-            <button class={`filter-btn ${index === 0 ? 'active' : ''}`} data-filter={index === 0 ? 'all' : cat}>
+            <button type="button" class={`filter-btn ${index === 0 ? 'active' : ''}`} data-filter={index === 0 ? 'all' : cat}>
               {cat}
             </button>
           ))}
         </div>
+
+        <details class="advanced-filters" open={Boolean(query.search || query.client || query.year || query.service || query.sector)}>
+          <summary>{isEn ? 'Advanced filters' : 'فلترة متقدمة'}</summary>
+          <form class="advanced-filters__form" action={localePath(locale, '/projects')} method="get">
+            <input type="search" name="search" value={query.search || ''} placeholder={isEn ? 'Search projects' : 'ابحث في المشاريع'} />
+            <input type="search" name="client" value={query.client || ''} placeholder={isEn ? 'Client name' : 'اسم العميل'} />
+            <input type="number" name="year" min="1900" max="2100" value={query.year || ''} placeholder={isEn ? 'Year' : 'السنة'} />
+            <select name="service" aria-label={isEn ? 'Service' : 'الخدمة'}>
+              <option value="">{isEn ? 'All services' : 'كل الخدمات'}</option>
+              {Object.entries(serviceLabels[locale]).map(([value, label]) => (
+                <option value={value} selected={query.service === value}>{label}</option>
+              ))}
+            </select>
+            <select name="sector" aria-label={isEn ? 'Sector' : 'القطاع'}>
+              <option value="">{isEn ? 'All sectors' : 'كل القطاعات'}</option>
+              {Object.entries(sectorLabels[locale]).map(([value, label]) => (
+                <option value={value} selected={query.sector === value}>{label}</option>
+              ))}
+            </select>
+            <select name="category" aria-label={isEn ? 'Category' : 'التصنيف'}>
+              <option value="">{isEn ? 'All categories' : 'كل التصنيفات'}</option>
+              {Object.entries(categoryLabels[locale]).map(([value, label]) => (
+                <option value={value} selected={query.category === value}>{label}</option>
+              ))}
+            </select>
+            <div class="advanced-filters__actions">
+              <button class="advanced-filter-submit" type="submit">{isEn ? 'Apply filters' : 'تطبيق الفلاتر'}</button>
+              <a class="advanced-filter-reset" href={localePath(locale, '/projects')}>{isEn ? 'Reset' : 'إعادة تعيين'}</a>
+            </div>
+          </form>
+        </details>
 
         <div class="projects-grid">
           {projects.map((project) => (
@@ -123,6 +155,16 @@ const categories = [allLabel, ...new Set(projects.map((p) => p.category).filter(
   }
   .filter-btn:hover { background: rgba(255, 255, 255, 0.1); }
   .filter-btn.active { background: var(--tj-primary); color: #fff; border-color: var(--tj-primary); }
+  .advanced-filters{margin:-18px auto 42px;max-width:1080px;border:1px solid rgba(255,255,255,.08);border-radius:18px;background:rgba(255,255,255,.025);overflow:hidden}
+  .advanced-filters summary{cursor:pointer;list-style:none;padding:14px 18px;color:rgba(255,255,255,.78);font-weight:var(--tj-font-medium);text-align:center}
+  .advanced-filters summary::-webkit-details-marker{display:none}
+  .advanced-filters__form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:0 18px 18px}
+  .advanced-filters__form input,.advanced-filters__form select{width:100%;min-height:46px;border:1px solid rgba(255,255,255,.1);border-radius:12px;background:#0b1e26;color:#fff;padding:0 14px;font:inherit;outline:none}
+  .advanced-filters__form input:focus,.advanced-filters__form select:focus{border-color:var(--tj-primary)}
+  .advanced-filters__actions{grid-column:1/-1;display:flex;gap:10px;justify-content:center;padding-top:4px}
+  .advanced-filter-submit,.advanced-filter-reset{min-height:44px;border-radius:999px;padding:0 22px;font:inherit;font-weight:var(--tj-font-medium);display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+  .advanced-filter-submit{border:0;background:var(--tj-primary);color:#fff;cursor:pointer}
+  .advanced-filter-reset{border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.78);background:transparent}
   .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 32px; }
   .project-card {
     background: rgba(255, 255, 255, 0.02);
@@ -143,5 +185,6 @@ const categories = [allLabel, ...new Set(projects.map((p) => p.category).filter(
   .card-title { font-size: 1.4rem; color: #fff; margin-bottom: 12px; font-weight: var(--tj-font-bold); }
   .card-meta { display: flex; gap: 16px; margin-bottom: 16px; font-size: 0.9rem; color: rgba(255, 255, 255, 0.5); }
   .card-summary { color: rgba(255, 255, 255, 0.7); font-size: 0.95rem; line-height: 1.6; margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-  @media(max-width:560px){.projects-grid{grid-template-columns:1fr}.filter-btn{padding:9px 17px;font-size:.9rem}.card-meta{flex-wrap:wrap}}
+  @media(max-width:760px){.advanced-filters__form{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.projects-grid{grid-template-columns:1fr}.filter-btn{padding:9px 17px;font-size:.9rem}.card-meta{flex-wrap:wrap}.advanced-filters__form{grid-template-columns:1fr}.advanced-filters__actions{flex-direction:column}.advanced-filter-submit,.advanced-filter-reset{width:100%}}
 </style>
