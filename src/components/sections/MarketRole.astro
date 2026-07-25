@@ -78,69 +78,6 @@ const brandSources = [
     <!-- Flow Visualization -->
     <div class="mr-flow" data-reveal>
       
-      <!-- Source: Brands Column -->
-      <div class="mr-flow__brands">
-        <span class="mr-flow__col-label">العلامات المتخصصة</span>
-        <div class="mr-flow__brand-stack">
-          {brandSources.map((brand) => (
-            <div class="mr-brand-chip" data-mr-chip data-id={brand.id} data-targets={brand.targets}>
-              <div class="mr-brand-chip__logo">
-                <img src={brand.logo} alt={brand.name} width="80" height="36" loading="lazy" />
-              </div>
-              <div class="mr-brand-chip__info">
-                <strong>{brand.name}</strong>
-                <span>{brand.role}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <!-- Center: Hub -->
-      <div class="mr-flow__hub-zone">
-        <!-- Connection lines (left) -->
-        <div class="mr-flow__lines mr-flow__lines--in" aria-hidden="true">
-          <svg viewBox="0 0 120 200" fill="none" preserveAspectRatio="none" class="mr-svg-lines">
-            <!-- Background Static paths -->
-            <path d="M0 70 Q60 70 110 100" stroke="rgba(255,255,255,0.06)" stroke-width="2" class="mr-path-bg" />
-            <path d="M0 130 Q60 130 110 100" stroke="rgba(255,255,255,0.06)" stroke-width="2" class="mr-path-bg" />
-            
-            <!-- Glowing Laser path overlays -->
-            <path d="M0 70 Q60 70 110 100" stroke="#e63946" stroke-width="2.5" class="mr-path-glow mr-path-glow--cnc" data-path-in="cnc" />
-            <path d="M0 130 Q60 130 110 100" stroke="var(--tj-orange)" stroke-width="2.5" class="mr-path-glow mr-path-glow--liper" data-path-in="liper" />
-          </svg>
-        </div>
-
-        <!-- Hub Core -->
-        <div class="mr-hub" data-mr-hub>
-          <div class="mr-hub__ring mr-hub__ring--outer"></div>
-          <div class="mr-hub__ring mr-hub__ring--inner"></div>
-          <div class="mr-hub__core">
-            <img src="/logos/tajaddod-icon.svg" alt="تجدد" width="48" height="48" />
-            <strong>تجدد</strong>
-            <span>المظلة</span>
-          </div>
-          <div class="mr-hub__pulse"></div>
-        </div>
-
-        <!-- Connection lines (right) -->
-        <div class="mr-flow__lines mr-flow__lines--out" aria-hidden="true">
-          <svg viewBox="0 0 120 260" fill="none" preserveAspectRatio="none" class="mr-svg-lines">
-            <!-- Background Static paths -->
-            <path d="M10 130 Q60 40 120 20" stroke="rgba(255,255,255,0.06)" stroke-width="2" class="mr-path-bg" />
-            <path d="M10 130 Q50 100 120 90" stroke="rgba(255,255,255,0.06)" stroke-width="2" class="mr-path-bg" />
-            <path d="M10 130 Q50 160 120 170" stroke="rgba(255,255,255,0.06)" stroke-width="2" class="mr-path-bg" />
-            <path d="M10 130 Q60 220 120 240" stroke="rgba(255,255,255,0.06)" stroke-width="2" class="mr-path-bg" />
-            
-            <!-- Glowing Laser path overlays -->
-            <path d="M10 130 Q60 40 120 20" stroke="var(--tj-blue)" stroke-width="2.5" class="mr-path-glow mr-path-glow--retailers" data-path-out="retailers" />
-            <path d="M10 130 Q50 100 120 90" stroke="var(--tj-green)" stroke-width="2.5" class="mr-path-glow mr-path-glow--contractors" data-path-out="contractors" />
-            <path d="M10 130 Q50 160 120 170" stroke="var(--tj-orange)" stroke-width="2.5" class="mr-path-glow mr-path-glow--technicians" data-path-out="technicians" />
-            <path d="M10 130 Q60 220 120 240" stroke="var(--tj-blue)" stroke-width="2.5" class="mr-path-glow mr-path-glow--owners" data-path-out="owners" />
-          </svg>
-        </div>
-      </div>
-
       <!-- Destination: Market Segments -->
       <div class="mr-flow__market">
         <span class="mr-flow__col-label">السوق</span>
@@ -160,37 +97,103 @@ const brandSources = [
           ))}
         </div>
       </div>
+
+      <!-- Center: Hub -->
+      <div class="mr-flow__hub-zone">
+        <!-- Connection lines (left to Market) -->
+        <div class="mr-flow__lines mr-flow__lines--market" aria-hidden="true">
+          <svg viewBox="0 0 120 260" fill="none" preserveAspectRatio="none" class="mr-svg-lines">
+            <!-- Background Static paths -->
+            <path d="M110 130 Q60 40 0 20" stroke="rgba(255,255,255,0.06)" stroke-width="2" class="mr-path-bg" />
+            <path d="M110 130 Q60 100 0 90" stroke="rgba(255,255,255,0.06)" stroke-width="2" class="mr-path-bg" />
+            <path d="M110 130 Q60 160 0 170" stroke="rgba(255,255,255,0.06)" stroke-width="2" class="mr-path-bg" />
+            <path d="M110 130 Q60 220 0 240" stroke="rgba(255,255,255,0.06)" stroke-width="2" class="mr-path-bg" />
+            
+            <!-- Glowing Laser path overlays -->
+            <path d="M110 130 Q60 40 0 20" stroke="var(--tj-blue)" stroke-width="2.5" class="mr-path-glow mr-path-glow--retailers" data-path-market="retailers" />
+            <path d="M110 130 Q60 100 0 90" stroke="var(--tj-green)" stroke-width="2.5" class="mr-path-glow mr-path-glow--contractors" data-path-market="contractors" />
+            <path d="M110 130 Q60 160 0 170" stroke="var(--tj-orange)" stroke-width="2.5" class="mr-path-glow mr-path-glow--technicians" data-path-market="technicians" />
+            <path d="M110 130 Q60 220 0 240" stroke="var(--tj-blue)" stroke-width="2.5" class="mr-path-glow mr-path-glow--owners" data-path-market="owners" />
+          </svg>
+        </div>
+
+        <!-- Hub Core -->
+        <div class="mr-hub" data-mr-hub>
+          <div class="mr-hub__ring mr-hub__ring--outer"></div>
+          <div class="mr-hub__ring mr-hub__ring--inner"></div>
+          <div class="mr-hub__core">
+            <img src="/logos/tajaddod-icon.svg" alt="تجدد" width="48" height="48" />
+            <strong>تجدد</strong>
+            <span>المظلة</span>
+          </div>
+          <div class="mr-hub__pulse"></div>
+        </div>
+
+        <!-- Connection lines (right to Brands) -->
+        <div class="mr-flow__lines mr-flow__lines--brands" aria-hidden="true">
+          <svg viewBox="0 0 120 200" fill="none" preserveAspectRatio="none" class="mr-svg-lines">
+            <!-- Background Static paths -->
+            <path d="M0 100 Q55 70 120 70" stroke="rgba(255,255,255,0.06)" stroke-width="2" class="mr-path-bg" />
+            <path d="M0 100 Q55 130 120 130" stroke="rgba(255,255,255,0.06)" stroke-width="2" class="mr-path-bg" />
+            
+            <!-- Glowing Laser path overlays -->
+            <path d="M0 100 Q55 70 120 70" stroke="#e63946" stroke-width="2.5" class="mr-path-glow mr-path-glow--cnc" data-path-brand="cnc" />
+            <path d="M0 100 Q55 130 120 130" stroke="var(--tj-orange)" stroke-width="2.5" class="mr-path-glow mr-path-glow--liper" data-path-brand="liper" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Source: Brands Column -->
+      <div class="mr-flow__brands">
+        <span class="mr-flow__col-label">العلامات المتخصصة</span>
+        <div class="mr-flow__brand-stack">
+          {brandSources.map((brand) => (
+            <div class="mr-brand-chip" data-mr-chip data-id={brand.id} data-targets={brand.targets}>
+              <div class="mr-brand-chip__logo">
+                <img src={brand.logo} alt={brand.name} width="80" height="36" loading="lazy" />
+              </div>
+              <div class="mr-brand-chip__info">
+                <strong>{brand.name}</strong>
+                <span>{brand.role}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
     </div>
 
     <div class="mr-mobile-flow" aria-label="قصة دور تجدد في السوق">
-      <article class="mr-mobile-flow__card">
-        <span class="mr-mobile-flow__num">01</span>
-        <h3>العلامات المتخصصة</h3>
-        <p>حلول الحماية والإضاءة والطاقة</p>
-        <div class="mr-mobile-flow__logos">
-          {brandSources.map((brand) => (
-            <img src={brand.logo} alt={brand.name} width="58" height="28" loading="lazy" />
-          ))}
-        </div>
-      </article>
-
       <article class="mr-mobile-flow__card mr-mobile-flow__card--hub">
-        <span class="mr-mobile-flow__num">02</span>
+        <span class="mr-mobile-flow__num">01</span>
         <img src="/logos/tajaddod-icon.svg" alt="تجدد" width="42" height="42" loading="lazy" />
         <h3>تجدد</h3>
         <p>نحول تعدد العلامات إلى منظومة واضحة للسوق.</p>
       </article>
 
-      <article class="mr-mobile-flow__card">
-        <span class="mr-mobile-flow__num">03</span>
-        <h3>السوق</h3>
-        <p>تجار / مقاولون / فنيون / أصحاب مشاريع</p>
-        <div class="mr-mobile-flow__chips">
-          {marketSegments.map((segment) => (
-            <span>{segment.title}</span>
-          ))}
-        </div>
-      </article>
+      <div class="mr-mobile-flow__branches">
+        <article class="mr-mobile-flow__card">
+          <span class="mr-mobile-flow__num">02</span>
+          <h3>العلامات المتخصصة</h3>
+          <p>حلول الحماية والإضاءة والطاقة</p>
+          <div class="mr-mobile-flow__logos">
+            {brandSources.map((brand) => (
+              <img src={brand.logo} alt={brand.name} width="58" height="28" loading="lazy" />
+            ))}
+          </div>
+        </article>
+
+        <article class="mr-mobile-flow__card">
+          <span class="mr-mobile-flow__num">03</span>
+          <h3>السوق</h3>
+          <p>تجار / مقاولون / فنيون / مشاريع</p>
+          <div class="mr-mobile-flow__chips">
+            {marketSegments.map((segment) => (
+              <span>{segment.title}</span>
+            ))}
+          </div>
+        </article>
+      </div>
     </div>
 
     <!-- Process Steps (mobile-friendly linear flow) -->
@@ -231,8 +234,8 @@ const brandSources = [
 
     const brandChips = flowContainer.querySelectorAll('[data-mr-chip]');
     const segmentCards = flowContainer.querySelectorAll('[data-mr-segment]');
-    const pathInElements = flowContainer.querySelectorAll('[data-path-in]');
-    const pathOutElements = flowContainer.querySelectorAll('[data-path-out]');
+    const pathBrandElements = flowContainer.querySelectorAll('[data-path-brand]');
+    const pathMarketElements = flowContainer.querySelectorAll('[data-path-market]');
     const hub = flowContainer.querySelector('[data-mr-hub]');
 
     const clearAll = () => {
@@ -241,8 +244,8 @@ const brandSources = [
       
       brandChips.forEach(el => el.classList.remove('is-active', 'is-highlighted'));
       segmentCards.forEach(el => el.classList.remove('is-active', 'is-highlighted'));
-      pathInElements.forEach(el => el.classList.remove('is-active'));
-      pathOutElements.forEach(el => el.classList.remove('is-active'));
+      pathBrandElements.forEach(el => el.classList.remove('is-active', 'is-secondary'));
+      pathMarketElements.forEach(el => el.classList.remove('is-active', 'is-secondary'));
       hub?.classList.remove('is-active');
     };
 
@@ -260,17 +263,17 @@ const brandSources = [
         chip.classList.add('is-active');
         hub?.classList.add('is-active');
 
-        // Highlight matching path-in
-        const pathIn = flowContainer.querySelector(`[data-path-in="${brandId}"]`);
-        pathIn?.classList.add('is-active');
+        // Highlight matching brand path (100%)
+        const pathBrand = flowContainer.querySelector(`[data-path-brand="${brandId}"]`);
+        pathBrand?.classList.add('is-active');
 
-        // Highlight target segments & path-outs
+        // Highlight target segments & market paths (Secondary)
         targets.forEach(targetId => {
           const segment = flowContainer.querySelector(`[data-id="${targetId}"]`);
           segment?.classList.add('is-highlighted');
 
-          const pathOut = flowContainer.querySelector(`[data-path-out="${targetId}"]`);
-          pathOut?.classList.add('is-active');
+          const pathMarket = flowContainer.querySelector(`[data-path-market="${targetId}"]`);
+          pathMarket?.classList.add('is-secondary');
         });
       });
 
@@ -291,17 +294,17 @@ const brandSources = [
         card.classList.add('is-active');
         hub?.classList.add('is-active');
 
-        // Highlight matching path-out
-        const pathOut = flowContainer.querySelector(`[data-path-out="${segmentId}"]`);
-        pathOut?.classList.add('is-active');
+        // Highlight matching market path (100%)
+        const pathMarket = flowContainer.querySelector(`[data-path-market="${segmentId}"]`);
+        pathMarket?.classList.add('is-active');
 
-        // Highlight source brands & path-ins
+        // Highlight source brands & brand paths (Secondary)
         sources.forEach(sourceId => {
           const brand = flowContainer.querySelector(`[data-id="${sourceId}"]`);
           brand?.classList.add('is-highlighted');
 
-          const pathIn = flowContainer.querySelector(`[data-path-in="${sourceId}"]`);
-          pathIn?.classList.add('is-active');
+          const pathBrand = flowContainer.querySelector(`[data-path-brand="${sourceId}"]`);
+          pathBrand?.classList.add('is-secondary');
         });
       });
 
@@ -492,8 +495,10 @@ const brandSources = [
    ──────────────────────────────────────────────────────────────────────── */
 
 .mr-flow {
+  direction: ltr;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
+  grid-template-areas: "market hub brands";
   gap: 0;
   align-items: center;
   width: 100%;
@@ -519,6 +524,8 @@ const brandSources = [
 
 /* Left: Brands */
 .mr-flow__brands {
+  grid-area: brands;
+  direction: rtl;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -622,6 +629,8 @@ const brandSources = [
 
 /* Center Zone & SVG paths */
 .mr-flow__hub-zone {
+  grid-area: hub;
+  direction: ltr;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -666,6 +675,12 @@ const brandSources = [
   opacity: 1;
   stroke-width: 3.5px;
   animation-duration: 2s; /* Speeds up on active link! */
+}
+
+.mr-path-glow.is-secondary {
+  opacity: 0.35;
+  stroke-width: 2.8px;
+  animation-duration: 3s;
 }
 
 /* Hub Reactor Core */
@@ -771,6 +786,8 @@ const brandSources = [
 
 /* Right: Market Segments */
 .mr-flow__market {
+  grid-area: market;
+  direction: rtl;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1148,6 +1165,14 @@ const brandSources = [
     background: linear-gradient(180deg, var(--tj-blue), rgba(255,255,255,.38), var(--tj-green-light));
     box-shadow: 0 0 18px rgba(30,153,211,.28);
     opacity: .72;
+    display: none; /* Hide the old line */
+  }
+
+  .mr-mobile-flow__branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 100%;
   }
 
   .mr-mobile-flow__card {
