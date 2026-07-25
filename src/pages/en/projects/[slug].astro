@@ -1,12 +1,11 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import ProjectDetailPage from '../../components/pages/ProjectDetailPage.astro';
-import NotFound from '../../components/pages/NotFound.astro';
-import { ApiError, getProject } from '../../lib/api';
-import { dictionary } from '../../i18n';
-import { text } from '../../lib/content';
-
-const locale = 'ar' as const;
+import Layout from '../../../layouts/Layout.astro';
+import ProjectDetailPage from '../../../components/pages/ProjectDetailPage.astro';
+import NotFound from '../../../components/pages/NotFound.astro';
+import { ApiError, getProject } from '../../../lib/api';
+import { dictionary } from '../../../i18n';
+import { text } from '../../../lib/content';
+const locale = 'en' as const;
 const copy = dictionary(locale);
 const slug = Astro.params.slug || '';
 let project;
@@ -21,20 +20,19 @@ const source = project;
 const title = source ? text(source, 'metaTitle', locale) || text(source, 'title', locale) : copy.notFound.title;
 const description = source ? text(source, 'metaDescription', locale) || text(source, 'shortDescription', locale) : error || copy.notFound.description;
 const siteUrl = (import.meta.env.PUBLIC_SITE_URL || Astro.site?.toString() || Astro.url.origin).replace(/\/+$/, '');
-const canonicalUrl = `${siteUrl}/projects/${encodeURIComponent(slug)}`;
+const canonicalUrl = `${siteUrl}/en/projects/${encodeURIComponent(slug)}`;
 const structuredData = project ? {
   '@context': 'https://schema.org',
   '@type': 'CreativeWork',
   name: text(project, 'title', locale),
   description,
   url: canonicalUrl,
-  inLanguage: 'ar',
+  inLanguage: 'en',
   image: project.cover?.url ? new URL(project.cover.url, `${siteUrl}/`).toString() : undefined,
   locationCreated: text(project, 'location', locale) || undefined,
 } : undefined;
 ---
-
-<Layout locale={locale} title={`${title} | ${copy.brand}`} description={description} image={project?.cover?.url} canonicalPath={`/projects/${slug}`} noindex={!project}>
+<Layout locale={locale} title={`${title} | ${copy.brand}`} description={description} image={project?.cover?.url} canonicalPath={`/en/projects/${slug}`} noindex={!project}>
   {structuredData && <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
   {project ? <ProjectDetailPage locale={locale} project={project} /> : <NotFound locale={locale} message={error} />}
 </Layout>

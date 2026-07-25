@@ -1,0 +1,24 @@
+---
+import type { ArticleDetail, ArticleSummary, Locale } from '../../lib/api/types';
+import { dictionary } from '../../i18n';
+import { localePath, mediaAlt, renderRichContent, text } from '../../lib/content';
+
+const { locale, article, related = [] } = Astro.props as {
+  locale: Locale;
+  article: ArticleDetail;
+  related?: ArticleSummary[];
+};
+const copy = dictionary(locale);
+const source = article;
+const title = text(source, 'title', locale);
+const excerpt = text(source, 'excerpt', locale);
+const content = text(source, 'content', locale);
+const dateFormatter = new Intl.DateTimeFormat(locale === 'ar' ? 'ar-YE' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<main class="page-shell">
+  <section class="detail-hero"><div class="container detail-hero__grid"><div class="detail-title"><span class="eyebrow">{article.category || copy.nav.news}</span><h1>{title}</h1>{excerpt && <p>{excerpt}</p>}<div class="detail-meta">{article.publishDate && <span>{copy.news.published}: {dateFormatter.format(new Date(article.publishDate))}</span>}{article.authorName && <span>{copy.news.author}: {article.authorName}</span>}<span>{article.readTime} {copy.common.minutes}</span></div></div><div class="detail-cover">{article.cover?.url && <img src={article.cover.url} alt={mediaAlt(article.cover, locale, title)} width="900" height="620" />}</div></div></section>
+  <article class="content-section"><div class="container"><div class="prose" set:html={renderRichContent(content)} /></div></article>
+  {article.gallery?.length > 0 && <section class="content-section is-tinted"><div class="container"><div class="section-head"><h2>{copy.news.gallery}</h2></div><div class="gallery-grid">{article.gallery.map((media) => <figure><img src={media.url} alt={mediaAlt(media, locale, title)} loading="lazy" width="720" height="540" />{(locale === 'en' ? media.captionEn || media.captionAr : media.captionAr || media.captionEn) && <figcaption>{locale === 'en' ? media.captionEn || media.captionAr : media.captionAr || media.captionEn}</figcaption>}</figure>)}</div></div></section>}
+  {related.length > 0 && <section class="content-section"><div class="container"><div class="section-head"><h2>{copy.news.related}</h2></div><div class="cards-grid">{related.map((item) => { const itemTitle = text(item, 'title', locale); const itemExcerpt = text(item, 'excerpt', locale); return <article class="content-card"><div class="content-card__media">{item.cover?.url && <img src={item.cover.url} alt={mediaAlt(item.cover, locale, itemTitle)} loading="lazy" width="720" height="450" />}</div><div class="content-card__body"><h3>{itemTitle}</h3>{itemExcerpt && <p>{itemExcerpt}</p>}<a class="content-card__link" href={localePath(locale, `/news/${item.slug}`)}>{copy.common.readMore}</a></div></article>; })}</div></div></section>}
+</main>

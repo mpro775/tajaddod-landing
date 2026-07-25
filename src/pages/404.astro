@@ -1,0 +1,11 @@
+---
+import Layout from '../layouts/Layout.astro';
+import NotFound from '../components/pages/NotFound.astro';
+import { dictionary } from '../i18n';
+const locale = Astro.url.pathname.startsWith('/en') ? 'en' as const : 'ar' as const;
+const copy = dictionary(locale);
+Astro.response.status = 404;
+---
+<Layout locale={locale} title={`${copy.notFound.title} | ${copy.brand}`} description={copy.notFound.description} noindex>
+  <NotFound locale={locale} />
+</Layout>

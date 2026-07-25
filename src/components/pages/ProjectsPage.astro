@@ -1,0 +1,76 @@
+---
+import type { Locale, ProjectCollection } from '../../lib/api/types';
+import { categoryLabels, dictionary, sectorLabels, serviceLabels } from '../../i18n';
+import { localePath, mediaAlt, projectPeriod, text } from '../../lib/content';
+
+interface Props {
+  locale: Locale;
+  collection?: ProjectCollection;
+  error?: string;
+  query: Record<string, string>;
+}
+const { locale, collection, error, query } = Astro.props;
+const copy = dictionary(locale);
+const projects = collection?.projects || [];
+const page = collection?.pagination.page || 1;
+const totalPages = collection?.pagination.totalPages || 0;
+const action = localePath(locale, '/projects');
+const pageHref = (target: number) => {
+  const params = new URLSearchParams(query);
+  params.set('page', String(target));
+  return `${action}?${params}`;
+};
+---
+
+<main class="page-shell">
+  <section class="page-hero"><div class="container"><span class="eyebrow">{copy.nav.projects}</span><h1>{copy.projects.title}</h1><p>{copy.projects.intro}</p></div></section>
+  <div class="container">
+    <form class="filter-form" action={action} method="get">
+      <input type="search" name="search" value={query.search} placeholder={copy.projects.search} />
+      <select name="category" aria-label={copy.projects.category}>
+        <option value="">{copy.projects.category}: {copy.common.all}</option>
+        {Object.entries(categoryLabels[locale]).map(([value, label]) => <option value={value} selected={query.category === value}>{label}</option>)}
+      </select>
+      <select name="service" aria-label={copy.projects.service}>
+        <option value="">{copy.projects.service}: {copy.common.all}</option>
+        {Object.entries(serviceLabels[locale]).map(([value, label]) => <option value={value} selected={query.service === value}>{label}</option>)}
+      </select>
+      <select name="sector" aria-label={copy.projects.sector}>
+        <option value="">{copy.projects.sector}: {copy.common.all}</option>
+        {Object.entries(sectorLabels[locale]).map(([value, label]) => <option value={value} selected={query.sector === value}>{label}</option>)}
+      </select>
+      <input type="search" name="client" value={query.client} placeholder={copy.projects.client} />
+      <input type="number" name="year" min="1900" max="2100" value={query.year} placeholder={copy.projects.year} />
+      <button class="primary-button" type="submit">{locale === 'ar' ? 'تصفية' : 'Filter'}</button>
+    </form>
+  </div>
+
+  <section class="content-section">
+    <div class="container">
+      {error ? <div class="error-state">{error}</div> : projects.length === 0 ? <div class="empty-state">{copy.common.noResults}</div> : (
+        <div class="cards-grid">
+          {projects.map((project) => {
+            const title = text(project, 'title', locale);
+            const description = text(project, 'shortDescription', locale);
+            const location = text(project, 'location', locale);
+            return (
+              <article class="content-card">
+                <div class="content-card__media">{project.cover?.url && <img src={project.cover.url} alt={mediaAlt(project.cover, locale, title)} loading="lazy" width="720" height="450" />}</div>
+                <div class="content-card__body">
+                  <div class="content-card__meta"><span>{categoryLabels[locale][project.category] || project.category}</span>{projectPeriod(project, locale) && <span>{projectPeriod(project, locale)}</span>}{location && <span>{location}</span>}</div>
+                  <h2>{title}</h2>{description && <p>{description}</p>}
+                  <a class="content-card__link" href={localePath(locale, `/projects/${project.slug}`)}>{copy.common.details}</a>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
+      {totalPages > 1 && <nav class="pagination" aria-label="Pagination">
+        {page > 1 && <a href={pageHref(page - 1)}>{copy.common.previous}</a>}
+        <span class="active">{page} / {totalPages}</span>
+        {page < totalPages && <a href={pageHref(page + 1)}>{copy.common.next}</a>}
+      </nav>}
+    </div>
+  </section>
+</main>

@@ -1,0 +1,35 @@
+---
+import type { ArticleCollection, Locale } from '../../lib/api/types';
+import { dictionary } from '../../i18n';
+import { localePath, mediaAlt, text } from '../../lib/content';
+
+const { locale, collection, error, query } = Astro.props as {
+  locale: Locale; collection?: ArticleCollection; error?: string; query: Record<string, string>;
+};
+const copy = dictionary(locale);
+const articles = collection?.articles || [];
+const page = collection?.pagination.page || 1;
+const totalPages = collection?.pagination.totalPages || 0;
+const action = localePath(locale, '/news');
+const pageHref = (target: number) => {
+  const params = new URLSearchParams(query);
+  params.set('page', String(target));
+  return `${action}?${params}`;
+};
+const dateFormatter = new Intl.DateTimeFormat(locale === 'ar' ? 'ar-YE' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<main class="page-shell">
+  <section class="page-hero"><div class="container"><span class="eyebrow">{copy.nav.news}</span><h1>{copy.news.title}</h1><p>{copy.news.intro}</p></div></section>
+  <div class="container"><form class="filter-form news-filter" action={action} method="get"><input type="search" name="search" value={query.search} placeholder={copy.news.search} /><select name="type"><option value="">{copy.common.all}</option><option value="article" selected={query.type === 'article'}>{locale === 'ar' ? 'مقال' : 'Article'}</option><option value="news" selected={query.type === 'news'}>{locale === 'ar' ? 'خبر' : 'News'}</option></select><button class="primary-button" type="submit">{locale === 'ar' ? 'بحث' : 'Search'}</button></form></div>
+  <section class="content-section"><div class="container">
+    {error ? <div class="error-state">{error}</div> : articles.length === 0 ? <div class="empty-state">{copy.common.noResults}</div> : <div class="cards-grid">{articles.map((article) => {
+      const title = text(article, 'title', locale);
+      const excerpt = text(article, 'excerpt', locale);
+      return <article class="content-card"><div class="content-card__media">{article.cover?.url && <img src={article.cover.url} alt={mediaAlt(article.cover, locale, title)} loading="lazy" width="720" height="450" />}</div><div class="content-card__body"><div class="content-card__meta">{article.publishDate && <span>{dateFormatter.format(new Date(article.publishDate))}</span>}<span>{article.readTime} {copy.common.minutes}</span></div><h2>{title}</h2>{excerpt && <p>{excerpt}</p>}<a class="content-card__link" href={localePath(locale, `/news/${article.slug}`)}>{copy.common.readMore}</a></div></article>;
+    })}</div>}
+    {totalPages > 1 && <nav class="pagination" aria-label="Pagination">{page > 1 && <a href={pageHref(page - 1)}>{copy.common.previous}</a>}<span class="active">{page} / {totalPages}</span>{page < totalPages && <a href={pageHref(page + 1)}>{copy.common.next}</a>}</nav>}
+  </div></section>
+</main>
+
+<style>.news-filter{grid-template-columns:3fr 1fr auto}</style>

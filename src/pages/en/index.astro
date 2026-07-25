@@ -1,10 +1,10 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import HomePage from '../components/pages/HomePage.astro';
-import { getWebsiteHome } from '../lib/api';
-import { dictionary } from '../i18n';
+import Layout from '../../layouts/Layout.astro';
+import HomePage from '../../components/pages/HomePage.astro';
+import { getWebsiteHome } from '../../lib/api';
+import { dictionary } from '../../i18n';
 
-const locale = 'ar' as const;
+const locale = 'en' as const;
 const copy = dictionary(locale);
 let home;
 let error: string | undefined;
@@ -18,12 +18,11 @@ const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: copy.brand,
-  url: import.meta.env.PUBLIC_SITE_URL || 'https://tagadodgroup.com',
+  url: import.meta.env.PUBLIC_SITE_URL || 'https://tagadodgroup.com/en',
   email: 'info@tagadodgroup.com',
 };
 ---
-
-<Layout locale={locale} title={copy.siteTitle} description={copy.siteDescription} canonicalPath="/">
+<Layout locale={locale} title={copy.siteTitle} description={copy.siteDescription} canonicalPath="/en">
   <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
   <HomePage locale={locale} home={home} error={error} />
 </Layout>

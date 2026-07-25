@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="#212124"/>
-  <path d="M0 515C180 410 333 470 503 377c206-113 323-281 697-198v451H0Z" fill="#1E99D3" opacity=".23"/>
-  <path d="M0 561c225-71 416-33 605-109 229-92 327-219 595-151v329H0Z" fill="#159647" opacity=".28"/>
-  <circle cx="178" cy="152" r="88" fill="#FFB340" opacity=".9"/>
-  <text x="930" y="230" direction="rtl" unicode-bidi="bidi-override" font-family="Arial, sans-serif" font-size="82" font-weight="700" fill="#FFFFFF">تجدد</text>
-  <text x="930" y="320" direction="rtl" unicode-bidi="bidi-override" font-family="Arial, sans-serif" font-size="42" fill="#D8D8DC">بوابة العلامات الكهربائية والطاقة الشمسية</text>
-  <text x="930" y="395" direction="rtl" unicode-bidi="bidi-override" font-family="Arial, sans-serif" font-size="36" fill="#FFFFFF">CNC · Liper · Tagadod System</text>
-</svg>

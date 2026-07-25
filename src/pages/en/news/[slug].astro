@@ -1,13 +1,12 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import ArticleDetailPage from '../../components/pages/ArticleDetailPage.astro';
-import NotFound from '../../components/pages/NotFound.astro';
-import { ApiError, getArticle, getArticles } from '../../lib/api';
-import type { ArticleSummary } from '../../lib/api';
-import { dictionary } from '../../i18n';
-import { text } from '../../lib/content';
-
-const locale = 'ar' as const;
+import Layout from '../../../layouts/Layout.astro';
+import ArticleDetailPage from '../../../components/pages/ArticleDetailPage.astro';
+import NotFound from '../../../components/pages/NotFound.astro';
+import { ApiError, getArticle, getArticles } from '../../../lib/api';
+import type { ArticleSummary } from '../../../lib/api';
+import { dictionary } from '../../../i18n';
+import { text } from '../../../lib/content';
+const locale = 'en' as const;
 const copy = dictionary(locale);
 const slug = Astro.params.slug || '';
 let article;
@@ -38,22 +37,21 @@ const source = article;
 const title = source ? text(source, 'metaTitle', locale) || text(source, 'title', locale) : copy.notFound.title;
 const description = source ? text(source, 'metaDescription', locale) || text(source, 'excerpt', locale) : error || copy.notFound.description;
 const siteUrl = (import.meta.env.PUBLIC_SITE_URL || Astro.site?.toString() || Astro.url.origin).replace(/\/+$/, '');
-const canonicalUrl = `${siteUrl}/news/${encodeURIComponent(slug)}`;
+const canonicalUrl = `${siteUrl}/en/news/${encodeURIComponent(slug)}`;
 const structuredData = article ? {
   '@context': 'https://schema.org',
   '@type': 'Article',
   headline: text(article, 'title', locale),
   description,
   url: canonicalUrl,
-  inLanguage: 'ar',
+  inLanguage: 'en',
   image: article.cover?.url ? new URL(article.cover.url, `${siteUrl}/`).toString() : undefined,
   datePublished: article.publishDate || undefined,
   author: article.authorName ? { '@type': 'Person', name: article.authorName } : undefined,
   publisher: { '@type': 'Organization', name: copy.brand },
 } : undefined;
 ---
-
-<Layout locale={locale} title={`${title} | ${copy.brand}`} description={description} image={article?.cover?.url} canonicalPath={`/news/${slug}`} type="article" noindex={!article}>
+<Layout locale={locale} title={`${title} | ${copy.brand}`} description={description} image={article?.cover?.url} canonicalPath={`/en/news/${slug}`} type="article" noindex={!article}>
   {structuredData && <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
   {article ? <ArticleDetailPage locale={locale} article={article} related={related} /> : <NotFound locale={locale} message={error} />}
 </Layout>

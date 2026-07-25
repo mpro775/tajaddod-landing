@@ -1,0 +1,200 @@
+---
+import type { Locale, WebsiteHome } from '../../lib/api/types';
+import { dictionary, categoryLabels } from '../../i18n';
+import { localePath, mediaAlt, text } from '../../lib/content';
+import { adaptArticle } from '../../lib/adapters/article.adapter';
+import { adaptHome } from '../../lib/adapters/home.adapter';
+import { adaptProduct } from '../../lib/adapters/product.adapter';
+import { adaptProject } from '../../lib/adapters/project.adapter';
+import CinematicHero from '../sections/CinematicHero.astro';
+import About from '../sections/About.astro';
+import Achievements from '../sections/Achievements.astro';
+import MarketRole from '../sections/MarketRole.astro';
+import Coverage from '../sections/Coverage.astro';
+import Sectors from '../sections/Sectors.astro';
+import EnergyJourney from '../sections/EnergyJourney.astro';
+import AppDownload from '../sections/AppDownload.astro';
+import ContactCTA from '../sections/ContactCTA.astro';
+
+interface Props {
+  locale: Locale;
+  home?: WebsiteHome;
+  error?: string;
+}
+
+const { locale, home, error } = Astro.props;
+const copy = dictionary(locale);
+const adaptedHome = adaptHome(home);
+const { projects, products, articles, brands } = adaptedHome;
+const sectionPosition = (key: 'brands' | 'projects' | 'products' | 'articles') =>
+  -100 + adaptedHome.sectionOrder.indexOf(key);
+const storeUrl = (import.meta.env.PUBLIC_STORE_URL || '').replace(/\/+$/, '');
+const dateFormatter = new Intl.DateTimeFormat(locale === 'ar' ? 'ar-YE' : 'en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+---
+
+<main class="page-shell">
+  {locale === 'ar' ? <CinematicHero /> : <section class="home-hero">
+    <div class="container home-hero__inner">
+      <span class="eyebrow">{copy.hero.eyebrow}</span>
+      <h1>{copy.hero.title}</h1>
+      <p>{copy.hero.description}</p>
+      <div class="hero-actions">
+        <a class="primary-button" href={localePath(locale, '/projects')}>{copy.hero.projectsCta}</a>
+        <a class="secondary-button" href="#contact">{copy.hero.contactCta}</a>
+      </div>
+    </div>
+  </section>}
+
+  {locale === 'ar' && <About />}
+  {locale === 'ar' && <Achievements />}
+
+  {error && <div class="container"><div class="error-state home-error">{error}</div></div>}
+
+  <div class="ordered-home-sections">
+  {brands.length > 0 && (
+    <section class="content-section" id="brands" style={`order:${sectionPosition('brands')}`}>
+      <div class="container">
+        <div class="section-head">
+          <div><span class="eyebrow">{copy.sections.brands}</span><h2>{copy.sections.brands}</h2></div>
+          <p>{copy.sections.brandsIntro}</p>
+        </div>
+        <div class="brand-grid">
+          {brands.map((brand) => {
+            const source = brand;
+            const name = text(source, 'name', locale, brand.name || brand.slug);
+            const description = text(source, 'description', locale);
+            const image = brand.image || brand.logoUrl;
+            return (
+              <a class="brand-card" href={localePath(locale, `/brands/${brand.slug}`)}>
+                {image && <img src={image} alt={name} width="180" height="90" loading="lazy" />}
+                <div><h3>{name}</h3>{description && <p>{description}</p>}</div>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {projects.length > 0 && (
+    <section class="content-section is-tinted" style={`order:${sectionPosition('projects')}`}>
+      <div class="container">
+        <div class="section-head">
+          <div><span class="eyebrow">{copy.sections.projects}</span><h2>{copy.sections.projects}</h2></div>
+          <div><p>{copy.sections.projectsIntro}</p><a class="section-link" href={localePath(locale, '/projects')}>{copy.common.viewAll}</a></div>
+        </div>
+        <div class="cards-grid">
+          {projects.map((project) => {
+            const adapted = adaptProject(project, locale);
+            const title = adapted.title;
+            const description = adapted.shortDescription;
+            return (
+              <article class="content-card">
+                <div class="content-card__media">
+                  {project.cover?.url && <img src={project.cover.url} alt={mediaAlt(project.cover, locale, title)} loading="lazy" width="720" height="450" />}
+                </div>
+                <div class="content-card__body">
+                  <div class="content-card__meta"><span>{categoryLabels[locale][project.category] || project.category}</span><span>{adapted.period}</span></div>
+                  <h3>{title}</h3>
+                  {description && <p>{description}</p>}
+                  <a class="content-card__link" href={localePath(locale, `/projects/${project.slug}`)}>{copy.common.details}</a>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {products.length > 0 && (
+    <section class="content-section" style={`order:${sectionPosition('products')}`}>
+      <div class="container">
+        <div class="section-head">
+          <div><span class="eyebrow">{copy.sections.products}</span><h2>{copy.sections.products}</h2></div>
+          <p>{copy.sections.productsIntro}</p>
+        </div>
+        <div class="cards-grid">
+          {products.map((product) => {
+            const adapted = adaptProduct(product, locale);
+            const name = adapted.name;
+            const description = adapted.description;
+            return (
+              <article class="content-card">
+                <div class="content-card__media">
+                  {product.mainImage?.url && <img src={product.mainImage.url} alt={mediaAlt(product.mainImage, locale, name)} loading="lazy" width="720" height="450" />}
+                </div>
+                <div class="content-card__body">
+                  {product.brand && <div class="content-card__meta"><span>{text(product.brand, 'name', locale)}</span></div>}
+                  <h3>{name}</h3><p>{description}</p>
+                  {storeUrl && <a class="content-card__link" href={`${storeUrl}/products/${encodeURIComponent(product.slug)}`}>{copy.common.shop}</a>}
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {locale === 'ar' && <MarketRole />}
+  {locale === 'ar' && <Coverage />}
+  {locale === 'ar' && <Sectors />}
+  {locale === 'ar' && <EnergyJourney />}
+  {locale === 'ar' && <AppDownload />}
+
+  {articles.length > 0 && (
+    <section class="content-section is-tinted" style={`order:${sectionPosition('articles')}`}>
+      <div class="container">
+        <div class="section-head">
+          <div><span class="eyebrow">{copy.sections.news}</span><h2>{copy.sections.news}</h2></div>
+          <div><p>{copy.sections.newsIntro}</p><a class="section-link" href={localePath(locale, '/news')}>{copy.common.viewAll}</a></div>
+        </div>
+        <div class="cards-grid">
+          {articles.map((article) => {
+            const adapted = adaptArticle(article, locale);
+            const title = adapted.title;
+            const excerpt = adapted.excerpt;
+            return (
+              <article class="content-card">
+                <div class="content-card__media">
+                  {article.cover?.url && <img src={article.cover.url} alt={mediaAlt(article.cover, locale, title)} loading="lazy" width="720" height="450" />}
+                </div>
+                <div class="content-card__body">
+                  <div class="content-card__meta">
+                    {article.publishDate && <span>{dateFormatter.format(new Date(article.publishDate))}</span>}
+                    <span>{article.readTime} {copy.common.minutes}</span>
+                  </div>
+                  <h3>{title}</h3>{excerpt && <p>{excerpt}</p>}
+                  <a class="content-card__link" href={localePath(locale, `/news/${article.slug}`)}>{copy.common.readMore}</a>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  )}
+  </div>
+
+  {locale === 'ar' ? <ContactCTA /> : <section class="home-cta" id="contact">
+    <div class="container">
+      <span class="eyebrow">{copy.nav.contact}</span>
+      <h2>Let’s turn your requirement into a successful project</h2>
+      <a class="primary-button" href="mailto:info@tagadodgroup.com">Contact our team</a>
+    </div>
+  </section>}
+</main>
+
+<style>
+  .home-hero{min-height:760px;display:flex;align-items:center;color:#fff;background:radial-gradient(circle at 15% 30%,rgba(43,194,165,.27),transparent 35%),linear-gradient(135deg,#03151d 10%,#075260 100%)}
+  .ordered-home-sections{display:flex;flex-direction:column}
+  .home-hero__inner{padding-block:120px}.home-hero h1{font-size:clamp(3.2rem,8vw,7.2rem);line-height:.97;max-width:1100px;margin:0 0 28px}.home-hero p{font-size:clamp(1.08rem,2vw,1.35rem);max-width:720px;line-height:1.9;color:rgba(255,255,255,.75)}
+  .home-error{margin-top:35px}.brand-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}.brand-card{display:flex;align-items:center;gap:28px;padding:30px;border-radius:24px;border:1px solid #dbeaea;text-decoration:none;color:#14363e;background:#fff}.brand-card img{width:150px;height:84px;object-fit:contain}.brand-card h3{font-size:1.5rem;margin:0 0 8px}.brand-card p{margin:0;color:#63777c;line-height:1.7}
+  .home-cta{margin:80px 0 -80px;padding:90px 0;text-align:center;color:#fff;background:linear-gradient(135deg,#073641,#0a7f83)}.home-cta h2{font-size:clamp(2rem,5vw,4rem);max-width:800px;margin:12px auto 28px}
+  @media(max-width:700px){.home-hero{min-height:620px}.brand-grid{grid-template-columns:1fr}.brand-card{align-items:flex-start;flex-direction:column}}
+</style>

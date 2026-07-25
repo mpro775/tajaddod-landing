@@ -1,56 +1,71 @@
 ---
 import '../styles/global.css';
+import '../styles/content.css';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
-import { site } from '../data/site';
+import type { Locale } from '../lib/api/types';
+import { alternatePath } from '../lib/content';
+import { dictionary } from '../i18n';
 
 interface Props {
+  locale?: Locale;
   title?: string;
   description?: string;
   image?: string;
+  canonicalPath?: string;
+  type?: 'website' | 'article';
+  noindex?: boolean;
 }
 
-const { 
-  title = site.name, 
-  description = site.description, 
-  image = '/og-image.svg' 
+const locale = Astro.props.locale || 'ar';
+const copy = dictionary(locale);
+const {
+  title = copy.siteTitle,
+  description = copy.siteDescription,
+  image = '/og.png',
+  canonicalPath = Astro.url.pathname,
+  type = 'website',
+  noindex = false,
 } = Astro.props;
+const siteUrl = (import.meta.env.PUBLIC_SITE_URL || Astro.site?.toString() || 'https://tagadodgroup.com').replace(/\/+$/, '');
+const absolute = (value: string) => new URL(value, `${siteUrl}/`).toString();
+const canonicalUrl = absolute(canonicalPath);
+const altUrl = absolute(alternatePath(canonicalPath, locale));
 ---
 
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang={locale} dir={copy.dir}>
   <head>
-    <script is:inline>
-      document.documentElement.classList.add('js');
-    </script>
+    <script is:inline>document.documentElement.classList.add('js');</script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#1E99D3" />
-    
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#0a7f83" />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang={locale === 'ar' ? 'en' : 'ar'} href={altUrl} />
+    <link rel="alternate" hreflang={locale} href={canonicalUrl} />
+    <link rel="alternate" hreflang="x-default" href={locale === 'ar' ? canonicalUrl : altUrl} />
+
+    <meta property="og:type" content={type} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:locale" content="ar" />
-    <meta property="og:image" content={image} />
-    
-    <!-- Twitter -->
+    <meta property="og:locale" content={locale === 'ar' ? 'ar_YE' : 'en_US'} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={absolute(image)} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={image} />
-    
+    <meta name="twitter:image" content={absolute(image)} />
+
     <link rel="icon" type="image/svg+xml" href="/logos/tajaddod-icon.svg" />
     <title>{title}</title>
-    
     <slot name="head" />
   </head>
   <body>
-    <Header />
+    <Header locale={locale} pathname={Astro.url.pathname} />
     <slot />
-    <Footer />
-    
+    <Footer locale={locale} />
     <script>
       import '../scripts/animations';
     </script>

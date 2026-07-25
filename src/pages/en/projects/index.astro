@@ -1,10 +1,9 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import ProjectsPage from '../../components/pages/ProjectsPage.astro';
-import { getProjects } from '../../lib/api';
-import { dictionary } from '../../i18n';
-
-const locale = 'ar' as const;
+import Layout from '../../../layouts/Layout.astro';
+import ProjectsPage from '../../../components/pages/ProjectsPage.astro';
+import { getProjects } from '../../../lib/api';
+import { dictionary } from '../../../i18n';
+const locale = 'en' as const;
 const copy = dictionary(locale);
 const query = {
   search: Astro.url.searchParams.get('search') || '',
@@ -24,7 +23,6 @@ try {
   error = cause instanceof Error ? cause.message : copy.common.unavailable;
 }
 ---
-
-<Layout locale={locale} title={`${copy.projects.title} | ${copy.brand}`} description={copy.projects.intro} canonicalPath="/projects">
+<Layout locale={locale} title={`${copy.projects.title} | ${copy.brand}`} description={copy.projects.intro} canonicalPath="/en/projects">
   <ProjectsPage locale={locale} collection={collection} error={error} query={query} />
 </Layout>

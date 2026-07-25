@@ -1,0 +1,53 @@
+---
+import type { Locale, ProjectDetail } from '../../lib/api/types';
+import { categoryLabels, dictionary, serviceLabels } from '../../i18n';
+import { localizedArray, mediaAlt, projectPeriod, renderRichContent, text } from '../../lib/content';
+
+const { locale, project } = Astro.props as { locale: Locale; project: ProjectDetail };
+const copy = dictionary(locale);
+const source = project;
+const title = text(source, 'title', locale);
+const description = text(source, 'description', locale);
+const shortDescription = text(source, 'shortDescription', locale, description);
+const client = text(source, 'clientName', locale);
+const location = text(source, 'location', locale);
+const challenge = text(source, 'challenge', locale);
+const solution = text(source, 'solution', locale);
+const results = text(source, 'results', locale);
+const scope = localizedArray(source, 'scope', locale);
+const gallery = [...(project.gallery || [])].sort((a, b) => (a.order || 0) - (b.order || 0));
+---
+
+<main class="page-shell">
+  <section class="detail-hero">
+    <div class="container detail-hero__grid">
+      <div class="detail-title">
+        <span class="eyebrow">{categoryLabels[locale][project.category] || project.category}</span>
+        <h1>{title}</h1><p>{shortDescription}</p>
+        <div class="detail-meta">
+          {client && <span>{copy.projects.client}: {client}</span>}
+          {location && <span>{copy.projects.location}: {location}</span>}
+          {projectPeriod(project, locale) && <span>{copy.projects.period}: {projectPeriod(project, locale)}</span>}
+        </div>
+      </div>
+      <div class="detail-cover">{project.cover?.url && <img src={project.cover.url} alt={mediaAlt(project.cover, locale, title)} width="900" height="620" />}</div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="container">
+      <div class="prose" set:html={renderRichContent(description)} />
+      {project.metrics?.length > 0 && <div class="metrics-grid">{project.metrics.sort((a, b) => (a.order || 0) - (b.order || 0)).map((metric) => <div class="metric"><strong>{metric.value}</strong><span>{locale === 'en' ? metric.labelEn || metric.labelAr : metric.labelAr || metric.labelEn}</span></div>)}</div>}
+    </div>
+  </section>
+
+  {project.displayMode === 'case_study' && (challenge || solution || results || scope.length > 0) && <section class="content-section is-tinted"><div class="container case-grid">
+    {challenge && <article class="case-card"><h2>{copy.projects.challenge}</h2><div class="prose" set:html={renderRichContent(challenge)} /></article>}
+    {solution && <article class="case-card"><h2>{copy.projects.solution}</h2><div class="prose" set:html={renderRichContent(solution)} /></article>}
+    {scope.length > 0 && <article class="case-card"><h2>{copy.projects.scope}</h2><ul>{scope.map((item) => <li>{item}</li>)}</ul></article>}
+    {results && <article class="case-card"><h2>{copy.projects.results}</h2><div class="prose" set:html={renderRichContent(results)} /></article>}
+  </div></section>}
+
+  {project.services.length > 0 && <section class="content-section"><div class="container"><div class="section-head"><h2>{copy.projects.service}</h2></div><div class="detail-meta">{project.services.map((service) => <span>{serviceLabels[locale][service] || service}</span>)}</div></div></section>}
+  {gallery.length > 0 && <section class="content-section is-tinted"><div class="container"><div class="section-head"><h2>{copy.projects.gallery}</h2></div><div class="gallery-grid">{gallery.map((media) => <figure><img src={media.url} alt={mediaAlt(media, locale, title)} loading="lazy" width="720" height="540" />{(locale === 'en' ? media.captionEn || media.captionAr : media.captionAr || media.captionEn) && <figcaption>{locale === 'en' ? media.captionEn || media.captionAr : media.captionAr || media.captionEn}</figcaption>}</figure>)}</div></div></section>}
+</main>

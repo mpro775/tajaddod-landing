@@ -1,0 +1,20 @@
+---
+import type { LandingProduct, Locale, PublicBrand } from '../../lib/api/types';
+import { dictionary } from '../../i18n';
+import { mediaAlt, text } from '../../lib/content';
+
+const { locale, brand, products = [] } = Astro.props as { locale: Locale; brand: PublicBrand; products?: LandingProduct[] };
+const copy = dictionary(locale);
+const source = brand;
+const name = text(source, 'name', locale, brand.name || brand.slug);
+const description = text(source, 'description', locale);
+const logo = brand.image || brand.logoUrl;
+const storeUrl = (import.meta.env.PUBLIC_STORE_URL || '').replace(/\/+$/, '');
+---
+
+<main class="page-shell">
+  <section class="detail-hero"><div class="container detail-hero__grid"><div class="detail-title"><span class="eyebrow">{copy.nav.brands}</span><h1>{name}</h1><p>{description}</p>{brand.website && <a class="primary-button" href={brand.website} target="_blank" rel="noopener noreferrer">{locale === 'ar' ? 'زيارة الموقع' : 'Visit website'}</a>}</div><div class="brand-logo">{logo && <img src={logo} alt={name} width="480" height="260" />}</div></div></section>
+  {products.length > 0 && <section class="content-section"><div class="container"><div class="section-head"><h2>{copy.sections.products}</h2><p>{copy.sections.productsIntro}</p></div><div class="cards-grid">{products.map((product) => { const productSource = product; const productName = text(productSource, 'landingLabel', locale) || text(productSource, 'name', locale); return <article class="content-card"><div class="content-card__media">{product.mainImage?.url && <img src={product.mainImage.url} alt={mediaAlt(product.mainImage, locale, productName)} loading="lazy" width="720" height="450" />}</div><div class="content-card__body"><h2>{productName}</h2><p>{text(productSource, 'landingDescription', locale) || text(productSource, 'description', locale)}</p>{storeUrl && <a class="content-card__link" href={`${storeUrl}/products/${encodeURIComponent(product.slug)}`}>{copy.common.shop}</a>}</div></article>; })}</div></div></section>}
+</main>
+
+<style>.brand-logo{min-height:360px;border-radius:28px;background:#fff;display:grid;place-items:center;padding:40px}.brand-logo img{max-width:100%;height:auto;max-height:240px;object-fit:contain}</style>
