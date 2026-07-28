@@ -210,7 +210,7 @@ export function toLegacyProduct(product: LandingProduct | PublicProductSummary, 
     : adaptPublicProduct(product as PublicProductSummary, locale);
   const mainImage = product.mainImage;
   return {
-    slug: product.slug || product.id || product._id,
+    slug: product.slug || product.id || (product as any)._id,
     name: adapted.name,
     description: adapted.description,
     image: typeof mainImage === 'string' ? mainImage : mainImage?.url || '/assets/projects/project.webp',

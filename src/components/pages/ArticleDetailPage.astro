@@ -221,6 +221,7 @@ const articleUrl = `${siteUrl}${localePath(locale, `/news/${item.slug}`)}`;
         input.value = url;
         document.body.appendChild(input);
         input.select();
+        // @ts-ignore
         document.execCommand('copy');
         document.body.removeChild(input);
         copyBtn.classList.add('copied');
