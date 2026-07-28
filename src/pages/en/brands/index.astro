@@ -1,0 +1,15 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import BrandsIndexPage from '../../../components/pages/BrandsIndexPage.astro';
+import { getBrands } from '../../../lib/api';
+import { dictionary } from '../../../i18n';
+const locale = 'en' as const;
+const copy = dictionary(locale);
+let brands;
+let error: string | undefined;
+try { brands = (await getBrands(locale, { limit: 100 })).brands; }
+catch (cause) { error = cause instanceof Error ? cause.message : copy.common.unavailable; }
+---
+<Layout locale={locale} title={`Brands | ${copy.brand}`} description="Electrical and lighting brands represented by Tajaddod in Yemen." canonicalPath="/en/brands">
+  <BrandsIndexPage locale={locale} brands={brands} error={error} />
+</Layout>

@@ -1,0 +1,153 @@
+---
+import type {
+  Locale,
+  PublicProductDetail,
+  PublicProductSummary,
+} from '../../lib/api/types';
+import { adaptPublicProduct } from '../../lib/adapters/product.adapter';
+import { localePath } from '../../lib/content';
+
+interface Props {
+  locale: Locale;
+  product: PublicProductDetail;
+  related?: PublicProductSummary[];
+}
+
+const { locale, product, related = [] } = Astro.props;
+const view = adaptPublicProduct(product, locale);
+const labels = locale === 'en'
+  ? {
+      home: 'Home', products: 'Products', overview: 'Product overview',
+      category: 'Category', specifications: 'Specifications',
+      contact: 'Request product information', related: 'Related products',
+      unavailable: 'Product image',
+    }
+  : {
+      home: 'الرئيسية', products: 'المنتجات', overview: 'نظرة عامة على المنتج',
+      category: 'التصنيف', specifications: 'المواصفات',
+      contact: 'اطلب معلومات المنتج', related: 'منتجات ذات صلة',
+      unavailable: 'صورة المنتج',
+    };
+const media = [
+  product.mainImage,
+  ...(product.images || []),
+]
+  .map((item) => typeof item === 'string' ? item : item?.url)
+  .filter((url, index, source): url is string => Boolean(url) && source.indexOf(url) === index);
+const brandName = product.brand
+  ? (locale === 'en' ? product.brand.nameEn || product.brand.nameAr : product.brand.nameAr || product.brand.nameEn)
+  : '';
+const categoryName = product.category
+  ? (locale === 'en' ? product.category.nameEn || product.category.nameAr : product.category.nameAr || product.category.nameEn)
+  : '';
+---
+
+<main class="product-detail">
+  <section class="product-hero">
+    <div class="container">
+      <nav class="product-breadcrumb" aria-label="Breadcrumb">
+        <a href={localePath(locale, '/')}>{labels.home}</a>
+        <span aria-hidden="true">/</span>
+        {product.brand?.slug
+          ? <a href={localePath(locale, `/brands/${product.brand.slug}`)}>{brandName || labels.products}</a>
+          : <span>{labels.products}</span>}
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{view.name}</span>
+      </nav>
+
+      <div class="product-hero__grid">
+        <div class="product-media">
+          <div class="product-media__main">
+            <img src={media[0] || '/assets/projects/project.webp'} alt={view.name || labels.unavailable} width="900" height="700" />
+          </div>
+          {media.length > 1 && (
+            <div class="product-gallery" aria-label={labels.unavailable}>
+              {media.slice(1).map((url) => <img src={url} alt="" width="180" height="140" loading="lazy" />)}
+            </div>
+          )}
+        </div>
+
+        <div class="product-copy">
+          {brandName && <p class="product-brand">{brandName}</p>}
+          <h1>{view.name}</h1>
+          {view.description && <p class="product-description">{view.description}</p>}
+          {categoryName && (
+            <dl class="product-facts">
+              <div><dt>{labels.category}</dt><dd>{categoryName}</dd></div>
+            </dl>
+          )}
+          <a class="product-cta" href={`${localePath(locale, '/')}#contact`}>{labels.contact}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {product.attributesDetails && product.attributesDetails.length > 0 && (
+    <section class="product-specs section">
+      <div class="container product-specs__inner">
+        <h2>{labels.specifications}</h2>
+        <dl>
+          {product.attributesDetails.map((attribute) => {
+            const name = locale === 'en' ? attribute.nameEn || attribute.name : attribute.name || attribute.nameEn;
+            const values = (attribute.values || [])
+              .map((value) => locale === 'en' ? value.label || value.value || value.nameEn || value.name : value.label || value.value || value.name || value.nameEn)
+              .filter(Boolean);
+            return name && values.length > 0 && <div><dt>{name}</dt><dd>{values.join('، ')}</dd></div>;
+          })}
+        </dl>
+      </div>
+    </section>
+  )}
+
+  {related.length > 0 && (
+    <section class="related-products section">
+      <div class="container">
+        <h2>{labels.related}</h2>
+        <div class="related-products__grid">
+          {related.slice(0, 4).map((item) => {
+            const relatedView = adaptPublicProduct(item, locale);
+            const image = typeof item.mainImage === 'string' ? item.mainImage : item.mainImage?.url;
+            const identifier = item.slug || item.id || item._id;
+            return (
+              identifier && <a href={localePath(locale, `/products/${identifier}`)}>
+                <img src={image || '/assets/projects/project.webp'} alt={relatedView.name} width="480" height="360" loading="lazy" />
+                <strong>{relatedView.name}</strong>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  )}
+</main>
+
+<style>
+  .product-detail { color: var(--tj-text-primary); background: var(--tj-bg-page); }
+  .product-hero { padding-block: clamp(8rem, 12vw, 10rem) var(--tj-section-space); background: var(--tj-gradient-section-alt); }
+  .product-breadcrumb { display:flex; flex-wrap:wrap; gap:.55rem; margin-block-end:2rem; color:var(--tj-text-muted); font-size:var(--tj-type-small); }
+  .product-breadcrumb a { color:var(--tj-text-accent); }
+  .product-hero__grid { display:grid; grid-template-columns:minmax(0,1.05fr) minmax(20rem,.95fr); gap:clamp(2rem,5vw,5rem); align-items:center; }
+  .product-media__main { display:grid; place-items:center; aspect-ratio:4/3; padding:2rem; border:1px solid var(--tj-border-subtle); border-radius:var(--tj-radius-xl); background:var(--tj-bg-surface); box-shadow:var(--tj-shadow-2); }
+  .product-media__main img { width:100%; height:100%; object-fit:contain; }
+  .product-gallery { display:flex; gap:.75rem; margin-block-start:1rem; }
+  .product-gallery img { width:5.5rem; aspect-ratio:1; object-fit:contain; padding:.5rem; border:1px solid var(--tj-border-subtle); border-radius:var(--tj-radius-md); background:var(--tj-bg-surface); }
+  .product-brand { color:var(--tj-text-accent); font-weight:var(--tj-font-bold); }
+  .product-copy h1 { max-width:none; color:var(--tj-text-primary); }
+  .product-description { color:var(--tj-text-secondary); font-size:var(--tj-type-body-lg); line-height:var(--tj-leading-body); }
+  .product-facts { margin-block:2rem; }
+  .product-facts div { display:flex; justify-content:space-between; gap:2rem; padding-block:1rem; border-block-end:1px solid var(--tj-border-subtle); }
+  .product-facts dt { color:var(--tj-text-muted); } .product-facts dd { margin:0; font-weight:var(--tj-font-semibold); }
+  .product-cta { display:inline-flex; min-height:3rem; align-items:center; justify-content:center; padding-inline:1.5rem; border-radius:var(--tj-radius-pill); color:var(--tj-text-on-brand); background:var(--tj-action-primary); font-weight:var(--tj-font-bold); text-decoration:none; }
+  .product-cta:hover { background:var(--tj-action-primary-hover); }
+  .product-specs { background:var(--tj-bg-section); }
+  .product-specs__inner { max-width:60rem; }
+  .product-specs dl { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border:1px solid var(--tj-border-subtle); border-radius:var(--tj-radius-xl); overflow:hidden; }
+  .product-specs dl div { padding:1.25rem; background:var(--tj-bg-surface); border:1px solid var(--tj-border-subtle); }
+  .product-specs dt { color:var(--tj-text-muted); } .product-specs dd { margin:.4rem 0 0; font-weight:var(--tj-font-semibold); }
+  .related-products { background:var(--tj-bg-section-alt); }
+  .related-products__grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:var(--tj-card-gap); }
+  .related-products__grid a { display:grid; gap:1rem; padding:1rem; color:var(--tj-text-primary); text-decoration:none; border:1px solid var(--tj-border-subtle); border-radius:var(--tj-radius-lg); background:var(--tj-bg-surface); }
+  .related-products__grid img { width:100%; aspect-ratio:4/3; object-fit:contain; }
+  :is(.product-cta,.related-products__grid a):focus-visible { outline:3px solid var(--tj-focus-ring); outline-offset:3px; }
+  @media(max-width:900px){.product-hero__grid{grid-template-columns:1fr}.related-products__grid{grid-template-columns:repeat(2,1fr)}}
+</style>

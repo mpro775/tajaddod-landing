@@ -35,6 +35,7 @@ export function adaptProject(project: ProjectSummary, locale: Locale) {
     ...project,
     title: localizedValue(source, 'title', locale),
     shortDescription: localizedValue(source, 'shortDescription', locale),
+    description: localizedValue(source, 'description', locale),
     clientName: localizedValue(source, 'clientName', locale),
     location: localizedValue(source, 'location', locale),
     period: formatProjectPeriod(project, locale),

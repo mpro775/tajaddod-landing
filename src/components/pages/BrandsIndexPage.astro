@@ -1,0 +1,77 @@
+---
+import type { Locale, PublicBrand } from '../../lib/api/types';
+import { localePath } from '../../lib/content';
+import { toVisualBrands } from '../../lib/visual/legacy-view';
+import PageHeader from '../layout/PageHeader.astro';
+
+interface Props {
+  locale: Locale;
+  brands?: PublicBrand[];
+  error?: string;
+}
+
+const { locale, brands = [], error } = Astro.props;
+const view = toVisualBrands(brands, locale);
+const labels = locale === 'en'
+  ? {
+      eyebrow: 'Official portfolio', title: 'Brands represented by Tajaddod',
+      description: 'Protection, control and lighting brands brought together for the Yemeni market.',
+      explore: 'Explore brand', error: 'Live brand data is temporarily unavailable; verified brand profiles are shown.',
+      cta: 'Need help choosing the right solution?', contact: 'Talk to our team',
+    }
+  : {
+      eyebrow: 'محفظة الوكالات', title: 'العلامات التي تمثلها تجدد',
+      description: 'علامات متخصصة في الحماية والتحكم والإضاءة ضمن منظومة موحدة للسوق اليمني.',
+      explore: 'استكشف العلامة', error: 'بيانات العلامات المباشرة غير متاحة مؤقتًا؛ نعرض الملفات الموثقة للعلامات.',
+      cta: 'تحتاج مساعدة لاختيار الحل المناسب؟', contact: 'تحدث مع فريقنا',
+    };
+---
+
+<main class="brands-index">
+  <PageHeader eyebrow={labels.eyebrow} title={labels.title} description={labels.description} />
+  <section class="brands-list section">
+    <div class="container">
+      {error && <p class="brands-state" role="status">{labels.error}</p>}
+      <div class="brands-list__grid">
+        {view.map((brand) => (
+          <a class={`brand-index-card brand-index-card--${brand.id}`} href={localePath(locale, `/brands/${brand.slug}`)}>
+            <div class="brand-index-card__logo">
+              <img src={brand.logo} alt={brand.name} width="220" height="100" />
+            </div>
+            <div>
+              <p>{brand.category}</p>
+              <h2>{brand.name}</h2>
+              <span>{brand.shortDescription}</span>
+            </div>
+            <strong>{labels.explore} <span class="directional-icon" aria-hidden="true">←</span></strong>
+          </a>
+        ))}
+      </div>
+      <div class="brands-index__cta">
+        <h2>{labels.cta}</h2>
+        <a href={`${localePath(locale, '/')}#contact`}>{labels.contact}</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<style>
+  .brands-index { color:var(--tj-text-primary); background:var(--tj-bg-page); }
+  .brands-list { background:var(--tj-bg-section); }
+  .brands-state { max-width:54rem; margin:0 auto 2rem; padding:1rem 1.25rem; text-align:center; color:var(--tj-text-secondary); border:1px solid var(--tj-border-default); border-radius:var(--tj-radius-lg); background:var(--tj-bg-surface); }
+  .brands-list__grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--tj-card-gap); }
+  .brand-index-card { --card-accent:var(--tj-blue); display:grid; grid-template-columns:10rem 1fr; gap:2rem; align-items:center; min-height:21rem; padding:clamp(2rem,4vw,3.5rem); color:var(--tj-text-primary); text-decoration:none; background:var(--tj-bg-surface); border:1px solid var(--tj-border-subtle); border-radius:var(--tj-radius-xl); box-shadow:var(--tj-shadow-1); transition:transform var(--tj-transition-smooth),border-color var(--tj-transition-smooth),box-shadow var(--tj-transition-smooth); }
+  .brand-index-card--cnc { --card-accent:var(--tj-cnc-red); } .brand-index-card--liper { --card-accent:var(--tj-orange); }
+  .brand-index-card:hover { transform:translateY(-6px); border-color:color-mix(in srgb,var(--card-accent) 40%,var(--tj-border-default)); box-shadow:var(--tj-shadow-3); }
+  .brand-index-card:focus-visible,.brands-index__cta a:focus-visible { outline:3px solid var(--tj-focus-ring); outline-offset:4px; }
+  .brand-index-card__logo { display:grid; place-items:center; min-height:10rem; padding:1.5rem; border-radius:var(--tj-radius-lg); background:var(--tj-bg-surface-soft); }
+  .brand-index-card__logo img { width:100%; height:auto; object-fit:contain; }
+  .brand-index-card p { margin-block-end:.5rem; color:var(--card-accent); font-weight:var(--tj-font-bold); }
+  .brand-index-card h2 { color:var(--tj-text-primary); }
+  .brand-index-card span { color:var(--tj-text-secondary); line-height:var(--tj-leading-body); }
+  .brand-index-card > strong { grid-column:1/-1; color:var(--card-accent); }
+  .brands-index__cta { display:flex; align-items:center; justify-content:space-between; gap:2rem; margin-block-start:4rem; padding:2rem; border-radius:var(--tj-radius-xl); background:var(--tj-bg-section-alt); border:1px solid var(--tj-border-subtle); }
+  .brands-index__cta h2 { margin:0; color:var(--tj-text-primary); }
+  .brands-index__cta a { padding:.85rem 1.4rem; color:var(--tj-text-on-brand); text-decoration:none; background:var(--tj-action-primary); border-radius:var(--tj-radius-pill); font-weight:var(--tj-font-bold); white-space:nowrap; }
+  @media(max-width:900px){.brands-list__grid{grid-template-columns:1fr}.brand-index-card{grid-template-columns:8rem 1fr}.brands-index__cta{align-items:flex-start;flex-direction:column}}
+</style>

@@ -185,7 +185,7 @@ export const en = {
   },
   projectDetail: {
     home: 'Home', projects: 'Projects', location: 'Location', year: 'Period',
-    challenge: 'Challenge', solution: 'Our solution', gallery: 'Project gallery',
+    overview: 'Overview', challenge: 'Challenge', solution: 'Our solution', gallery: 'Project gallery',
     scope: 'Scope of work', brands: 'Brands used', summary: 'Project summary',
     category: 'Category', status: 'Status', similar: 'Similar projects',
     more: 'Discover more of our work', details: 'View details',

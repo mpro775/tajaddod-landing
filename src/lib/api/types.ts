@@ -131,6 +131,57 @@ export interface LandingProduct {
   landingOrder: number;
 }
 
+export interface PublicProductSummary {
+  id?: string;
+  _id?: string;
+  slug?: string;
+  name?: string;
+  nameAr?: string;
+  nameEn?: string;
+  description?: string;
+  descriptionAr?: string;
+  descriptionEn?: string;
+  mainImage?: LocalizedMedia | string | null;
+  images?: Array<LocalizedMedia | string>;
+  brand?: ProductReference;
+  category?: ProductReference;
+  warrantyDurationYears?: number;
+  isFeatured?: boolean;
+  isNew?: boolean;
+  isAvailable?: boolean;
+}
+
+export interface ProductAttributeValue {
+  id?: string;
+  label?: string;
+  value?: string;
+  name?: string;
+  nameEn?: string;
+  hexCode?: string;
+}
+
+export interface ProductAttribute {
+  id?: string;
+  name?: string;
+  nameEn?: string;
+  values?: ProductAttributeValue[];
+}
+
+export interface PublicProductDetail extends PublicProductSummary {
+  attributesDetails?: ProductAttribute[];
+}
+
+export interface PublicProductCollection {
+  data: PublicProductSummary[];
+  meta: Pagination;
+}
+
+export interface PublicProductDetailResponse {
+  product: PublicProductDetail;
+  relatedProducts?: PublicProductSummary[];
+  variants?: Array<Record<string, unknown>>;
+}
+
 export interface PublicBrand {
   id?: string;
   _id?: string;

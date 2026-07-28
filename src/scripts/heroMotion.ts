@@ -12,6 +12,47 @@ export function initHeroMotion() {
   const duration = (seconds: number) => seconds * motionScale;
   const brandAnchors = hero.querySelectorAll<HTMLElement>('.brand-anchor');
 
+  const updateFlowGeometry = () => {
+    const svg = hero.querySelector<SVGSVGElement>('.hero-energy-flow');
+    const origin = hero.querySelector<HTMLElement>('[data-flow-origin]');
+    if (!svg || !origin) return;
+    const screenMatrix = svg.getScreenCTM();
+    if (!screenMatrix) return;
+    const inverse = screenMatrix.inverse();
+    const pointFor = (element: Element) => {
+      const rect = element.getBoundingClientRect();
+      return new DOMPoint(rect.left + rect.width / 2, rect.top + rect.height / 2).matrixTransform(inverse);
+    };
+    const start = pointFor(origin);
+    const core = hero.querySelector<SVGCircleElement>('[data-flow-core]');
+    core?.setAttribute('cx', String(start.x));
+    core?.setAttribute('cy', String(start.y));
+
+    hero.querySelectorAll<SVGPathElement>('[data-flow-connection]').forEach((path) => {
+      const id = path.dataset.flowConnection;
+      const target = id ? hero.querySelector<HTMLElement>(`[data-flow-target="${id}"]`) : null;
+      if (!target) return;
+      const end = pointFor(target);
+      const distance = Math.max(90, Math.abs(end.x - start.x) * 0.48);
+      const inlineDirection = Math.sign(end.x - start.x) || 1;
+      path.setAttribute(
+        'd',
+        `M ${start.x} ${start.y} C ${start.x + distance * inlineDirection} ${start.y}, ${end.x - distance * inlineDirection} ${end.y}, ${end.x} ${end.y}`,
+      );
+      const gradient = hero.querySelector<SVGLinearGradientElement>(`[data-flow-gradient="${id}"]`);
+      gradient?.setAttribute('x1', String(start.x));
+      gradient?.setAttribute('y1', String(start.y));
+      gradient?.setAttribute('x2', String(end.x));
+      gradient?.setAttribute('y2', String(end.y));
+    });
+  };
+
+  requestAnimationFrame(updateFlowGeometry);
+  const resizeObserver = new ResizeObserver(() => requestAnimationFrame(updateFlowGeometry));
+  resizeObserver.observe(hero);
+  window.addEventListener('load', updateFlowGeometry, { once: true });
+  document.addEventListener('tajaddod:direction-change', updateFlowGeometry);
+
   brandAnchors.forEach((anchor) => {
     const brandId = anchor.getAttribute('data-brand');
     if (!brandId) return;

@@ -153,7 +153,7 @@
   opacity: 0.035;
 }
 
-:root[data-theme] .philosophy-section :is(.ph-pillar, .ph-quote, .ph-closing) {
+:root[data-theme] .philosophy-section :is(.ph-pillar, .ph-quote) {
   color: var(--tj-text-primary);
   background: color-mix(in srgb, var(--tj-bg-surface) 90%, transparent);
   border-color: var(--tj-border-subtle);
@@ -164,7 +164,7 @@
   color: var(--tj-text-primary);
 }
 
-:root[data-theme] .philosophy-section :is(.ph-pillar__text, .ph-quote, .ph-closing) {
+:root[data-theme] .philosophy-section :is(.ph-pillar__text, .ph-quote) {
   color: var(--tj-text-secondary);
 }
 
@@ -300,10 +300,8 @@
   border-color: var(--tj-border-subtle);
 }
 
-/* Contact keeps a cinematic callout card, but the surrounding section now
-   participates in the selected theme. */
 :root[data-theme] .cta-section .cta-card {
-  border-color: var(--tj-border-inverse);
+  border-color: var(--tj-border-default);
   box-shadow: var(--tj-shadow-3);
 }
 
@@ -326,12 +324,11 @@
   color: var(--tj-text-accent);
 }
 
-:root[data-theme] .site-footer :is(.footer-bottom, .footer-accordion-item) {
+:root[data-theme] .site-footer .footer-bottom {
   border-color: var(--tj-border-subtle);
 }
 
-:root[data-theme] .site-footer .footer-bottom,
-:root[data-theme] .site-footer .footer-accordion-item {
+:root[data-theme] .site-footer .footer-bottom {
   background: color-mix(in srgb, var(--tj-bg-surface) 45%, transparent);
 }
 

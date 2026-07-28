@@ -2,8 +2,8 @@
 import Layout from '../../layouts/Layout.astro';
 import BrandPage from '../../components/pages/BrandPage.astro';
 import NotFound from '../../components/pages/NotFound.astro';
-import type { LandingProduct } from '../../lib/api';
-import { ApiError, getBrand, getWebsiteHome } from '../../lib/api';
+import type { PublicProductSummary } from '../../lib/api';
+import { ApiError, getBrand, getProducts } from '../../lib/api';
 import { dictionary } from '../../i18n';
 import { text } from '../../lib/content';
 
@@ -11,12 +11,18 @@ const locale = 'ar' as const;
 const copy = dictionary(locale);
 const slug = Astro.params.slug || '';
 let brand;
-let products: LandingProduct[] = [];
+let products: PublicProductSummary[] = [];
 let error: string | undefined;
 try {
-  const [brandResponse, home] = await Promise.all([getBrand(slug, locale), getWebsiteHome(locale)]);
-  brand = brandResponse;
-  products = home.products.filter((product) => product.brand?.slug === slug);
+  brand = await getBrand(slug, locale);
+  const brandId = brand.id || brand._id;
+  if (brandId) {
+    try {
+      products = (await getProducts(locale, { brandId, limit: 100 })).data || [];
+    } catch {
+      products = [];
+    }
+  }
 } catch (cause) {
   Astro.response.status = cause instanceof ApiError && cause.status === 404 ? 404 : 503;
   error = cause instanceof Error ? cause.message : copy.common.unavailable;

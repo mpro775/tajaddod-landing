@@ -1,0 +1,85 @@
+---
+import type { Locale } from '../../lib/api/types';
+import { localePath } from '../../lib/content';
+import { serializeFilterQuery, type FilterQuery } from '../../lib/filters';
+
+interface Tab {
+  label: string;
+  query: FilterQuery;
+  active: boolean;
+}
+
+interface Props {
+  locale: Locale;
+  action: string;
+  query: FilterQuery;
+  searchLabel: string;
+  tabs: Tab[];
+  resultsLabel: string;
+  clearLabel: string;
+  ariaLabel: string;
+}
+
+const { locale, action, query, searchLabel, tabs, resultsLabel, clearLabel, ariaLabel } = Astro.props;
+const activeEntries = Object.entries(query).filter(([key, value]) => key !== 'page' && value);
+const path = localePath(locale, action);
+const hrefFor = (next: FilterQuery) => {
+  const serialized = serializeFilterQuery(next);
+  return serialized ? `${path}?${serialized}` : path;
+};
+---
+
+<section class="filter-bar" aria-label={ariaLabel} data-filter-bar>
+  <nav class="filter-tabs" aria-label={ariaLabel}>
+    {tabs.map((tab) => (
+      <a class:list={['filter-tab', { 'is-active': tab.active }]} href={hrefFor(tab.query)} aria-current={tab.active ? 'page' : undefined}>
+        {tab.label}
+      </a>
+    ))}
+  </nav>
+
+  <form class="filter-form" action={path} method="get">
+    <label class="filter-search">
+      <span class="sr-only">{searchLabel}</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+      <input type="search" name="search" value={query.search || ''} placeholder={searchLabel} />
+    </label>
+    <slot />
+    <button class="filter-submit" type="submit">{locale === 'en' ? 'Apply filters' : 'تطبيق الفلاتر'}</button>
+  </form>
+
+  <div class="filter-summary">
+    <strong>{resultsLabel}</strong>
+    {activeEntries.length > 0 && (
+      <div class="active-filters" aria-label={locale === 'en' ? 'Active filters' : 'الفلاتر النشطة'}>
+        {activeEntries.map(([key, value]) => (
+          <a class="filter-chip" href={hrefFor(Object.fromEntries(Object.entries(query).filter(([entryKey]) => entryKey !== key)))}>
+            <span>{value}</span><span aria-hidden="true">×</span>
+          </a>
+        ))}
+        <a class="filter-clear" href={path}>{clearLabel}</a>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .filter-bar { display:grid; gap:1.25rem; margin-block:0 2.5rem; padding:1.5rem; border:1px solid var(--tj-border-default); border-radius:var(--tj-radius-xl); background:var(--tj-bg-surface); box-shadow:var(--tj-shadow-1); }
+  .filter-tabs { display:flex; flex-wrap:wrap; gap:.5rem; padding:.4rem; border-radius:var(--tj-radius-pill); background:var(--tj-bg-surface-soft); width:fit-content; max-width:100%; }
+  .filter-tab { display:inline-flex; min-height:2.75rem; align-items:center; padding-inline:1.15rem; border:1px solid transparent; border-radius:var(--tj-radius-pill); color:var(--tj-text-secondary); text-decoration:none; font-weight:var(--tj-font-semibold); }
+  .filter-tab:hover { color:var(--tj-text-accent); background:var(--tj-action-soft); }
+  .filter-tab.is-active { color:var(--tj-text-on-brand); background:var(--tj-action-primary); }
+  .filter-form { display:grid; grid-template-columns:minmax(16rem,2fr) repeat(4,minmax(8rem,1fr)) auto; gap:.75rem; }
+  .filter-search { position:relative; display:flex; align-items:center; }
+  .filter-search svg { position:absolute; inset-inline-start:.9rem; width:1.15rem; fill:none; stroke:var(--tj-text-muted); stroke-width:2; pointer-events:none; }
+  .filter-search input { padding-inline-start:2.8rem; }
+  .filter-form :global(input),.filter-form :global(select) { width:100%; min-height:3rem; padding-inline:.9rem; color:var(--tj-text-primary); background:var(--tj-bg-surface-soft); border:1px solid var(--tj-border-default); border-radius:var(--tj-radius-md); font:inherit; }
+  .filter-submit { min-height:3rem; padding-inline:1.2rem; border:0; border-radius:var(--tj-radius-md); color:var(--tj-text-on-brand); background:var(--tj-action-primary); font:inherit; font-weight:var(--tj-font-bold); cursor:pointer; }
+  .filter-summary { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem; color:var(--tj-text-secondary); }
+  .active-filters { display:flex; flex-wrap:wrap; gap:.5rem; align-items:center; }
+  .filter-chip,.filter-clear { display:inline-flex; align-items:center; gap:.45rem; min-height:2.25rem; padding-inline:.8rem; border-radius:var(--tj-radius-pill); text-decoration:none; font-size:var(--tj-type-caption); }
+  .filter-chip { color:var(--tj-text-primary); background:var(--tj-action-soft); border:1px solid var(--tj-border-subtle); }
+  .filter-clear { color:var(--tj-text-accent); font-weight:var(--tj-font-bold); }
+  :is(.filter-tab,.filter-chip,.filter-clear,.filter-submit,.filter-form input,.filter-form select):focus-visible { outline:3px solid var(--tj-focus-ring); outline-offset:2px; }
+  @media(max-width:1200px){.filter-form{grid-template-columns:repeat(3,minmax(0,1fr))}.filter-search{grid-column:span 2}}
+</style>

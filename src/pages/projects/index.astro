@@ -3,22 +3,15 @@ import Layout from '../../layouts/Layout.astro';
 import ProjectsPage from '../../components/pages/ProjectsPage.astro';
 import { getProjects } from '../../lib/api';
 import { dictionary } from '../../i18n';
+import { apiQuery, parseFilterQuery } from '../../lib/filters';
 
 const locale = 'ar' as const;
 const copy = dictionary(locale);
-const query = {
-  search: Astro.url.searchParams.get('search') || '',
-  category: Astro.url.searchParams.get('category') || '',
-  service: Astro.url.searchParams.get('service') || '',
-  sector: Astro.url.searchParams.get('sector') || '',
-  client: Astro.url.searchParams.get('client') || '',
-  year: Astro.url.searchParams.get('year') || '',
-  page: Astro.url.searchParams.get('page') || '1',
-};
+const query = parseFilterQuery(Astro.url.searchParams, ['search', 'category', 'service', 'sector', 'client', 'year', 'page']);
 let collection;
 let error: string | undefined;
 try {
-  collection = await getProjects(locale, { ...query, limit: 100 });
+  collection = await getProjects(locale, { ...apiQuery(query, ['search', 'page']), limit: 100 });
 } catch (cause) {
   Astro.response.status = 503;
   error = cause instanceof Error ? cause.message : copy.common.unavailable;

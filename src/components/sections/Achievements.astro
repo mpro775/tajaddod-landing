@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '../../lib/api/types';
 import { dictionary } from '../../i18n';
+import SectionHeader from '../layout/SectionHeader.astro';
 
 const { locale } = Astro.props as { locale: Locale };
 const copy = dictionary(locale).home.achievements;
@@ -21,10 +22,7 @@ const iconMap: Record<string, string> = {
   </div>
 
   <div class="container">
-    <div class="section-header">
-      <span class="eyebrow">{copy.eyebrow}</span>
-      <h2 class="section-title">{copy.title}</h2>
-    </div>
+    <SectionHeader eyebrow={copy.eyebrow} title={copy.title} align="center" />
 
     <div class="achievements-grid" id="achievements-grid">
       {copy.items.map((item) => (
@@ -88,11 +86,12 @@ const iconMap: Record<string, string> = {
     position: relative;
     z-index: 1;
   }
-  .section-header {
-    text-align: center;
+  :global(.achievements-section .section-header) {
+    width: min(100%, 760px);
+    margin-inline: auto;
     margin-bottom: 60px;
   }
-  .eyebrow {
+  :global(.achievements-section .eyebrow) {
     display: inline-block;
     padding: 6px 16px;
     background: color-mix(in srgb, var(--tj-blue) 10%, transparent);
@@ -103,12 +102,13 @@ const iconMap: Record<string, string> = {
     font-weight: var(--tj-font-semibold);
     margin-bottom: 16px;
   }
-  .section-title {
+  :global(.achievements-section .section-header h2) {
     font-size: clamp(2rem, 4vw, 2.8rem);
     font-weight: var(--tj-font-bold);
     background: linear-gradient(135deg, var(--tj-text-inverse), var(--tj-inverse-alpha-70));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    margin-inline: auto;
   }
   
   .achievements-grid {

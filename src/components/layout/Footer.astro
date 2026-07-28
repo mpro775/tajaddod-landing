@@ -170,8 +170,8 @@ const contactLinks = buildContactLinks({
 .site-footer {
   position: relative;
   background: var(--tj-footer-surface);
-  color: var(--tj-text-inverse);
-  border-top: 1px solid var(--tj-inverse-alpha-05);
+  color: var(--tj-text-primary);
+  border-top: 1px solid var(--tj-border-subtle);
   overflow: hidden;
 }
 
@@ -208,7 +208,7 @@ const contactLinks = buildContactLinks({
 .footer-container {
   position: relative;
   z-index: 1;
-  padding: 80px 0 60px;
+  padding-block: 80px 60px;
 }
 
 /* Top Grid Layout */
@@ -236,6 +236,12 @@ const contactLinks = buildContactLinks({
   display: flex;
   flex-direction: column;
   gap: 24px;
+}
+
+.footer-accordion-item {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
 }
 
 .footer-accordion-trigger {

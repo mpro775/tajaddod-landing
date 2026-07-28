@@ -115,7 +115,8 @@ const stats = [
 <style>
   .brand-overview {
     padding: clamp(70px, 9vw, 110px) 0;
-    color: var(--tj-text-inverse);
+    color: var(--tj-text-primary);
+    background: var(--tj-bg-section);
     position: relative;
     z-index: 1;
   }
@@ -152,7 +153,7 @@ const stats = [
     font-size: clamp(2rem, 3.5vw, 2.6rem);
     font-weight: var(--tj-font-bold);
     margin-bottom: clamp(36px, 5vw, 56px);
-    color: var(--tj-text-inverse);
+    color: var(--tj-text-primary);
   }
 
   .overview-title__accent {
@@ -181,7 +182,7 @@ const stats = [
   }
 
   .overview-text {
-    color: var(--tj-inverse-alpha-65);
+    color: var(--tj-text-secondary);
     font-size: 1.08rem;
     line-height: 1.9;
     margin: 0;
@@ -232,7 +233,7 @@ const stats = [
   }
 
   .overview-why p {
-    color: var(--tj-inverse-alpha-55);
+    color: var(--tj-text-secondary);
     line-height: 1.8;
     margin: 0;
     font-size: 0.98rem;
@@ -251,8 +252,8 @@ const stats = [
     gap: 12px;
     padding: 18px 16px;
     border-radius: 18px;
-    background: var(--tj-inverse-alpha-03);
-    border: 1px solid var(--tj-inverse-alpha-06);
+    background: var(--tj-bg-surface);
+    border: 1px solid var(--tj-border-subtle);
     transition: border-color 0.3s ease, background 0.3s ease;
   }
 
@@ -291,7 +292,7 @@ const stats = [
 
   .overview-stat__value {
     font-size: 0.95rem;
-    color: var(--tj-text-inverse);
+    color: var(--tj-text-primary);
     font-weight: var(--tj-font-semibold);
     white-space: nowrap;
     overflow: hidden;
@@ -307,8 +308,8 @@ const stats = [
 
   /* ── Specialties ───────────────────────────────────────────── */
   .overview-specialties {
-    background: var(--tj-inverse-alpha-02);
-    border: 1px solid var(--tj-inverse-alpha-06);
+    background: var(--tj-bg-surface);
+    border: 1px solid var(--tj-border-subtle);
     border-radius: 24px;
     padding: 28px;
     backdrop-filter: blur(10px);
@@ -331,7 +332,7 @@ const stats = [
 
   .overview-specialties__header h3 {
     font-size: 1.25rem;
-    color: var(--tj-text-inverse);
+    color: var(--tj-text-primary);
     margin: 0;
   }
 
@@ -382,15 +383,15 @@ const stats = [
 
   /* ── Product families ──────────────────────────────────────── */
   .overview-families {
-    background: var(--tj-inverse-alpha-02);
-    border: 1px solid var(--tj-inverse-alpha-06);
+    background: var(--tj-bg-surface);
+    border: 1px solid var(--tj-border-subtle);
     border-radius: 20px;
     padding: 24px;
   }
 
   .overview-families h4 {
     font-size: 1.05rem;
-    color: var(--tj-inverse-alpha-80);
+    color: var(--tj-text-primary);
     margin: 0 0 16px;
   }
 

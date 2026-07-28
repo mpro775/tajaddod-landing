@@ -1,5 +1,5 @@
 ---
-import type { LandingProduct, Locale, PublicBrand } from '../../lib/api/types';
+import type { Locale, PublicBrand, PublicProductSummary } from '../../lib/api/types';
 import { toLegacyProduct, toVisualBrand } from '../../lib/visual/legacy-view';
 import BrandHero from '../sections/BrandHero.astro';
 import BrandOverview from '../sections/BrandOverview.astro';
@@ -9,7 +9,7 @@ import BrandProducts from '../sections/BrandProducts.astro';
 const { locale, brand: sourceBrand, products: sourceProducts = [] } = Astro.props as {
   locale: Locale;
   brand: PublicBrand;
-  products?: LandingProduct[];
+  products?: PublicProductSummary[];
 };
 const brand = toVisualBrand(sourceBrand, sourceBrand.slug, locale);
 const products = sourceProducts.map((product) => toLegacyProduct(product, locale));

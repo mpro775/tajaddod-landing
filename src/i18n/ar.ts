@@ -289,7 +289,7 @@ export const ar = {
   },
   projectDetail: {
     home: 'الرئيسية', projects: 'المشاريع', location: 'الموقع', year: 'السنة',
-    challenge: 'التحدي', solution: 'الحل المقدم', gallery: 'معرض الصور',
+    overview: 'نظرة عامة', challenge: 'التحدي', solution: 'الحل المقدم', gallery: 'معرض الصور',
     scope: 'نطاق العمل', brands: 'العلامات التجارية المستخدمة', summary: 'ملخص المشروع',
     category: 'التصنيف', status: 'الحالة', similar: 'مشاريع مشابهة',
     more: 'اكتشف المزيد من أعمالنا', details: 'عرض التفاصيل',

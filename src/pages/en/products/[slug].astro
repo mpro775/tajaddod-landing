@@ -1,0 +1,24 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import ProductDetailPage from '../../../components/pages/ProductDetailPage.astro';
+import NotFound from '../../../components/pages/NotFound.astro';
+import { ApiError, getProductBySlug } from '../../../lib/api';
+import { adaptPublicProduct } from '../../../lib/adapters/product.adapter';
+import { dictionary } from '../../../i18n';
+
+const locale = 'en' as const;
+const copy = dictionary(locale);
+const slug = Astro.params.slug || '';
+let response;
+let error: string | undefined;
+try {
+  response = await getProductBySlug(slug, locale);
+} catch (cause) {
+  Astro.response.status = cause instanceof ApiError && cause.status === 404 ? 404 : 503;
+  error = cause instanceof Error ? cause.message : copy.common.unavailable;
+}
+const view = response?.product ? adaptPublicProduct(response.product, locale) : undefined;
+---
+<Layout locale={locale} title={`${view?.name || copy.notFound.title} | ${copy.brand}`} description={view?.description || error || copy.siteDescription} image={typeof response?.product.mainImage === 'string' ? response.product.mainImage : response?.product.mainImage?.url} canonicalPath={`/en/products/${slug}`} noindex={!response?.product}>
+  {response?.product ? <ProductDetailPage locale={locale} product={response.product} related={response.relatedProducts} /> : <NotFound locale={locale} message={error} />}
+</Layout>

@@ -31,10 +31,11 @@ describe('Astro production architecture', () => {
     expect(homeComponent).toContain('<FeaturedProjects');
     expect(homeComponent).toContain('<LatestNews');
 
-    // Products are presented inside the restored brand-detail experience rather than
-    // the temporary generic product cards that were introduced during the SSR migration.
-    expect(brandRoute).toContain('getWebsiteHome');
-    expect(brandRoute).toContain('home.products.filter');
+    // Brand details are resilient: the brand is mandatory while products are
+    // loaded independently from the public products endpoint by brand id.
+    expect(brandRoute).not.toContain('getWebsiteHome');
+    expect(brandRoute).toContain('getProducts');
+    expect(brandRoute).toContain('brandId');
     expect(brandComponent).toContain('<BrandProducts');
   });
 

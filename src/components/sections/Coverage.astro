@@ -166,11 +166,11 @@ const getBrandList = (brandStr: string) => {
 
 .coverage-section {
   position: relative;
-  background: #020609; /* Deep dark background matching the cinematic theme */
-  color: var(--tj-text-inverse);
+  background: var(--tj-gradient-section-alt);
+  color: var(--tj-text-primary);
   overflow: hidden;
   padding: clamp(90px, 12vw, 150px) 0;
-  border-top: 1px solid var(--tj-inverse-alpha-05);
+  border-top: 1px solid var(--tj-border-subtle);
 }
 
 /* Background details */
@@ -253,7 +253,7 @@ const getBrandList = (brandStr: string) => {
   border-radius: 100px;
   border: 1px solid transparent;
   background: transparent;
-  color: var(--tj-inverse-alpha-60);
+  color: var(--tj-text-secondary);
   font-weight: var(--tj-font-semibold);
   font-size: var(--tj-text-small);
   cursor: pointer;
@@ -262,8 +262,8 @@ const getBrandList = (brandStr: string) => {
 }
 
 .cv-tab:hover {
-  color: var(--tj-text-inverse);
-  background: var(--tj-inverse-alpha-05);
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-surface-raised);
 }
 
 .cv-tab:active {
@@ -271,10 +271,10 @@ const getBrandList = (brandStr: string) => {
 }
 
 .cv-tab.is-active {
-  background: var(--tj-inverse-alpha-10);
-  color: var(--tj-text-inverse);
-  border-color: var(--tj-inverse-alpha-15);
-  box-shadow: 0 10px 30px color-mix(in srgb, var(--tj-neutral-950) 30%, transparent);
+  background: var(--tj-bg-surface-raised);
+  color: var(--tj-text-primary);
+  border-color: var(--tj-border-strong);
+  box-shadow: var(--tj-shadow-1);
 }
 
 .cv-tab__dot {
@@ -306,8 +306,8 @@ const getBrandList = (brandStr: string) => {
   flex-direction: column;
   align-items: flex-start;
   border-radius: 28px;
-  background: var(--tj-inverse-alpha-02);
-  border: 1px solid var(--tj-inverse-alpha-05);
+  background: var(--tj-bg-surface);
+  border: 1px solid var(--tj-border-subtle);
   transition:
     opacity 0.35s ease,
     transform 0.4s var(--tj-ease-smooth),
@@ -361,7 +361,7 @@ const getBrandList = (brandStr: string) => {
   box-shadow:
     0 20px 40px color-mix(in srgb, var(--tj-neutral-950) 50%, transparent),
     0 0 30px rgba(var(--brand-primary-rgb), 0.1);
-  background: var(--tj-inverse-alpha-03);
+  background: var(--tj-bg-surface-raised);
 }
 
 .coverage-card:hover .cv-card__glow-bg {
@@ -383,9 +383,9 @@ const getBrandList = (brandStr: string) => {
   width: 56px;
   height: 56px;
   border-radius: 16px;
-  background: var(--tj-inverse-alpha-04);
-  border: 1px solid var(--tj-inverse-alpha-08);
-  color: var(--tj-inverse-alpha-70);
+  background: var(--tj-bg-surface-soft);
+  border: 1px solid var(--tj-border-subtle);
+  color: var(--brand-primary);
   transition: all 0.4s ease;
 }
 
@@ -422,7 +422,7 @@ const getBrandList = (brandStr: string) => {
 
 /* Content */
 .coverage-card h3 {
-  color: var(--tj-text-inverse);
+  color: var(--tj-text-primary);
   font-size: var(--tj-text-h4);
   font-weight: var(--tj-font-bold);
   margin-bottom: 12px;
@@ -430,7 +430,7 @@ const getBrandList = (brandStr: string) => {
 }
 
 .coverage-card p {
-  color: var(--tj-inverse-alpha-60);
+  color: var(--tj-text-secondary);
   font-size: var(--tj-text-small);
   line-height: 1.7;
   margin: 0;
@@ -438,7 +438,7 @@ const getBrandList = (brandStr: string) => {
 }
 
 .coverage-card:hover p {
-  color: var(--tj-inverse-alpha-80);
+  color: var(--tj-text-primary);
 }
 
 /* ────────────────────────────────────────────────────────────────────────

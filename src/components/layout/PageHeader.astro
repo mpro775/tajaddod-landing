@@ -1,0 +1,42 @@
+---
+import SectionHeader from './SectionHeader.astro';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+}
+
+const { eyebrow, title, description } = Astro.props;
+---
+
+<section class="page-header" data-page-header>
+  <div class="container page-header__inner">
+    <SectionHeader eyebrow={eyebrow} title={title} description={description} align="center" level="h1" />
+    <slot name="controls" />
+  </div>
+</section>
+
+<style>
+  .page-header {
+    position: relative;
+    padding-block: clamp(8.25rem, 12vw, 10rem) clamp(3.75rem, 6vw, 5rem);
+    color: var(--tj-text-primary);
+    background:
+      radial-gradient(circle at 50% 0%, rgba(var(--tj-blue-rgb), 0.16), transparent 52%),
+      var(--tj-gradient-section-alt);
+    border-block-end: 1px solid var(--tj-border-subtle);
+  }
+  .page-header__inner { display: grid; justify-items: center; }
+  .page-header :global(.section-header) {
+    width: min(100%, 48rem);
+    margin: 0 auto;
+    text-align: center;
+  }
+  .page-header :global(h1) {
+    max-width: none;
+    margin-inline: auto;
+    color: var(--tj-text-primary);
+  }
+  .page-header :global(.section-header > p:not(.eyebrow)) { color: var(--tj-text-secondary); }
+</style>

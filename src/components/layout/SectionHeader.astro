@@ -5,11 +5,13 @@ interface Props {
   description?: string;
   align?: 'start' | 'center';
   dark?: boolean;
+  level?: 'h1' | 'h2';
 }
-const { eyebrow, title, description, align = 'start', dark = false } = Astro.props;
+const { eyebrow, title, description, align = 'start', dark = false, level = 'h2' } = Astro.props;
+const Heading = level;
 ---
-<header class={`section-header section-header-${align} ${dark ? 'is-dark' : ''}`} data-reveal>
+<header class={`section-header section-header-${align} ${dark ? 'is-dark' : ''}`} data-section-header data-align={align} data-reveal>
   {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-  <h2>{title}</h2>
+  <Heading>{title}</Heading>
   {description && <p>{description}</p>}
 </header>

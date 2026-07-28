@@ -2,6 +2,7 @@ import type {
   ArticleDetail,
   ArticleSummary,
   LandingProduct,
+  PublicProductSummary,
   Locale,
   ProjectDetail,
   ProjectSummary,
@@ -9,7 +10,7 @@ import type {
 } from '../api/types';
 import { categoryLabels } from '../../i18n';
 import { adaptArticle } from '../adapters/article.adapter';
-import { adaptProduct } from '../adapters/product.adapter';
+import { adaptProduct, adaptPublicProduct } from '../adapters/product.adapter';
 import { adaptProject, formatProjectPeriod } from '../adapters/project.adapter';
 
 export const DEFAULT_PROJECT_IMAGE = '/assets/projects/project.webp';
@@ -172,6 +173,7 @@ export function toLegacyProject(project: ProjectSummary | ProjectDetail, locale:
     status,
     coverImage: project.cover?.url || DEFAULT_PROJECT_IMAGE,
     summary: adapted.shortDescription,
+    description: adapted.description,
     challenge: locale === 'en' ? detail.challengeEn || detail.challengeAr : detail.challengeAr || detail.challengeEn,
     solution: locale === 'en' ? detail.solutionEn || detail.solutionAr : detail.solutionAr || detail.solutionEn,
     scope: locale === 'en' ? detail.scopeEn || [] : detail.scopeAr || [],
@@ -201,13 +203,17 @@ export function toLegacyArticle(article: ArticleSummary | ArticleDetail, locale:
   };
 }
 
-export function toLegacyProduct(product: LandingProduct, locale: Locale) {
-  const adapted = adaptProduct(product, locale);
+export function toLegacyProduct(product: LandingProduct | PublicProductSummary, locale: Locale) {
+  const isLanding = 'landingOrder' in product;
+  const adapted = isLanding
+    ? adaptProduct(product as LandingProduct, locale)
+    : adaptPublicProduct(product as PublicProductSummary, locale);
+  const mainImage = product.mainImage;
   return {
-    slug: product.slug,
+    slug: product.slug || product.id || product._id,
     name: adapted.name,
     description: adapted.description,
-    image: product.mainImage?.url || '/assets/projects/project.webp',
+    image: typeof mainImage === 'string' ? mainImage : mainImage?.url || '/assets/projects/project.webp',
     category: product.category
       ? (locale === 'en' ? product.category.nameEn || product.category.nameAr : product.category.nameAr || product.category.nameEn)
       : (locale === 'en' ? 'Products' : 'منتجات'),
@@ -215,6 +221,6 @@ export function toLegacyProduct(product: LandingProduct, locale: Locale) {
       ? (locale === 'en' ? product.brand.nameEn || product.brand.nameAr : product.brand.nameAr || product.brand.nameEn)
       : '',
     badges: [],
-    warrantyYears: undefined,
+    warrantyYears: 'warrantyDurationYears' in product ? product.warrantyDurationYears : undefined,
   };
 }

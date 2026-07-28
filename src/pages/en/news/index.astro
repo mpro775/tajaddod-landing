@@ -3,17 +3,14 @@ import Layout from '../../../layouts/Layout.astro';
 import NewsPage from '../../../components/pages/NewsPage.astro';
 import { getArticles } from '../../../lib/api';
 import { dictionary } from '../../../i18n';
+import { apiQuery, parseFilterQuery } from '../../../lib/filters';
 const locale = 'en' as const;
 const copy = dictionary(locale);
-const query = {
-  search: Astro.url.searchParams.get('search') || '',
-  type: Astro.url.searchParams.get('type') || '',
-  page: Astro.url.searchParams.get('page') || '1',
-};
+const query = parseFilterQuery(Astro.url.searchParams, ['search', 'type', 'category', 'page']);
 let collection;
 let error: string | undefined;
 try {
-  collection = await getArticles(locale, { ...query, limit: 100 });
+  collection = await getArticles(locale, { ...apiQuery(query, ['search', 'type', 'category', 'page']), limit: 100 });
 } catch (cause) {
   Astro.response.status = 503;
   error = cause instanceof Error ? cause.message : copy.common.unavailable;

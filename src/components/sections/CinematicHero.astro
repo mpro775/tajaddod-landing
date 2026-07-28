@@ -73,13 +73,13 @@ const hero = dictionary(locale).home.hero;
         <stop stop-color="#1E99D3" stop-opacity="0.95" />
         <stop offset="1" stop-color="#ff8c00" stop-opacity="0.72" />
       </linearGradient>
-      <linearGradient id="flowGreen" x1="430" y1="245" x2="1025" y2="500" gradientUnits="userSpaceOnUse">
-        <stop stop-color="#ff8c00" stop-opacity="0.96" />
-        <stop offset="1" stop-color="#1E99D3" stop-opacity="0.58" />
+      <linearGradient id="flowGreen" gradientUnits="userSpaceOnUse" data-flow-gradient="liper">
+        <stop stop-color="#1E99D3" stop-opacity="0.78" />
+        <stop offset="1" stop-color="#ff8c00" stop-opacity="0.96" />
       </linearGradient>
-      <linearGradient id="flowCnc" x1="420" y1="795" x2="1020" y2="535" gradientUnits="userSpaceOnUse">
-        <stop stop-color="#E63636" stop-opacity="0.82" />
-        <stop offset="1" stop-color="#1E99D3" stop-opacity="0.46" />
+      <linearGradient id="flowCnc" gradientUnits="userSpaceOnUse" data-flow-gradient="cnc">
+        <stop stop-color="#1E99D3" stop-opacity="0.72" />
+        <stop offset="1" stop-color="#E63636" stop-opacity="0.9" />
       </linearGradient>
       <filter id="energyGlow" x="-20%" y="-20%" width="140%" height="140%">
         <feGaussianBlur stdDeviation="5" result="blur" />
@@ -92,9 +92,8 @@ const hero = dictionary(locale).home.hero;
 
     <path
       class="energy-path energy-path-liper"
-      data-flow-role="source"
-      data-flow-target="tajaddod"
-      d="M 470 260 C 610 305, 715 350, 830 435 C 910 493, 972 520, 1024 506"
+      data-flow-connection="liper"
+      d="M0 0"
       stroke="url(#flowGreen)"
       stroke-width="4"
       stroke-linecap="round"
@@ -102,25 +101,24 @@ const hero = dictionary(locale).home.hero;
     />
     <path
       class="energy-path energy-path-cnc"
-      data-flow-role="source"
-      data-flow-target="tajaddod"
-      d="M 420 800 C 570 760, 708 690, 820 610 C 908 548, 966 522, 1020 532"
+      data-flow-connection="cnc"
+      d="M0 0"
       stroke="url(#flowCnc)"
       stroke-width="3.5"
       stroke-linecap="round"
       filter="url(#energyGlow)"
     />
-    <circle class="energy-core" data-flow-role="destination" cx="1024" cy="512" r="8" fill="#A7F05A" filter="url(#energyGlow)" />
+    <circle class="energy-core" data-flow-core cx="0" cy="0" r="8" fill="#A7F05A" filter="url(#energyGlow)" />
   </svg>
 
   <!-- Brand anchors: real logos, visually tied to product zones -->
   <div class="hero-brands-container" aria-label={hero.brandsLabel}>
-    <div class="brand-anchor brand-anchor-liper" data-brand="liper" data-flow-role="source" tabindex="0" role="button" aria-label={`Liper — ${hero.brandAnchors.liper}`}>
+    <div class="brand-anchor brand-anchor-liper" data-brand="liper" data-flow-target="liper" tabindex="0" role="button" aria-label={`Liper — ${hero.brandAnchors.liper}`}>
       <img src="/logos/liper-logo.svg" alt="Liper" width="138" height="58" />
       <span>{hero.brandAnchors.liper}</span>
     </div>
 
-    <div class="brand-anchor brand-anchor-cnc" data-brand="cnc" data-flow-role="source" tabindex="0" role="button" aria-label={`CNC — ${hero.brandAnchors.cnc}`}>
+    <div class="brand-anchor brand-anchor-cnc" data-brand="cnc" data-flow-target="cnc" tabindex="0" role="button" aria-label={`CNC — ${hero.brandAnchors.cnc}`}>
       <img src="/logos/cnc-logo.svg" alt="CNC Electric" width="138" height="70" />
       <span>{hero.brandAnchors.cnc}</span>
     </div>
@@ -131,6 +129,7 @@ const hero = dictionary(locale).home.hero;
     <p class="hero-eyebrow">{hero.eyebrow}</p>
     <img
       class="tajaddod-logo-hero"
+      data-flow-origin
       src="/logos/tajaddod-logo-white.svg"
       alt={hero.logoAlt}
       width="220"

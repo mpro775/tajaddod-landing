@@ -13,7 +13,7 @@ const copy = dictionary(locale);
 const home = localePath(locale, '/');
 const navigation = [
   { label: copy.nav.about, href: `${home}#about` },
-  { label: copy.nav.brands, href: `${home}#brands` },
+  { label: copy.nav.brands, href: localePath(locale, '/brands') },
   { label: copy.nav.projects, href: localePath(locale, '/projects') },
   { label: copy.nav.achievements, href: `${home}#achievements` },
   { label: copy.nav.news, href: localePath(locale, '/news') },
@@ -30,21 +30,14 @@ const navigation = [
       {navigation.map((item) => <a href={item.href}>{item.label}</a>)}
     </nav>
     <div class="theme-controls theme-controls--desktop" aria-label={copy.theme.label}>
-      <button
-        class="theme-quick-toggle"
-        type="button"
-        data-theme-toggle
-        aria-label={copy.theme.toggle}
-        aria-pressed="false"
-      >
-        <svg class="theme-icon theme-icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path></svg>
-        <svg class="theme-icon theme-icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"></path></svg>
-      </button>
       <details class="theme-menu">
-        <summary aria-label={copy.theme.choose}>
-          <span aria-hidden="true">◐</span>
+        <summary aria-label={copy.theme.choose} aria-haspopup="menu">
+          <svg class="theme-icon theme-icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path></svg>
+          <svg class="theme-icon theme-icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"></path></svg>
+          <span class="theme-menu__label">{copy.theme.appearance}</span>
+          <span class="theme-menu__chevron" aria-hidden="true">⌄</span>
         </summary>
-        <fieldset class="theme-options">
+        <fieldset class="theme-options" role="menu">
           <legend>{copy.theme.appearance}</legend>
           <label><input type="radio" name="theme-desktop" value="light" data-theme-option />{copy.theme.light}</label>
           <label><input type="radio" name="theme-desktop" value="dark" data-theme-option />{copy.theme.dark}</label>
@@ -114,6 +107,23 @@ const navigation = [
     <a class="mobile-nav__cta" href={`${home}#contact`} data-mobile-nav-link>{copy.header.businessInquiry}</a>
   </nav>
 </header>
+
+<script>
+  document.querySelectorAll<HTMLDetailsElement>('.theme-menu').forEach((menu) => {
+    menu.addEventListener('keydown', (event) => {
+      const options = [...menu.querySelectorAll<HTMLInputElement>('[data-theme-option]')];
+      const current = options.indexOf(document.activeElement as HTMLInputElement);
+      if (event.key === 'Escape') {
+        menu.open = false;
+        menu.querySelector<HTMLElement>('summary')?.focus();
+      } else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        const delta = event.key === 'ArrowDown' ? 1 : -1;
+        options[(current + delta + options.length) % options.length]?.focus();
+      }
+    });
+  });
+</script>
 
 <style>
   .brand-lockup {
@@ -204,6 +214,17 @@ const navigation = [
   :global(:root[data-theme="dark"]) .theme-icon--sun { display: none; }
   :global(:root[data-theme="dark"]) .theme-icon--moon { display: block; }
   .theme-menu { position: relative; }
+  .theme-menu summary {
+    display: inline-flex;
+    width: auto;
+    min-width: 118px;
+    padding-inline: var(--tj-space-3);
+    gap: var(--tj-space-2);
+    cursor: pointer;
+  }
+  .theme-menu__label { font-size: var(--tj-type-caption); font-weight: var(--tj-font-semibold); }
+  .theme-menu__chevron { margin-inline-start: auto; transition: transform var(--tj-transition-base); }
+  .theme-menu[open] .theme-menu__chevron { transform: rotate(180deg); }
   .theme-menu summary::-webkit-details-marker { display: none; }
   .theme-menu[open] summary {
     color: var(--tj-text-accent);
@@ -247,6 +268,10 @@ const navigation = [
   .theme-options label[data-active] {
     color: var(--tj-text-primary);
     background: var(--tj-action-soft);
+  }
+  .theme-options label:focus-within {
+    outline: 2px solid var(--tj-focus-ring);
+    outline-offset: 1px;
   }
   .theme-options input {
     accent-color: var(--tj-action-primary);

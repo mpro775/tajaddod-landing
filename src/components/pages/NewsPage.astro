@@ -1,101 +1,85 @@
 ---
 import type { ArticleCollection, Locale } from '../../lib/api/types';
 import { localePath } from '../../lib/content';
-import { toLegacyArticle } from '../../lib/visual/legacy-view';
+import { articleCategories, type FilterQuery } from '../../lib/filters';
 import { dictionary, intlLocale } from '../../i18n';
+import { toLegacyArticle } from '../../lib/visual/legacy-view';
+import PageHeader from '../layout/PageHeader.astro';
+import FilterBar from '../ui/FilterBar.astro';
 
 interface Props {
   locale: Locale;
   collection?: ArticleCollection;
   error?: string;
-  query?: Record<string, string>;
+  query?: FilterQuery;
 }
 
-const { locale, collection, error } = Astro.props;
-const copy = dictionary(locale);
-const labels = copy.news;
+const { locale, collection, error, query = {} } = Astro.props;
+const labels = dictionary(locale).news;
 const news = (collection?.articles || []).map((article) => toLegacyArticle(article, locale));
-const allLabel = copy.common.all;
-const categories = [allLabel, ...new Set(news.map((item) => item.category).filter(Boolean))];
+const categories = articleCategories(collection);
 const dateFormatter = new Intl.DateTimeFormat(intlLocale(locale), { year: 'numeric', month: 'long', day: 'numeric' });
+const cleanTabs = Object.fromEntries(Object.entries(query).filter(([key]) => key !== 'type' && key !== 'category'));
+const tabCopy = locale === 'en'
+  ? { all: 'All', news: 'News', events: 'Events', training: 'Training' }
+  : { all: 'الكل', news: 'الأخبار', events: 'الفعاليات', training: 'التدريب' };
+const tabs = [
+  { label: tabCopy.all, query: cleanTabs, active: !query.type && !query.category },
+  { label: tabCopy.news, query: { ...cleanTabs, type: 'news' }, active: query.type === 'news' },
+  { label: tabCopy.events, query: { ...cleanTabs, category: 'events' }, active: query.category === 'events' },
+  { label: tabCopy.training, query: { ...cleanTabs, category: 'training' }, active: query.category === 'training' },
+];
+const countLabel = locale === 'en'
+  ? `${news.length} result${news.length === 1 ? '' : 's'}`
+  : `${news.length} نتيجة`;
+const clearLabel = locale === 'en' ? 'Clear all' : 'مسح الكل';
 ---
 
 <main class="news-index">
-  <div class="page-header theme-inverse">
+  <PageHeader title={labels.pageTitle} description={labels.pageDescription} />
+  <section class="news-content section">
     <div class="container">
-      <h1 class="page-title">{labels.pageTitle}</h1>
-      <p class="page-desc">{labels.pageDescription}</p>
-    </div>
-  </div>
+      <FilterBar locale={locale} action="/news" query={query} searchLabel={labels.search} tabs={tabs} resultsLabel={countLabel} clearLabel={clearLabel} ariaLabel={labels.categoriesLabel}>
+        <select name="category" aria-label={locale === 'en' ? 'Category' : 'التصنيف'}>
+          <option value="">{locale === 'en' ? 'All categories' : 'كل التصنيفات'}</option>
+          {categories.map((category) => <option value={category} selected={query.category === category}>{category}</option>)}
+        </select>
+        {query.type && <input type="hidden" name="type" value={query.type} />}
+      </FilterBar>
 
-  <div class="container">
-    {error && <div class="news-error" role="status">{error}</div>}
-    {news.length > 0 ? (
-      <>
-        <div class="filters" aria-label={labels.categoriesLabel}>
-          {categories.map((cat, index) => (
-            <button class={`filter-btn ${index === 0 ? 'active' : ''}`} data-filter={index === 0 ? 'all' : cat}>{cat}</button>
-          ))}
-        </div>
-
+      {error ? (
+        <div class="page-state" role="alert"><p>{error}</p><a href={localePath(locale, '/news')}>{clearLabel}</a></div>
+      ) : news.length === 0 ? (
+        <div class="page-state"><p>{labels.empty}</p>{Object.keys(query).length > 0 && <a href={localePath(locale, '/news')}>{clearLabel}</a>}</div>
+      ) : (
         <div class="news-grid">
           {news.map((item) => (
-            <a href={localePath(locale, `/news/${item.slug}`)} class="news-card" data-category={item.category}>
-              <div class="news-card__image-wrap">
-                <img src={item.coverImage} alt={item.title} width="1200" height="750" loading="lazy" decoding="async" />
-                <span class="news-card__category">{item.category}</span>
-              </div>
+            <a href={localePath(locale, `/news/${item.slug}`)} class="news-card">
+              <div class="news-card__image"><img src={item.coverImage} alt={item.title} width="1200" height="750" loading="lazy" /><span>{item.category}</span></div>
               <div class="news-card__content">
-                <div class="news-card__meta">
-                  <span class="meta-date">{item.date ? dateFormatter.format(new Date(item.date)) : ''}</span>
-                </div>
-                <h2 class="news-card__title">{item.title}</h2>
-                {item.excerpt && <p class="news-card__excerpt">{item.excerpt}</p>}
+                <p>{item.date ? dateFormatter.format(new Date(item.date)) : ''}</p>
+                <h2>{item.title}</h2>
+                {item.excerpt && <span>{item.excerpt}</span>}
               </div>
             </a>
           ))}
         </div>
-      </>
-    ) : !error && <div class="news-empty">{labels.empty}</div>}
-  </div>
+      )}
+    </div>
+  </section>
 </main>
 
-<script>
-  const filterBtns = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
-  const newsCards = document.querySelectorAll<HTMLElement>('.news-card');
-  filterBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach((button) => button.classList.remove('active'));
-      btn.classList.add('active');
-      const filterValue = btn.getAttribute('data-filter');
-      newsCards.forEach((card) => {
-        const cardCategory = card.getAttribute('data-category');
-        card.style.display = filterValue === 'all' || filterValue === cardCategory ? 'flex' : 'none';
-      });
-    });
-  });
-</script>
-
 <style>
-  .news-index { background: var(--tj-bg-page); min-height: 100vh; padding-bottom: var(--tj-section-space); color: var(--tj-text-primary); }
-  .page-header { padding: clamp(120px, 15vw, 160px) 0 clamp(60px, 8vw, 80px); text-align: center; background: radial-gradient(circle at 50% 0%, rgba(var(--tj-blue-rgb), 0.22), transparent 52%), var(--tj-bg-inverse); }
-  .page-title { font-size: var(--tj-type-h1); font-weight: var(--tj-font-bold); margin-bottom: var(--tj-space-lg); color:var(--tj-text-inverse); }
-  .page-desc { font-size: var(--tj-type-body-lg); color: var(--tj-inverse-alpha-70); max-width: 700px; margin: 0 auto; line-height: var(--tj-leading-body); }
-  .news-error,.news-empty{max-width:760px;margin:0 auto 36px;padding:18px 22px;border:1px solid var(--tj-border-default);border-radius:var(--tj-radius-lg);background:var(--tj-bg-surface);color:var(--tj-text-secondary);text-align:center}
-  .filters { display: flex; flex-wrap: wrap; gap: var(--tj-space-3); justify-content: center; margin-bottom: var(--tj-space-7); }
-  .filter-btn { background: var(--tj-bg-surface); border: 1px solid var(--tj-border-default); color: var(--tj-text-secondary); padding: 10px 24px; border-radius: var(--tj-radius-pill); cursor: pointer; font-size: var(--tj-type-body); transition: background-color var(--tj-transition-base), color var(--tj-transition-base), border-color var(--tj-transition-base); }
-  .filter-btn:hover { background: var(--tj-action-soft); color: var(--tj-text-accent); }
-  .filter-btn.active { background: var(--tj-action-primary); color: var(--tj-text-on-brand); border-color: var(--tj-action-primary); }
-  .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--tj-card-gap); }
-  .news-card { background: var(--tj-bg-surface); border: 1px solid var(--tj-border-subtle); border-radius: var(--tj-radius-xl); overflow: hidden; text-decoration: none; color: var(--tj-text-primary); display: flex; flex-direction: column; box-shadow: var(--tj-shadow-1); transition: transform var(--tj-transition-smooth), border-color var(--tj-transition-smooth), box-shadow var(--tj-transition-smooth); }
-  .news-card:hover { transform: translateY(-8px); border-color: var(--tj-border-strong); box-shadow: var(--tj-shadow-3); }
-  .news-card__image-wrap { position: relative; width: 100%; aspect-ratio: 16/10; overflow: hidden; background:var(--tj-bg-surface-soft); }
-  .news-card__image-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
-  .news-card:hover .news-card__image-wrap img { transform: scale(1.05); }
-  .news-card__category { position: absolute; top: 16px; inset-inline-end: 16px; background: var(--tj-action-primary); color: var(--tj-text-on-brand); font-size: var(--tj-type-caption); font-weight: var(--tj-font-semibold); padding: 6px 14px; border-radius: var(--tj-radius-pill); }
-  .news-card__content { padding: 24px; display: flex; flex-direction: column; flex: 1; }
-  .news-card__meta { margin-bottom: 12px; font-size: var(--tj-type-small); color: var(--tj-text-muted); }
-  .news-card__title { font-size: var(--tj-type-h3); font-weight: var(--tj-font-bold); margin-bottom: 12px; line-height: var(--tj-leading-heading); color:var(--tj-text-primary); }
-  .news-card__excerpt { color: var(--tj-text-secondary); font-size: 0.95rem; line-height: 1.6; margin: 0; }
-  @media(max-width:767px){.news-grid{grid-template-columns:1fr}.filter-btn{padding:9px 17px;font-size:.9rem}}
+  .news-index { min-height:100vh; color:var(--tj-text-primary); background:var(--tj-bg-page); }
+  .news-content { background:var(--tj-bg-section); }
+  .news-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--tj-card-gap); }
+  .news-card { display:flex; flex-direction:column; overflow:hidden; color:var(--tj-text-primary); text-decoration:none; border:1px solid var(--tj-border-subtle); border-radius:var(--tj-radius-xl); background:var(--tj-bg-surface); box-shadow:var(--tj-shadow-1); transition:transform var(--tj-transition-smooth),box-shadow var(--tj-transition-smooth),border-color var(--tj-transition-smooth); }
+  .news-card:hover { transform:translateY(-6px); border-color:var(--tj-border-strong); box-shadow:var(--tj-shadow-3); }
+  .news-card:focus-visible { outline:3px solid var(--tj-focus-ring); outline-offset:4px; }
+  .news-card__image { position:relative; aspect-ratio:16/10; overflow:hidden; background:var(--tj-bg-surface-soft); }
+  .news-card__image img { width:100%; height:100%; object-fit:cover; transition:transform .5s ease; }.news-card:hover img{transform:scale(1.04)}
+  .news-card__image span { position:absolute; inset-block-start:1rem; inset-inline-end:1rem; padding:.35rem .7rem; color:var(--tj-text-on-brand); background:var(--tj-action-primary); border-radius:var(--tj-radius-pill); font-size:var(--tj-type-caption); }
+  .news-card__content { display:grid; gap:.75rem; padding:1.5rem; }.news-card__content p{color:var(--tj-text-muted)}.news-card__content h2{color:var(--tj-text-primary);font-size:var(--tj-type-h3)}.news-card__content span{color:var(--tj-text-secondary);line-height:var(--tj-leading-body)}
+  .page-state { display:grid; justify-items:center; gap:1rem; max-width:50rem; margin-inline:auto; padding:3rem; text-align:center; color:var(--tj-text-secondary); border:1px solid var(--tj-border-default); border-radius:var(--tj-radius-xl); background:var(--tj-bg-surface); }.page-state a{color:var(--tj-text-accent);font-weight:var(--tj-font-bold)}
+  @media(max-width:1100px){.news-grid{grid-template-columns:repeat(2,1fr)}} @media(max-width:700px){.news-grid{grid-template-columns:1fr}}
 </style>

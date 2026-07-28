@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '../../lib/api/types';
 import { dictionary, formatMessage } from '../../i18n';
+import { localePath } from '../../lib/content';
 
 interface Props {
   product: any;
@@ -18,9 +19,10 @@ const hexToRgb = (hex: string) => {
 };
 
 const rgb = hexToRgb(brandColor);
+const href = localePath(locale, `/products/${product.slug}`);
 ---
 
-<article class="product-card" style={`--brand: ${brandColor}; --brand-rgb: ${rgb};`}>
+<a class="product-card" href={href} style={`--brand: ${brandColor}; --brand-rgb: ${rgb};`}>
   <!-- Image section -->
   <div class="product-card__image-wrap">
     <div class="product-card__image-bg"></div>
@@ -69,18 +71,20 @@ const rgb = hexToRgb(brandColor);
   <div class="product-card__energy">
     <div class="product-card__energy-fill"></div>
   </div>
-</article>
+</a>
 
 <style>
   .product-card {
     position: relative;
     overflow: hidden;
-    background: var(--tj-inverse-alpha-02);
-    border: 1px solid var(--tj-inverse-alpha-06);
+    background: var(--tj-bg-surface);
+    border: 1px solid var(--tj-border-subtle);
     border-radius: 22px;
     display: flex;
     flex-direction: column;
     height: 100%;
+    color: var(--tj-text-primary);
+    text-decoration: none;
     transition: all 0.4s var(--tj-ease-smooth);
   }
 
@@ -90,6 +94,11 @@ const rgb = hexToRgb(brandColor);
     box-shadow:
       0 20px 50px color-mix(in srgb, var(--tj-neutral-950) 30%, transparent),
       0 0 30px rgba(var(--brand-rgb), 0.06);
+  }
+
+  .product-card:focus-visible {
+    outline: 3px solid var(--tj-focus-ring);
+    outline-offset: 4px;
   }
 
   /* ── Image section ─────────────────────────────────────────── */
@@ -220,19 +229,19 @@ const rgb = hexToRgb(brandColor);
 
   .product-card__type {
     font-size: var(--tj-text-micro);
-    color: var(--tj-inverse-alpha-40);
+    color: var(--tj-text-muted);
   }
 
   .product-card__title {
     font-size: 1.05rem;
-    color: var(--tj-text-inverse);
+    color: var(--tj-text-primary);
     margin: 0;
     line-height: 1.45;
     font-weight: var(--tj-font-semibold);
   }
 
   .product-card__desc {
-    color: var(--tj-inverse-alpha-50);
+    color: var(--tj-text-secondary);
     font-size: var(--tj-text-small);
     line-height: 1.7;
     margin: 0;
@@ -248,7 +257,7 @@ const rgb = hexToRgb(brandColor);
     gap: 16px;
     margin-top: auto;
     padding-top: 14px;
-    border-top: 1px solid var(--tj-inverse-alpha-05);
+    border-top: 1px solid var(--tj-border-subtle);
   }
 
   .product-card__warranty {
@@ -256,7 +265,7 @@ const rgb = hexToRgb(brandColor);
     align-items: center;
     gap: 6px;
     font-size: var(--tj-text-micro);
-    color: var(--tj-inverse-alpha-50);
+    color: var(--tj-text-secondary);
   }
 
   .product-card__warranty svg {

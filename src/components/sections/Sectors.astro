@@ -370,11 +370,11 @@ const sectorDetails = content.items.map((item) => {
 
 .sectors-section {
   position: relative;
-  background: #020609;
-  color: var(--tj-text-inverse);
+  background: var(--tj-gradient-corporate);
+  color: var(--tj-text-primary);
   overflow: hidden;
   padding: clamp(90px, 11vw, 150px) 0;
-  border-top: 1px solid var(--tj-inverse-alpha-05);
+  border-top: 1px solid var(--tj-border-subtle);
 }
 
 /* Background Grids & Glows */
@@ -453,8 +453,8 @@ const sectorDetails = content.items.map((item) => {
   gap: 16px;
   padding: 16px 20px;
   border-radius: 20px;
-  background: var(--tj-inverse-alpha-02);
-  border: 1px solid var(--tj-inverse-alpha-05);
+  background: var(--tj-bg-surface);
+  border: 1px solid var(--tj-border-subtle);
   text-align: start;
   cursor: pointer;
   position: relative;
@@ -482,12 +482,12 @@ const sectorDetails = content.items.map((item) => {
 
 /* Hover and Active Tab states */
 .sc-tab:hover {
-  background: var(--tj-inverse-alpha-04);
-  border-color: var(--tj-inverse-alpha-10);
+  background: var(--tj-bg-surface-raised);
+  border-color: var(--tj-border-default);
 }
 
 .sc-tab.is-active {
-  background: var(--tj-inverse-alpha-08);
+  background: color-mix(in srgb, var(--tab-accent) 8%, var(--tj-bg-surface));
   border-color: rgba(var(--tab-accent-rgb), 0.3);
   box-shadow:
     0 12px 30px color-mix(in srgb, var(--tj-neutral-950) 30%, transparent),
@@ -537,19 +537,19 @@ const sectorDetails = content.items.map((item) => {
 
 .sc-tab__label strong {
   display: block;
-  color: var(--tj-inverse-alpha-70);
+  color: var(--tj-text-primary);
   font-size: var(--tj-text-body-lg);
   font-weight: var(--tj-font-bold);
   transition: color 0.3s;
 }
 
 .sc-tab.is-active .sc-tab__label strong {
-  color: var(--tj-text-inverse);
+  color: var(--tab-accent);
 }
 
 .sc-tab__label span {
   display: block;
-  color: var(--tj-inverse-alpha-50);
+  color: var(--tj-text-secondary);
   font-size: var(--tj-text-nano);
   margin-top: 2px;
 }
@@ -582,10 +582,10 @@ const sectorDetails = content.items.map((item) => {
   position: relative;
   overflow: hidden;
   padding: 44px;
-  background: var(--tj-inverse-alpha-02);
+  background: var(--tj-bg-surface);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid var(--tj-inverse-alpha-06);
+  border: 1px solid var(--tj-border-subtle);
   border-radius: 38px;
   box-shadow: 0 30px 60px color-mix(in srgb, var(--tj-neutral-950) 40%, transparent);
   transition:
@@ -654,7 +654,7 @@ const sectorDetails = content.items.map((item) => {
 }
 
 .sc-board__meta h3 {
-  color: var(--tj-text-inverse);
+  color: var(--tj-text-primary);
   font-size: clamp(1.4rem, 2.2vw, 1.8rem);
   font-weight: var(--tj-font-bold);
   margin-bottom: 4px;
@@ -676,7 +676,7 @@ const sectorDetails = content.items.map((item) => {
 .sc-board__statement {
   position: relative;
   z-index: 1;
-  color: var(--tj-inverse-alpha-90);
+  color: var(--tj-text-primary);
   font-size: var(--tj-text-body-lg);
   font-weight: var(--tj-font-semibold);
   line-height: 1.8;
@@ -699,7 +699,7 @@ const sectorDetails = content.items.map((item) => {
 
 .sc-board__checklist-wrapper h4,
 .sc-board__brands-wrapper h4 {
-  color: var(--tj-inverse-alpha-90);
+  color: var(--tj-text-primary);
   font-size: var(--tj-text-small);
   font-weight: var(--tj-font-bold);
   margin-bottom: 16px;
@@ -718,7 +718,7 @@ const sectorDetails = content.items.map((item) => {
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  color: var(--tj-inverse-alpha-60);
+  color: var(--tj-text-secondary);
   font-size: var(--tj-text-body);
   line-height: 1.65;
 }
@@ -759,8 +759,8 @@ const sectorDetails = content.items.map((item) => {
   align-items: center;
   gap: 10px;
   padding: 8px 14px;
-  background: var(--tj-inverse-alpha-03);
-  border: 1px solid var(--tj-inverse-alpha-08);
+  background: var(--tj-bg-surface-soft);
+  border: 1px solid var(--tj-border-subtle);
   border-radius: 14px;
   transition: border-color 0.3s, background 0.3s, transform 0.3s;
 }
@@ -784,14 +784,14 @@ const sectorDetails = content.items.map((item) => {
 }
 
 .sc-brand-tag__name {
-  color: var(--tj-text-inverse);
+  color: var(--tj-text-primary);
   font-size: var(--tj-text-caption);
   font-weight: var(--tj-font-bold);
   display: none;
 }
 
 .sc-brand-tag__role {
-  color: var(--tj-inverse-alpha-50);
+  color: var(--tj-text-secondary);
   font-size: var(--tj-text-nano);
   border-inline-start: 1px solid var(--tj-inverse-alpha-10);
   padding-inline-start: 8px;
