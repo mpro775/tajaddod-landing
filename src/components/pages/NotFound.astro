@@ -6,4 +6,4 @@ const { locale, message } = Astro.props as { locale: Locale; message?: string };
 const copy = dictionary(locale);
 ---
 <main class="not-found"><div class="container"><span>404</span><h1>{copy.notFound.title}</h1><p>{message || copy.notFound.description}</p><a class="primary-button" href={localePath(locale, '/')}>{copy.nav.home}</a></div></main>
-<style>.not-found{min-height:70vh;display:grid;place-items:center;text-align:center;background:#f3f8f8;padding:80px 0}.not-found span{font-size:clamp(5rem,18vw,12rem);font-weight:950;line-height:1;color:#d5e7e7}.not-found h1{font-size:clamp(2rem,5vw,4rem);margin:0 0 12px}.not-found p{color:#60767b;margin:0 auto 28px;max-width:600px}</style>
+<style>.not-found{min-height:70vh;display:grid;place-items:center;text-align:center;background:var(--tj-bg-page);color:var(--tj-text-primary);padding:var(--tj-section-space) 0}.not-found span{font-size:clamp(5rem,18vw,12rem);font-weight:var(--tj-font-black);line-height:1;color:var(--tj-border-default)}.not-found h1{font-size:var(--tj-type-h1);color:var(--tj-text-primary);margin:0 0 12px}.not-found p{color:var(--tj-text-secondary);margin:0 auto 28px;max-width:600px}</style>

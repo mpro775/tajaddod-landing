@@ -1,12 +1,35 @@
+import type { Locale } from '../lib/api/types';
 import { ar } from './ar';
 import { en } from './en';
-import type { Locale } from '../lib/api/types';
 
-export type Dictionary = typeof ar;
+type Widen<T> =
+  T extends string ? string :
+  T extends number ? number :
+  T extends boolean ? boolean :
+  T extends readonly (infer U)[] ? Widen<U>[] :
+  T extends object ? { [K in keyof T]: K extends 'variant' ? T[K] : Widen<T[K]> } :
+  T;
+
+export type DictionaryShape = Omit<Widen<typeof ar>, 'locale' | 'dir'> & {
+  locale: Locale;
+  dir: 'rtl' | 'ltr';
+};
+
+export type Dictionary = DictionaryShape;
 
 export function dictionary(locale: Locale): Dictionary {
-  return (locale === 'en' ? en : ar) as Dictionary;
+  return locale === 'en' ? en : ar;
 }
+
+export const intlLocale = (locale: Locale): string => locale === 'en' ? 'en-US' : 'ar-YE';
+
+export const formatMessage = (
+  template: string,
+  values: Record<string, string | number>,
+): string => Object.entries(values).reduce(
+  (message, [key, value]) => message.replaceAll(`{${key}}`, String(value)),
+  template,
+);
 
 export function localized(
   input: unknown,

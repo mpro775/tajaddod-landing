@@ -21,6 +21,6 @@ const paths: Record<string, string> = {
 };
 ---
 
-<svg class={`icon ${className}`} viewBox="0 0 24 24" fill="none" aria-hidden="true" width="28" height="28">
+<svg class={`icon ${name === 'arrow' ? 'directional-icon' : ''} ${className}`} viewBox="0 0 24 24" fill="none" aria-hidden="true" width="28" height="28">
   <path d={paths[name] ?? paths.check} stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>

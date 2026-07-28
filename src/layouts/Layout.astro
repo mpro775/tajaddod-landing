@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import '../styles/content.css';
+import '../styles/semantic-overrides.css';
+import '../styles/mobile-redesign.css';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import type { Locale } from '../lib/api/types';
@@ -34,13 +36,35 @@ const altUrl = absolute(alternatePath(canonicalPath, locale));
 ---
 
 <!doctype html>
-<html lang={locale} dir={copy.dir}>
+<html lang={locale} dir={copy.dir} data-theme="light" data-theme-preference="system">
   <head>
-    <script is:inline>document.documentElement.classList.add('js');</script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f6f9fa" />
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        const storageKey = 'tajaddod-theme';
+        let preference = 'system';
+        try {
+          const stored = localStorage.getItem(storageKey);
+          if (stored === 'light' || stored === 'dark' || stored === 'system') preference = stored;
+        } catch {
+          // Storage can be unavailable in private browsing; system remains the safe fallback.
+        }
+        const resolved = preference === 'system'
+          ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+          : preference;
+        root.classList.add('js');
+        root.dataset.theme = resolved;
+        root.dataset.themePreference = preference;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute(
+          'content',
+          resolved === 'dark' ? '#02090d' : '#f6f9fa',
+        );
+      })();
+    </script>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#0a7f83" />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonicalUrl} />
     <link rel="alternate" hreflang={locale === 'ar' ? 'en' : 'ar'} href={altUrl} />
@@ -67,7 +91,9 @@ const altUrl = absolute(alternatePath(canonicalPath, locale));
     <slot />
     <Footer locale={locale} />
     <script>
+      import { initializeTheme } from '../scripts/theme';
       import '../scripts/animations';
+      initializeTheme();
     </script>
   </body>
 </html>

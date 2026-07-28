@@ -1,10 +1,4 @@
-/* ═══════════════════════════════════════════════════════════════════════
-   theme.css — نظام التصميم الأساسي لتجدد
-   Design Tokens: ألوان، خطوط، مسافات، ظلال، أسطح، ألوان البراندات
-   ═══════════════════════════════════════════════════════════════════════ */
-
-/* ─── Norsal Font Family ─────────────────────────────────────────────── */
-
+/* 1. Fonts */
 @font-face {
   font-family: "Norsal";
   src: url("/assets/fonts/alfont_com_Norsal-ExtraLight.otf") format("opentype");
@@ -53,10 +47,91 @@
   font-display: swap;
 }
 
-/* ─── Design Tokens ──────────────────────────────────────────────────── */
-
 :root {
-  /* ── Typography ────────────────────────────────────────────────────── */
+  /* 2. Primitive brand palette */
+  --tj-blue: #1e99d3;
+  --tj-blue-deep: #0d6f9e;
+  --tj-blue-light: #9be8ff;
+  --tj-blue-pale: #dff8ff;
+  --tj-green: #159647;
+  --tj-green-deep: #0d6f3e;
+  --tj-green-light: #8bc543;
+  --tj-orange: #ff8c00;
+  --tj-orange-deep: #cc7000;
+  --tj-yellow: #ffb340;
+  --tj-red: #e01b1b;
+  --tj-red-light: #ff6b6b;
+  --tj-cnc-red: #e63946;
+
+  --tj-blue-rgb: 30, 153, 211;
+  --tj-green-rgb: 21, 150, 71;
+  --tj-green-light-rgb: 139, 197, 67;
+  --tj-orange-rgb: 255, 140, 0;
+  --tj-red-rgb: 224, 27, 27;
+  --tj-cnc-red-rgb: 230, 57, 70;
+
+  --tj-blue-glow: rgba(var(--tj-blue-rgb), 0.4);
+  --tj-green-glow: rgba(var(--tj-green-light-rgb), 0.4);
+  --tj-blue-surface: rgba(var(--tj-blue-rgb), 0.1);
+  --tj-blue-surface-soft: rgba(var(--tj-blue-rgb), 0.06);
+  --tj-green-surface: rgba(var(--tj-green-rgb), 0.1);
+  --tj-green-surface-soft: rgba(var(--tj-green-rgb), 0.06);
+
+  --tj-gradient-brand: linear-gradient(135deg, var(--tj-blue) 0%, var(--tj-green) 58%, var(--tj-green-light) 100%);
+  --tj-gradient-green: linear-gradient(135deg, var(--tj-green) 0%, var(--tj-green-light) 100%);
+  --tj-gradient-energy: linear-gradient(90deg, transparent, rgba(var(--tj-green-light-rgb), 0.8), rgba(var(--tj-blue-rgb), 0.65), transparent);
+  --tj-gradient-hero: linear-gradient(145deg, #071b25 0%, #0f2f38 45%, #0a402a 100%);
+  --tj-gradient-cinematic: linear-gradient(135deg, #0b2732, #104734);
+  --tj-gradient-journey: linear-gradient(145deg, #071b25 0%, #102a32 42%, #0c362a 100%);
+
+  /* 3. Primitive neutral palette */
+  --tj-neutral-0: #ffffff;
+  --tj-neutral-25: #fbfdfe;
+  --tj-neutral-50: #f6f9fa;
+  --tj-neutral-100: #edf3f5;
+  --tj-neutral-200: #dce7ea;
+  --tj-neutral-300: #c3d1d5;
+  --tj-neutral-400: #91a2a8;
+  --tj-neutral-500: #687b82;
+  --tj-neutral-600: #465b62;
+  --tj-neutral-700: #2d434b;
+  --tj-neutral-800: #172c34;
+  --tj-neutral-850: #10232b;
+  --tj-neutral-900: #091920;
+  --tj-neutral-925: #06131a;
+  --tj-neutral-950: #02090d;
+
+  /* Stable cinematic primitives. These are for deliberately inverse artwork only. */
+  --tj-cinematic-base: #071b25;
+  --tj-cinematic-mid: #0f2f38;
+  --tj-cinematic-green: #0a402a;
+  --tj-cinematic-deep: #0b2732;
+  --tj-cinematic-green-deep: #104734;
+  --tj-inverse-alpha-02: rgb(255 255 255 / 0.02);
+  --tj-inverse-alpha-03: rgb(255 255 255 / 0.03);
+  --tj-inverse-alpha-04: rgb(255 255 255 / 0.04);
+  --tj-inverse-alpha-05: rgb(255 255 255 / 0.05);
+  --tj-inverse-alpha-06: rgb(255 255 255 / 0.06);
+  --tj-inverse-alpha-07: rgb(255 255 255 / 0.07);
+  --tj-inverse-alpha-08: rgb(255 255 255 / 0.08);
+  --tj-inverse-alpha-10: rgb(255 255 255 / 0.1);
+  --tj-inverse-alpha-12: rgb(255 255 255 / 0.12);
+  --tj-inverse-alpha-15: rgb(255 255 255 / 0.15);
+  --tj-inverse-alpha-20: rgb(255 255 255 / 0.2);
+  --tj-inverse-alpha-25: rgb(255 255 255 / 0.25);
+  --tj-inverse-alpha-30: rgb(255 255 255 / 0.3);
+  --tj-inverse-alpha-40: rgb(255 255 255 / 0.4);
+  --tj-inverse-alpha-50: rgb(255 255 255 / 0.5);
+  --tj-inverse-alpha-55: rgb(255 255 255 / 0.55);
+  --tj-inverse-alpha-60: rgb(255 255 255 / 0.6);
+  --tj-inverse-alpha-65: rgb(255 255 255 / 0.65);
+  --tj-inverse-alpha-70: rgb(255 255 255 / 0.7);
+  --tj-inverse-alpha-75: rgb(255 255 255 / 0.75);
+  --tj-inverse-alpha-80: rgb(255 255 255 / 0.8);
+  --tj-inverse-alpha-85: rgb(255 255 255 / 0.85);
+  --tj-inverse-alpha-90: rgb(255 255 255 / 0.9);
+
+  /* 4. Typography scale */
   --tj-font-family: "Norsal", "Noto Sans Arabic", Tajawal, Cairo, system-ui, sans-serif;
   --tj-font-extralight: 200;
   --tj-font-regular: 400;
@@ -65,212 +140,367 @@
   --tj-font-extrabold: 800;
   --tj-font-black: 900;
 
-  /* Font Sizes — Fluid with clamp() */
-  --tj-text-hero: clamp(2rem, 4.5vw, 3.25rem);
-  --tj-text-h2: clamp(1.55rem, 3.2vw, 2.2rem);
-  --tj-text-h3: 1.25rem;
+  --tj-type-display: clamp(2.75rem, 7vw, 5.75rem);
+  --tj-type-h1: clamp(2.25rem, 5vw, 4.5rem);
+  --tj-type-h2: clamp(1.75rem, 3.6vw, 3.25rem);
+  --tj-type-h3: clamp(1.2rem, 2vw, 1.55rem);
+  --tj-type-body-lg: clamp(1rem, 1.6vw, 1.18rem);
+  --tj-type-body: 1rem;
+  --tj-type-small: 0.875rem;
+  --tj-type-caption: 0.8rem;
+
+  --tj-leading-display: 1.12;
+  --tj-leading-heading: 1.28;
+  --tj-leading-body: 1.85;
+  --tj-leading-tight: var(--tj-leading-heading);
+  --tj-leading-normal: var(--tj-leading-body);
+  --tj-leading-relaxed: 1.95;
+  --tj-tracking-tight: -0.035em;
+  --tj-tracking-normal: -0.01em;
+  --tj-tracking-snug: -0.02em;
+
+  /* Typography legacy aliases. Kept for existing components; new code uses --tj-type-*. */
+  --tj-text-hero: var(--tj-type-h1);
+  --tj-text-h2: var(--tj-type-h2);
+  --tj-text-h3: var(--tj-type-h3);
   --tj-text-h4: 1.05rem;
-  --tj-text-body: 0.95rem;
-  --tj-text-body-lg: clamp(1rem, 1.8vw, 1.15rem);
-  --tj-text-small: 0.875rem;
-  --tj-text-caption: 0.8rem;
+  --tj-text-body-lg: var(--tj-type-body-lg);
+  --tj-text-body: var(--tj-type-body);
+  --tj-text-small: var(--tj-type-small);
+  --tj-text-caption: var(--tj-type-caption);
   --tj-text-micro: 0.75rem;
   --tj-text-nano: 0.7rem;
   --tj-text-tiny: 0.65rem;
 
-  /* Line Heights */
-  --tj-leading-tight: 1.22;
-  --tj-leading-normal: 1.8;
-  --tj-leading-relaxed: 1.9;
+  /* 5. Spacing scale */
+  --tj-space-1: 0.25rem;
+  --tj-space-2: 0.5rem;
+  --tj-space-3: 0.75rem;
+  --tj-space-4: 1rem;
+  --tj-space-5: 1.5rem;
+  --tj-space-6: 2rem;
+  --tj-space-7: 3rem;
+  --tj-space-8: 4rem;
+  --tj-space-9: 6rem;
+  --tj-space-xs: var(--tj-space-1);
+  --tj-space-sm: var(--tj-space-2);
+  --tj-space-md: 0.875rem;
+  --tj-space-lg: 1.375rem;
+  --tj-space-xl: 2.125rem;
+  --tj-space-2xl: 3.5rem;
+  --tj-space-3xl: 4.75rem;
+  --tj-space-4xl: 6.5rem;
 
-  /* Letter Spacing */
-  --tj-tracking-tight: -0.045em;
-  --tj-tracking-normal: -0.01em;
-  --tj-tracking-snug: -0.02em;
-
-  /* ── Colors — Tajaddod Identity ────────────────────────────────────── */
-  --tj-blue: #1e99d3;
-  --tj-blue-deep: #0d6f9e;
-  --tj-blue-light: #9be8ff;
-  --tj-blue-pale: #dff8ff;
-  --tj-blue-glow: rgba(30, 153, 211, 0.4);
-  --tj-blue-surface: rgba(30, 153, 211, 0.10);
-  --tj-blue-surface-soft: rgba(30, 153, 211, 0.06);
-
-  --tj-green: #159647;
-  --tj-green-light: #8bc543;
-  --tj-orange: #ff8c00;
-  --tj-green-glow: rgba(139, 197, 67, 0.4);
-  --tj-green-surface: rgba(21, 150, 71, 0.08);
-  --tj-green-surface-soft: rgba(21, 150, 71, 0.06);
-
-  --tj-yellow: #ffb340;
-  --tj-red: #e01b1b;
-
-  /* ── Neutral Palette ───────────────────────────────────────────────── */
-  --tj-ink: #212124;
-  --tj-ink-soft: #363842;
-  --tj-title: #56575c;
-  --tj-muted: #8a8a8e;
-  --tj-line: rgba(33, 33, 36, 0.11);
-  --tj-white: #ffffff;
-
-  /* ── Surfaces ──────────────────────────────────────────────────────── */
-  /* Corporate Layer */
-  --tj-surface-white: #ffffff;
-  --tj-surface-soft: #f6fbff;
-  --tj-surface-soft-green: #f5fff8;
-  --tj-surface-alt: #f8fcff;
-  --tj-surface-warm: #f8fbff;
-  --tj-surface-footer: #f5f8fa;
-
-  /* Cinematic Layer */
-  --tj-dark: #101b22;
-  --tj-dark-2: #142a31;
-  --tj-cinematic-base: #071b25;
-  --tj-cinematic-mid: #0f2f38;
-  --tj-cinematic-green: #0a402a;
-  --tj-cinematic-deep: #0b2732;
-  --tj-cinematic-green-deep: #104734;
-
-  /* Glass / Semi-transparent */
-  --tj-glass-white: rgba(255, 255, 255, 0.88);
-  --tj-glass-white-soft: rgba(255, 255, 255, 0.84);
-  --tj-glass-white-dim: rgba(255, 255, 255, 0.11);
-  --tj-glass-white-faint: rgba(255, 255, 255, 0.075);
-  --tj-glass-dark: rgba(255, 255, 255, 0.08);
-  --tj-glass-dark-border: rgba(255, 255, 255, 0.13);
-  --tj-glass-dark-strong: rgba(255, 255, 255, 0.18);
-
-  /* ── Gradients ─────────────────────────────────────────────────────── */
-  --tj-gradient-brand: linear-gradient(135deg, #1e99d3 0%, #159647 58%, #8bc543 100%);
-  --tj-gradient-green: linear-gradient(135deg, #159647 0%, #8bc543 100%);
-  --tj-gradient-blue-soft: linear-gradient(135deg, rgba(30, 153, 211, 0.15) 0%, rgba(139, 197, 67, 0.12) 100%);
-  --tj-gradient-energy: linear-gradient(90deg, transparent, rgba(139, 197, 67, 0.8), rgba(30, 153, 211, 0.65), transparent);
-  --tj-gradient-hero: linear-gradient(145deg, #071b25 0%, #0f2f38 45%, #0a402a 100%);
-  --tj-gradient-cinematic: linear-gradient(135deg, #0b2732, #104734);
-  --tj-gradient-journey: linear-gradient(145deg, #071b25 0%, #102a32 42%, #0c362a 100%);
-  --tj-gradient-corporate: linear-gradient(180deg, #f8fcff 0%, #fff 100%);
-  --tj-gradient-section-alt: linear-gradient(180deg, #f7fcff, #ffffff);
-
-  /* ── Shadows ───────────────────────────────────────────────────────── */
-  --tj-shadow-xs: 0 4px 12px rgba(33, 33, 36, 0.04);
-  --tj-shadow-sm: 0 12px 30px rgba(33, 33, 36, 0.04);
-  --tj-shadow-md: 0 18px 50px rgba(33, 33, 36, 0.07);
-  --tj-shadow-lg: 0 24px 80px rgba(33, 33, 36, 0.12);
-  --tj-shadow-xl: 0 34px 100px rgba(0, 0, 0, 0.28);
-  --tj-shadow-blue: 0 18px 42px rgba(30, 153, 211, 0.28);
-  --tj-shadow-blue-soft: 0 18px 50px rgba(30, 153, 211, 0.14);
-  --tj-shadow-green: 0 18px 42px rgba(21, 150, 71, 0.24);
-  --tj-shadow-brand: 0 16px 32px rgba(30, 153, 211, 0.22);
-  --tj-shadow-card: 0 18px 60px rgba(33, 33, 36, 0.08);
-  --tj-shadow-card-hover: 0 30px 88px rgba(33, 33, 36, 0.14);
-  --tj-shadow-float: 0 16px 45px rgba(33, 33, 36, 0.13);
-  --tj-shadow-glass: 0 16px 44px rgba(0, 0, 0, 0.16);
-  --tj-shadow-cinematic: 0 34px 90px rgba(16, 27, 34, 0.22);
-  --tj-shadow-header: 0 14px 45px rgba(16, 27, 34, 0.10);
-
-  /* Legacy Aliases */
-  --tj-shadow: var(--tj-shadow-lg);
-  --tj-shadow-soft: var(--tj-shadow-blue-soft);
-  --tj-soft: var(--tj-surface-soft);
-  --tj-soft-green: var(--tj-surface-soft-green);
-
-  /* ── Spacing ───────────────────────────────────────────────────────── */
-  --tj-space-xs: 4px;
-  --tj-space-sm: 8px;
-  --tj-space-md: 14px;
-  --tj-space-lg: 22px;
-  --tj-space-xl: 34px;
-  --tj-space-2xl: 56px;
-  --tj-space-3xl: 76px;
-  --tj-space-4xl: 104px;
-
-  /* ── Border Radius ─────────────────────────────────────────────────── */
-  --tj-radius-sm: 7px;
-  --tj-radius-md: 14px;
-  --tj-radius-lg: 18px;
-  --tj-radius-xl: 22px;
-  --tj-radius-2xl: 28px;
-  --tj-radius-3xl: 34px;
-  --tj-radius-4xl: 42px;
+  /* 6. Radius scale */
+  --tj-radius-sm: 0.5rem;
+  --tj-radius-md: 0.875rem;
+  --tj-radius-lg: 1.125rem;
+  --tj-radius-xl: 1.375rem;
+  --tj-radius-2xl: 1.75rem;
+  --tj-radius-3xl: 2.125rem;
+  --tj-radius-4xl: 2.625rem;
   --tj-radius-pill: 999px;
 
-  /* ── Transitions ───────────────────────────────────────────────────── */
+  /* 7. Elevation/shadow scale: theme-specific values are assigned below. */
+  --tj-shadow-blue: 0 18px 42px rgba(var(--tj-blue-rgb), 0.28);
+  --tj-shadow-blue-soft: 0 18px 50px rgba(var(--tj-blue-rgb), 0.14);
+  --tj-shadow-green: 0 18px 42px rgba(var(--tj-green-rgb), 0.24);
+  --tj-shadow-brand: 0 16px 32px rgba(var(--tj-blue-rgb), 0.22);
+  --tj-shadow-cinematic: 0 34px 90px rgb(0 0 0 / 0.28);
+
+  /* 8. Motion */
   --tj-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   --tj-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --tj-ease-energy: cubic-bezier(0.16, 1, 0.3, 1);
   --tj-ease-out: cubic-bezier(0, 0, 0.2, 1);
-
   --tj-duration-fast: 160ms;
   --tj-duration-normal: 190ms;
   --tj-duration-medium: 300ms;
   --tj-duration-slow: 500ms;
   --tj-duration-energy: 600ms;
-
   --tj-transition-base: var(--tj-duration-normal) var(--tj-ease-smooth);
   --tj-transition-smooth: var(--tj-duration-medium) var(--tj-ease-smooth);
   --tj-transition-spring: var(--tj-duration-slow) var(--tj-ease-spring);
   --tj-transition-energy: var(--tj-duration-energy) var(--tj-ease-energy);
 
-  /* ── Z-index Scale ─────────────────────────────────────────────────── */
+  /* 9. Layout/container tokens */
+  /* Responsive contract: small <=359, mobile 360–767, tablet 768–1023,
+     desktop 1024–1439, large desktop >=1440. */
+  --tj-page-gutter: 0.875rem;
+  --tj-section-space: 4rem;
+  --tj-section-space-lg: 5rem;
+  --tj-section-space-compact: 2.75rem;
+  --tj-card-padding: 1.125rem;
+  --tj-card-gap: 1rem;
+  --tj-grid-gap: var(--tj-card-gap);
+  --tj-header-height: 4.125rem;
+  --tj-button-height: 3.25rem;
+  --tj-touch-target: 2.75rem;
+  --tj-icon-touch-target: var(--tj-touch-target);
+  --tj-content-measure: 46rem;
+  --tj-container: 73.75rem;
+  --tj-container-wide: 87.5rem;
+  --tj-container-padding: var(--tj-page-gutter);
   --tj-z-base: 1;
   --tj-z-above: 2;
   --tj-z-overlay: 10;
   --tj-z-header: 60;
   --tj-z-modal: 100;
-
-  /* ── Container ─────────────────────────────────────────────────────── */
-  --tj-container: 1180px;
-  --tj-container-padding: 40px;
-
-  /* ── Color Scheme ──────────────────────────────────────────────────── */
-  color-scheme: light;
 }
 
-/* ─── Brand World Accents ────────────────────────────────────────────── */
+@media (min-width: 360px) {
+  :root {
+    --tj-page-gutter: 1rem;
+  }
+}
 
-/* CNC — قلب الحماية والتحكم */
+@media (min-width: 768px) {
+  :root {
+    --tj-page-gutter: 1.5rem;
+    --tj-section-space: 5rem;
+    --tj-section-space-lg: 6.5rem;
+    --tj-section-space-compact: 3.5rem;
+    --tj-card-padding: 1.375rem;
+    --tj-card-gap: 1.25rem;
+    --tj-header-height: 4.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --tj-page-gutter: 2rem;
+    --tj-section-space: 6rem;
+    --tj-section-space-lg: 7.5rem;
+    --tj-section-space-compact: 4rem;
+    --tj-card-padding: 1.625rem;
+    --tj-card-gap: 1.5rem;
+    --tj-header-height: 5.125rem;
+  }
+}
+
+@media (min-width: 1440px) {
+  :root {
+    --tj-page-gutter: 2.5rem;
+    --tj-section-space: 6.5rem;
+    --tj-section-space-lg: 8.5rem;
+    --tj-section-space-compact: 4.5rem;
+    --tj-card-padding: 1.75rem;
+  }
+}
+
+/* 10. Semantic theme tokens - Light */
+:root,
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --tj-bg-page: var(--tj-neutral-50);
+  --tj-bg-section: var(--tj-neutral-0);
+  --tj-bg-section-alt: #eef6f7;
+  --tj-bg-surface: var(--tj-neutral-0);
+  --tj-bg-surface-raised: var(--tj-neutral-0);
+  --tj-bg-surface-soft: var(--tj-neutral-100);
+  --tj-bg-inverse: var(--tj-neutral-925);
+
+  --tj-text-primary: #16282e;
+  --tj-text-secondary: #42575e;
+  --tj-text-muted: #64767c;
+  --tj-text-inverse: #f8fcff;
+  --tj-text-on-brand: var(--tj-neutral-0);
+  --tj-text-accent: var(--tj-blue-deep);
+  --tj-text-success: #0d7137;
+  --tj-text-danger: #a61b24;
+  --tj-text-disabled: #8b9ba0;
+
+  --tj-border-subtle: rgb(25 65 76 / 0.09);
+  --tj-border-default: rgb(25 65 76 / 0.16);
+  --tj-border-strong: rgb(25 65 76 / 0.28);
+  --tj-border-inverse: rgb(255 255 255 / 0.15);
+
+  --tj-glass-surface: rgb(255 255 255 / 0.78);
+  --tj-glass-surface-strong: rgb(255 255 255 / 0.92);
+  --tj-glass-border: rgb(255 255 255 / 0.72);
+  --tj-glass-shadow: 0 16px 44px rgb(25 65 76 / 0.12);
+
+  --tj-overlay-soft: rgb(2 9 13 / 0.28);
+  --tj-overlay-medium: rgb(2 9 13 / 0.52);
+  --tj-overlay-strong: rgb(2 9 13 / 0.76);
+
+  --tj-action-primary: #0b78a8;
+  --tj-action-primary-hover: #08688f;
+  --tj-action-secondary: #117e3d;
+  --tj-action-secondary-hover: #0d6e34;
+  --tj-action-soft: rgba(var(--tj-blue-rgb), 0.1);
+  --tj-focus-ring: #087eaf;
+  --tj-selection-bg: rgba(var(--tj-blue-rgb), 0.24);
+  --tj-selection-text: var(--tj-text-primary);
+
+  --tj-shadow-1: 0 4px 14px rgb(25 65 76 / 0.06);
+  --tj-shadow-2: 0 12px 32px rgb(25 65 76 / 0.09);
+  --tj-shadow-3: 0 22px 58px rgb(25 65 76 / 0.13);
+  --tj-shadow-4: 0 32px 88px rgb(25 65 76 / 0.18);
+
+  --tj-header-surface: var(--tj-glass-surface-strong);
+  --tj-header-text: var(--tj-text-primary);
+  --tj-header-border: var(--tj-border-subtle);
+  --tj-mobile-nav-surface: rgb(255 255 255 / 0.97);
+  --tj-footer-surface: var(--tj-neutral-950);
+
+  --tj-gradient-blue-soft: linear-gradient(135deg, rgba(var(--tj-blue-rgb), 0.15), rgba(var(--tj-green-light-rgb), 0.12));
+  --tj-gradient-corporate: linear-gradient(180deg, var(--tj-bg-section-alt) 0%, var(--tj-bg-section) 100%);
+  --tj-gradient-section-alt: linear-gradient(180deg, #f3f9fa, var(--tj-bg-section));
+}
+
+/* 11. Semantic theme tokens - Dark */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --tj-bg-page: var(--tj-neutral-950);
+  --tj-bg-section: #06131a;
+  --tj-bg-section-alt: #091b23;
+  --tj-bg-surface: #0d222a;
+  --tj-bg-surface-raised: #12303a;
+  --tj-bg-surface-soft: #0a1a21;
+  --tj-bg-inverse: var(--tj-neutral-925);
+
+  --tj-text-primary: #f2f7f9;
+  --tj-text-secondary: #bfd0d5;
+  --tj-text-muted: #8ea3aa;
+  --tj-text-inverse: #f8fcff;
+  --tj-text-on-brand: var(--tj-neutral-0);
+  --tj-text-accent: var(--tj-blue-light);
+  --tj-text-success: #79d797;
+  --tj-text-danger: #ff9298;
+  --tj-text-disabled: #70858c;
+
+  --tj-border-subtle: rgb(255 255 255 / 0.07);
+  --tj-border-default: rgb(255 255 255 / 0.13);
+  --tj-border-strong: rgb(255 255 255 / 0.22);
+  --tj-border-inverse: rgb(255 255 255 / 0.15);
+
+  --tj-glass-surface: rgb(7 27 36 / 0.76);
+  --tj-glass-surface-strong: rgb(5 20 27 / 0.92);
+  --tj-glass-border: rgb(255 255 255 / 0.11);
+  --tj-glass-shadow: 0 18px 48px rgb(0 0 0 / 0.32), inset 0 1px 0 rgb(255 255 255 / 0.05);
+
+  --tj-overlay-soft: rgb(0 0 0 / 0.34);
+  --tj-overlay-medium: rgb(0 0 0 / 0.58);
+  --tj-overlay-strong: rgb(0 0 0 / 0.8);
+
+  --tj-action-primary: #36ace0;
+  --tj-action-primary-hover: #59bce7;
+  --tj-action-secondary: #58bd78;
+  --tj-action-secondary-hover: #76ca90;
+  --tj-action-soft: rgba(var(--tj-blue-rgb), 0.16);
+  --tj-focus-ring: #72d6ff;
+  --tj-selection-bg: rgba(var(--tj-blue-rgb), 0.36);
+  --tj-selection-text: var(--tj-text-primary);
+
+  --tj-shadow-1: 0 4px 14px rgb(0 0 0 / 0.2), inset 0 1px 0 rgb(255 255 255 / 0.03);
+  --tj-shadow-2: 0 12px 34px rgb(0 0 0 / 0.28), inset 0 1px 0 rgb(255 255 255 / 0.04);
+  --tj-shadow-3: 0 24px 64px rgb(0 0 0 / 0.36), inset 0 1px 0 rgb(255 255 255 / 0.05);
+  --tj-shadow-4: 0 34px 92px rgb(0 0 0 / 0.44), inset 0 1px 0 rgb(255 255 255 / 0.06);
+
+  --tj-header-surface: var(--tj-glass-surface-strong);
+  --tj-header-text: var(--tj-text-primary);
+  --tj-header-border: var(--tj-border-default);
+  --tj-mobile-nav-surface: rgb(5 20 27 / 0.98);
+  --tj-footer-surface: var(--tj-neutral-950);
+
+  --tj-gradient-blue-soft: linear-gradient(135deg, rgba(var(--tj-blue-rgb), 0.2), rgba(var(--tj-green-light-rgb), 0.1));
+  --tj-gradient-corporate: linear-gradient(180deg, var(--tj-bg-section-alt) 0%, var(--tj-bg-section) 100%);
+  --tj-gradient-section-alt: linear-gradient(180deg, #0a2029, var(--tj-bg-section));
+}
+
+/* Intentional cinematic surface contract. It stays dark in both preferences. */
+.theme-inverse,
+.layer-cinematic {
+  --tj-local-bg: var(--tj-bg-inverse);
+  --tj-local-surface: var(--tj-inverse-alpha-05);
+  --tj-local-surface-raised: var(--tj-inverse-alpha-08);
+  --tj-local-text-primary: var(--tj-text-inverse);
+  --tj-local-text-secondary: var(--tj-inverse-alpha-70);
+  --tj-local-text-muted: var(--tj-inverse-alpha-50);
+  --tj-local-border: var(--tj-border-inverse);
+  color: var(--tj-local-text-primary);
+}
+
+/* 12. Brand-world accent tokens */
 .brand-world--cnc,
 .accent-cnc {
   --accent: var(--tj-green);
+  --accent-rgb: var(--tj-green-rgb);
   --accent-glow: var(--tj-green-glow);
   --accent-surface: var(--tj-green-surface);
   --accent-surface-soft: var(--tj-green-surface-soft);
-  --accent-gradient: linear-gradient(135deg, #159647, #0d6f3e);
-  --accent-scene-bg: linear-gradient(145deg, rgba(21, 150, 71, 0.08), rgba(21, 150, 71, 0.03));
+  --accent-gradient: linear-gradient(135deg, var(--tj-green), var(--tj-green-deep));
+  --accent-scene-bg: linear-gradient(145deg, rgba(var(--tj-green-rgb), 0.08), rgba(var(--tj-green-rgb), 0.03));
 }
 
-/* Liper — الإضاءة التي تحول الطاقة إلى أثر */
 .brand-world--liper,
 .accent-liper {
   --accent: var(--tj-orange);
-  --accent-glow: rgba(255, 140, 0, 0.4);
-  --accent-surface: rgba(255, 140, 0, 0.10);
-  --accent-surface-soft: rgba(255, 140, 0, 0.06);
-  --accent-gradient: linear-gradient(135deg, #ff8c00, #cc7000);
-  --accent-scene-bg: linear-gradient(145deg, rgba(255, 140, 0, 0.08), rgba(255, 140, 0, 0.03));
+  --accent-rgb: var(--tj-orange-rgb);
+  --accent-glow: rgba(var(--tj-orange-rgb), 0.4);
+  --accent-surface: rgba(var(--tj-orange-rgb), 0.1);
+  --accent-surface-soft: rgba(var(--tj-orange-rgb), 0.06);
+  --accent-gradient: linear-gradient(135deg, var(--tj-orange), var(--tj-orange-deep));
+  --accent-scene-bg: linear-gradient(145deg, rgba(var(--tj-orange-rgb), 0.08), rgba(var(--tj-orange-rgb), 0.03));
 }
 
-/* ─── Layer Utility Classes ──────────────────────────────────────────── */
+/* Documented legacy aliases. Existing components may consume these during migration. */
+:root {
+  --tj-ink: var(--tj-text-primary);
+  --tj-ink-soft: var(--tj-text-secondary);
+  --tj-title: var(--tj-text-primary);
+  --tj-muted: var(--tj-text-muted);
+  --tj-line: var(--tj-border-subtle);
+  --tj-white: var(--tj-neutral-0);
+  --tj-dark: var(--tj-bg-inverse);
+  --tj-dark-2: var(--tj-cinematic-mid);
+  --tj-surface-white: var(--tj-bg-section);
+  --tj-surface-soft: var(--tj-bg-section-alt);
+  --tj-surface-soft-green: var(--tj-bg-section-alt);
+  --tj-surface-alt: var(--tj-bg-section-alt);
+  --tj-surface-warm: var(--tj-bg-section);
+  --tj-surface-footer: var(--tj-footer-surface);
+  --tj-glass-white: var(--tj-glass-surface);
+  --tj-glass-white-soft: var(--tj-glass-surface);
+  --tj-glass-white-dim: var(--tj-inverse-alpha-10);
+  --tj-glass-white-faint: var(--tj-inverse-alpha-07);
+  --tj-glass-dark: var(--tj-inverse-alpha-08);
+  --tj-glass-dark-border: var(--tj-border-inverse);
+  --tj-glass-dark-strong: var(--tj-inverse-alpha-20);
+  --tj-shadow-xs: var(--tj-shadow-1);
+  --tj-shadow-sm: var(--tj-shadow-1);
+  --tj-shadow-md: var(--tj-shadow-2);
+  --tj-shadow-lg: var(--tj-shadow-3);
+  --tj-shadow-xl: var(--tj-shadow-4);
+  --tj-shadow-card: var(--tj-shadow-2);
+  --tj-shadow-card-hover: var(--tj-shadow-4);
+  --tj-shadow-float: var(--tj-shadow-2);
+  --tj-shadow-glass: var(--tj-glass-shadow);
+  --tj-shadow-header: var(--tj-shadow-2);
+  --tj-shadow: var(--tj-shadow-3);
+  --tj-shadow-soft: var(--tj-shadow-blue-soft);
+  --tj-soft: var(--tj-bg-section-alt);
+  --tj-soft-green: var(--tj-bg-section-alt);
+}
 
-/* الطبقة المؤسسية — نظيفة، واضحة، تعطي ثقة */
+/* Shared semantic utilities */
 .layer-corporate {
-  background: var(--tj-surface-white);
-  color: var(--tj-title);
+  background: var(--tj-bg-section);
+  color: var(--tj-text-primary);
 }
 
 .layer-corporate-alt {
-  background: var(--tj-surface-soft);
+  background: var(--tj-bg-section-alt);
+  color: var(--tj-text-primary);
 }
 
-/* الطبقة السينمائية — خلفيات داكنة، توهج، طاقة */
 .layer-cinematic {
-  color: var(--tj-white);
   background: var(--tj-gradient-hero);
 }
 
-/* طبقة حركة الطاقة — overlay فوق المشاهد */
 .layer-energy {
   position: relative;
 }
@@ -287,23 +517,20 @@
   z-index: 0;
 }
 
-/* ─── Glass Surface Utilities ────────────────────────────────────────── */
-
 .glass-surface {
-  background: var(--tj-glass-white);
+  background: var(--tj-glass-surface);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--tj-glass-border);
+  box-shadow: var(--tj-glass-shadow);
 }
 
 .glass-surface-dark {
-  background: var(--tj-glass-dark);
+  background: var(--tj-inverse-alpha-08);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border: 1px solid var(--tj-glass-dark-border);
+  border: 1px solid var(--tj-border-inverse);
 }
-
-/* ─── Energy Glow Utilities ──────────────────────────────────────────── */
 
 .energy-glow {
   position: relative;
@@ -325,17 +552,13 @@
   opacity: 0.3;
 }
 
-/* Brand-specific glows */
 .brand-glow--cnc { --glow-color: var(--tj-green-glow); }
-.brand-glow--liper { --glow-color: rgba(255, 140, 0, 0.4); }
+.brand-glow--liper { --glow-color: rgba(var(--tj-orange-rgb), 0.4); }
 
 .brand-glow--cnc::after,
 .brand-glow--liper::after {
   background: var(--glow-color);
 }
-
-/* ─── Scroll-linked Section Connectors ───────────────────────────────── */
-/* Makes sections flow into each other instead of appearing as discrete blocks */
 
 .section-flow {
   position: relative;

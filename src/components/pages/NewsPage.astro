@@ -2,6 +2,7 @@
 import type { ArticleCollection, Locale } from '../../lib/api/types';
 import { localePath } from '../../lib/content';
 import { toLegacyArticle } from '../../lib/visual/legacy-view';
+import { dictionary, intlLocale } from '../../i18n';
 
 interface Props {
   locale: Locale;
@@ -11,18 +12,19 @@ interface Props {
 }
 
 const { locale, collection, error } = Astro.props;
-const isEn = locale === 'en';
+const copy = dictionary(locale);
+const labels = copy.news;
 const news = (collection?.articles || []).map((article) => toLegacyArticle(article, locale));
-const allLabel = isEn ? 'All' : 'الكل';
+const allLabel = copy.common.all;
 const categories = [allLabel, ...new Set(news.map((item) => item.category).filter(Boolean))];
-const dateFormatter = new Intl.DateTimeFormat(isEn ? 'en-US' : 'ar-YE', { year: 'numeric', month: 'long', day: 'numeric' });
+const dateFormatter = new Intl.DateTimeFormat(intlLocale(locale), { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
 <main class="news-index">
-  <div class="page-header">
+  <div class="page-header theme-inverse">
     <div class="container">
-      <h1 class="page-title">{isEn ? 'News & events' : 'الأخبار والفعاليات'}</h1>
-      <p class="page-desc">{isEn ? 'Follow Tajaddod updates, projects, training activities and partnerships across electricity and energy.' : 'تابع مستجدات تجدد، المشاريع، الأنشطة التدريبية، والشراكات في مجال الكهرباء والطاقة.'}</p>
+      <h1 class="page-title">{labels.pageTitle}</h1>
+      <p class="page-desc">{labels.pageDescription}</p>
     </div>
   </div>
 
@@ -30,7 +32,7 @@ const dateFormatter = new Intl.DateTimeFormat(isEn ? 'en-US' : 'ar-YE', { year: 
     {error && <div class="news-error" role="status">{error}</div>}
     {news.length > 0 ? (
       <>
-        <div class="filters" aria-label={isEn ? 'News categories' : 'تصنيفات الأخبار'}>
+        <div class="filters" aria-label={labels.categoriesLabel}>
           {categories.map((cat, index) => (
             <button class={`filter-btn ${index === 0 ? 'active' : ''}`} data-filter={index === 0 ? 'all' : cat}>{cat}</button>
           ))}
@@ -54,7 +56,7 @@ const dateFormatter = new Intl.DateTimeFormat(isEn ? 'en-US' : 'ar-YE', { year: 
           ))}
         </div>
       </>
-    ) : !error && <div class="news-empty">{isEn ? 'No published news is available yet.' : 'لا توجد أخبار منشورة حاليًا.'}</div>}
+    ) : !error && <div class="news-empty">{labels.empty}</div>}
   </div>
 </main>
 
@@ -75,25 +77,25 @@ const dateFormatter = new Intl.DateTimeFormat(isEn ? 'en-US' : 'ar-YE', { year: 
 </script>
 
 <style>
-  .news-index { background: #040d12; min-height: 100vh; padding-bottom: 100px; color: #fff; }
-  .page-header { padding: clamp(120px, 15vw, 160px) 0 clamp(60px, 8vw, 80px); text-align: center; background: linear-gradient(180deg, rgba(30,153,211,0.1) 0%, transparent 100%); }
-  .page-title { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: var(--tj-font-bold); margin-bottom: 24px; color:#fff; }
-  .page-desc { font-size: 1.2rem; color: rgba(255, 255, 255, 0.7); max-width: 700px; margin: 0 auto; line-height: 1.8; }
-  .news-error,.news-empty{max-width:760px;margin:0 auto 36px;padding:18px 22px;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.75);text-align:center}
-  .filters { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 48px; }
-  .filter-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.8); padding: 10px 24px; border-radius: 999px; cursor: pointer; font-size: 1rem; transition: all 0.3s ease; }
-  .filter-btn:hover { background: rgba(255, 255, 255, 0.1); }
-  .filter-btn.active { background: var(--tj-primary); color: #fff; border-color: var(--tj-primary); }
-  .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 32px; }
-  .news-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px; overflow: hidden; text-decoration: none; color: #fff; display: flex; flex-direction: column; transition: all 0.4s ease; }
-  .news-card:hover { transform: translateY(-8px); border-color: rgba(30,153,211,0.3); box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
-  .news-card__image-wrap { position: relative; width: 100%; aspect-ratio: 16/10; overflow: hidden; background:#0b1e26; }
+  .news-index { background: var(--tj-bg-page); min-height: 100vh; padding-bottom: var(--tj-section-space); color: var(--tj-text-primary); }
+  .page-header { padding: clamp(120px, 15vw, 160px) 0 clamp(60px, 8vw, 80px); text-align: center; background: radial-gradient(circle at 50% 0%, rgba(var(--tj-blue-rgb), 0.22), transparent 52%), var(--tj-bg-inverse); }
+  .page-title { font-size: var(--tj-type-h1); font-weight: var(--tj-font-bold); margin-bottom: var(--tj-space-lg); color:var(--tj-text-inverse); }
+  .page-desc { font-size: var(--tj-type-body-lg); color: var(--tj-inverse-alpha-70); max-width: 700px; margin: 0 auto; line-height: var(--tj-leading-body); }
+  .news-error,.news-empty{max-width:760px;margin:0 auto 36px;padding:18px 22px;border:1px solid var(--tj-border-default);border-radius:var(--tj-radius-lg);background:var(--tj-bg-surface);color:var(--tj-text-secondary);text-align:center}
+  .filters { display: flex; flex-wrap: wrap; gap: var(--tj-space-3); justify-content: center; margin-bottom: var(--tj-space-7); }
+  .filter-btn { background: var(--tj-bg-surface); border: 1px solid var(--tj-border-default); color: var(--tj-text-secondary); padding: 10px 24px; border-radius: var(--tj-radius-pill); cursor: pointer; font-size: var(--tj-type-body); transition: background-color var(--tj-transition-base), color var(--tj-transition-base), border-color var(--tj-transition-base); }
+  .filter-btn:hover { background: var(--tj-action-soft); color: var(--tj-text-accent); }
+  .filter-btn.active { background: var(--tj-action-primary); color: var(--tj-text-on-brand); border-color: var(--tj-action-primary); }
+  .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--tj-card-gap); }
+  .news-card { background: var(--tj-bg-surface); border: 1px solid var(--tj-border-subtle); border-radius: var(--tj-radius-xl); overflow: hidden; text-decoration: none; color: var(--tj-text-primary); display: flex; flex-direction: column; box-shadow: var(--tj-shadow-1); transition: transform var(--tj-transition-smooth), border-color var(--tj-transition-smooth), box-shadow var(--tj-transition-smooth); }
+  .news-card:hover { transform: translateY(-8px); border-color: var(--tj-border-strong); box-shadow: var(--tj-shadow-3); }
+  .news-card__image-wrap { position: relative; width: 100%; aspect-ratio: 16/10; overflow: hidden; background:var(--tj-bg-surface-soft); }
   .news-card__image-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
   .news-card:hover .news-card__image-wrap img { transform: scale(1.05); }
-  .news-card__category { position: absolute; top: 16px; inset-inline-end: 16px; background: var(--tj-primary); color: #fff; font-size: 0.8rem; font-weight: var(--tj-font-medium); padding: 6px 14px; border-radius: 999px; }
+  .news-card__category { position: absolute; top: 16px; inset-inline-end: 16px; background: var(--tj-action-primary); color: var(--tj-text-on-brand); font-size: var(--tj-type-caption); font-weight: var(--tj-font-semibold); padding: 6px 14px; border-radius: var(--tj-radius-pill); }
   .news-card__content { padding: 24px; display: flex; flex-direction: column; flex: 1; }
-  .news-card__meta { margin-bottom: 12px; font-size: 0.9rem; color: rgba(255, 255, 255, 0.5); }
-  .news-card__title { font-size: 1.4rem; font-weight: var(--tj-font-bold); margin-bottom: 12px; line-height: 1.4; color:#fff; }
-  .news-card__excerpt { color: rgba(255, 255, 255, 0.7); font-size: 0.95rem; line-height: 1.6; margin: 0; }
-  @media(max-width:560px){.news-grid{grid-template-columns:1fr}.filter-btn{padding:9px 17px;font-size:.9rem}}
+  .news-card__meta { margin-bottom: 12px; font-size: var(--tj-type-small); color: var(--tj-text-muted); }
+  .news-card__title { font-size: var(--tj-type-h3); font-weight: var(--tj-font-bold); margin-bottom: 12px; line-height: var(--tj-leading-heading); color:var(--tj-text-primary); }
+  .news-card__excerpt { color: var(--tj-text-secondary); font-size: 0.95rem; line-height: 1.6; margin: 0; }
+  @media(max-width:767px){.news-grid{grid-template-columns:1fr}.filter-btn{padding:9px 17px;font-size:.9rem}}
 </style>

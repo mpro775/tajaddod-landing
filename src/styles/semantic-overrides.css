@@ -1,0 +1,449 @@
+/*
+ * Semantic migration layer for legacy scoped components.
+ * The :root[data-theme] prefix intentionally wins over generated Astro scope
+ * selectors without !important or duplicated light/dark component styles.
+ */
+
+/* Shared responsive geometry for the legacy visual sections. Their artwork
+   remains distinct, while spacing and grid rhythm come from the global contract. */
+:root[data-theme] :is(
+  .philosophy-section,
+  .bw-section,
+  .achievements-section,
+  .mr-section,
+  .cv-section,
+  .sc-section,
+  .ej-section,
+  .app-download,
+  .featured-projects,
+  .latest-news
+) {
+  padding-block: var(--tj-section-space-lg);
+}
+
+:root[data-theme] :is(
+  .projects-grid,
+  .news-grid,
+  .achievements-grid,
+  .cv-grid,
+  .brand-products__grid
+) {
+  gap: var(--tj-grid-gap);
+}
+
+:root[data-theme] :is(
+  .projects-grid,
+  .news-grid,
+  .achievements-grid,
+  .cv-grid,
+  .brand-products__grid,
+  .fp-bento,
+  .pd-content__layout,
+  .nd-body__layout
+) > * {
+  min-width: 0;
+}
+
+:root[data-theme] :is(h1, h2, h3, p, a, button) {
+  overflow-wrap: anywhere;
+}
+
+/* Home corporate island */
+:root[data-theme] .achievements-section {
+  color: var(--tj-text-primary);
+  background: var(--tj-gradient-corporate);
+}
+
+:root[data-theme] .achievements-section .section-title {
+  color: var(--tj-text-primary);
+  background: none;
+  -webkit-text-fill-color: currentColor;
+}
+
+:root[data-theme] .achievements-section .eyebrow {
+  color: var(--tj-text-accent);
+  background: var(--tj-action-soft);
+  border-color: color-mix(in srgb, var(--tj-action-primary) 24%, transparent);
+}
+
+:root[data-theme] .achievements-section .achievement-card {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-surface);
+  border-color: var(--tj-border-subtle);
+  box-shadow: var(--tj-shadow-1);
+}
+
+:root[data-theme] .achievements-section .achievement-card:hover {
+  border-color: var(--tj-border-strong);
+  box-shadow: var(--tj-shadow-3);
+}
+
+:root[data-theme] .achievements-section .card-number,
+:root[data-theme] .achievements-section .card-label {
+  color: var(--tj-text-primary);
+}
+
+:root[data-theme] .achievements-section .card-desc {
+  color: var(--tj-text-muted);
+}
+
+/* Project/news indexes */
+:root[data-theme] .projects-page > .container,
+:root[data-theme] .news-index > .container {
+  padding-top: var(--tj-section-space-compact);
+}
+
+/* Project details: the image hero and closing CTA remain intentional inverse surfaces. */
+:root[data-theme] .pd-page {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-page);
+}
+
+:root[data-theme] .pd-page .pd-hero__title,
+:root[data-theme] .news-detail .nd-hero__title {
+  color: var(--tj-text-inverse);
+}
+
+:root[data-theme] .pd-page .pd-content {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-section);
+}
+
+:root[data-theme] .pd-page .pd-content::before,
+:root[data-theme] .pd-page .pd-related::before {
+  background: linear-gradient(90deg, transparent, var(--tj-border-default), transparent);
+}
+
+:root[data-theme] .pd-page .pd-block {
+  border-color: var(--tj-border-subtle);
+}
+
+:root[data-theme] .pd-page .pd-block__title,
+:root[data-theme] .pd-page .pd-widget__title,
+:root[data-theme] .pd-page .pd-scope-text,
+:root[data-theme] .pd-page .pd-info-value,
+:root[data-theme] .pd-page .pd-related__title,
+:root[data-theme] .pd-page .pd-related-card__title {
+  color: var(--tj-text-primary);
+}
+
+:root[data-theme] .pd-page .pd-block__text,
+:root[data-theme] .pd-page .pd-widget-cta__desc,
+:root[data-theme] .pd-page .pd-related-card__summary {
+  color: var(--tj-text-secondary);
+}
+
+:root[data-theme] .pd-page .pd-widget,
+:root[data-theme] .pd-page .pd-brand-card,
+:root[data-theme] .pd-page .pd-related-card {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-surface);
+  border-color: var(--tj-border-subtle);
+  box-shadow: var(--tj-shadow-1);
+}
+
+:root[data-theme] .pd-page .pd-widget:hover,
+:root[data-theme] .pd-page .pd-brand-card:hover,
+:root[data-theme] .pd-page .pd-related-card:hover {
+  border-color: var(--tj-border-strong);
+  box-shadow: var(--tj-shadow-3);
+}
+
+:root[data-theme] .pd-page .pd-scope-item {
+  color: var(--tj-text-secondary);
+  background: var(--tj-bg-surface-soft);
+  border-color: var(--tj-border-subtle);
+}
+
+:root[data-theme] .pd-page .pd-brand-card__logo {
+  background: var(--tj-neutral-0);
+}
+
+:root[data-theme] .pd-page .pd-brand-card__name,
+:root[data-theme] .pd-page .pd-brand-card__fallback {
+  color: var(--tj-text-primary);
+}
+
+:root[data-theme] .pd-page .pd-info-item {
+  border-color: var(--tj-border-subtle);
+}
+
+:root[data-theme] .pd-page .pd-info-label,
+:root[data-theme] .pd-page .pd-related-card__meta {
+  color: var(--tj-text-muted);
+}
+
+:root[data-theme] .pd-page .pd-back-link {
+  color: var(--tj-text-secondary);
+  background: var(--tj-bg-surface);
+  border-color: var(--tj-border-default);
+}
+
+:root[data-theme] .pd-page .pd-back-link:hover {
+  color: var(--tj-text-accent);
+  background: var(--tj-action-soft);
+  border-color: var(--tj-focus-ring);
+}
+
+:root[data-theme] .pd-page .pd-related {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-section-alt);
+}
+
+:root[data-theme] .pd-page .pd-related-card__img-overlay {
+  background: linear-gradient(180deg, transparent 44%, var(--tj-overlay-medium));
+}
+
+:root[data-theme] .pd-page .pd-related-card__cat,
+:root[data-theme] .pd-page .pd-related-card__year {
+  color: var(--tj-text-on-brand);
+}
+
+/* Article details and rich content */
+:root[data-theme] .news-detail {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-page);
+}
+
+:root[data-theme] .news-detail .nd-body {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-section);
+}
+
+:root[data-theme] .news-detail .nd-body::before,
+:root[data-theme] .news-detail .nd-related::before {
+  background: linear-gradient(90deg, transparent, var(--tj-border-default), transparent);
+}
+
+:root[data-theme] .news-detail .nd-article__text,
+:root[data-theme] .news-detail .nd-rich-content {
+  color: var(--tj-text-secondary);
+}
+
+:root[data-theme] .news-detail .nd-rich-content :is(h1, h2, h3, h4) {
+  color: var(--tj-text-primary);
+}
+
+:root[data-theme] .news-detail .nd-rich-content a {
+  color: var(--tj-text-accent);
+}
+
+:root[data-theme] .news-detail .nd-rich-content :is(blockquote, code) {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-surface-soft);
+  border-color: var(--tj-border-default);
+}
+
+:root[data-theme] .news-detail .nd-rich-content pre {
+  color: var(--tj-text-inverse);
+  background: var(--tj-bg-inverse);
+  border-color: var(--tj-border-inverse);
+}
+
+:root[data-theme] .news-detail .nd-rich-content table,
+:root[data-theme] .news-detail .nd-rich-content :is(th, td) {
+  border-color: var(--tj-border-default);
+}
+
+:root[data-theme] .news-detail .nd-gallery {
+  border-color: var(--tj-border-subtle);
+}
+
+:root[data-theme] .news-detail .nd-gallery__title,
+:root[data-theme] .news-detail .nd-widget__title,
+:root[data-theme] .news-detail .nd-info-list__value,
+:root[data-theme] .news-detail .nd-related__title,
+:root[data-theme] .news-detail .nd-related-card__title {
+  color: var(--tj-text-primary);
+}
+
+:root[data-theme] .news-detail .nd-widget,
+:root[data-theme] .news-detail .nd-share-btn,
+:root[data-theme] .news-detail .nd-related-card {
+  color: var(--tj-text-secondary);
+  background: var(--tj-bg-surface);
+  border-color: var(--tj-border-subtle);
+  box-shadow: var(--tj-shadow-1);
+}
+
+:root[data-theme] .news-detail .nd-share-btn:hover,
+:root[data-theme] .news-detail .nd-related-card:hover {
+  border-color: var(--tj-border-strong);
+  box-shadow: var(--tj-shadow-3);
+}
+
+:root[data-theme] .news-detail .nd-widget__title,
+:root[data-theme] .news-detail .nd-info-list__item {
+  border-color: var(--tj-border-subtle);
+}
+
+:root[data-theme] .news-detail .nd-info-list__label,
+:root[data-theme] .news-detail .nd-related-card__date {
+  color: var(--tj-text-muted);
+}
+
+:root[data-theme] .news-detail .nd-back-link {
+  color: var(--tj-text-secondary);
+  background: var(--tj-bg-surface);
+  border-color: var(--tj-border-default);
+}
+
+:root[data-theme] .news-detail .nd-back-link:hover {
+  color: var(--tj-text-accent);
+  background: var(--tj-action-soft);
+  border-color: var(--tj-focus-ring);
+}
+
+:root[data-theme] .news-detail .nd-related {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-section-alt);
+}
+
+:root[data-theme] .news-detail .nd-related-card__excerpt {
+  color: var(--tj-text-secondary);
+}
+
+/* Brand detail alternates intentional inverse scenes with corporate surfaces. */
+:root[data-theme] .brand-page {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-page);
+}
+
+:root[data-theme] .brand-overview {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-section);
+}
+
+:root[data-theme] .brand-overview .overview-title,
+:root[data-theme] .brand-overview .overview-stat__value,
+:root[data-theme] .brand-overview .overview-specialties__header h3 {
+  color: var(--tj-text-primary);
+}
+
+:root[data-theme] .brand-overview .overview-text,
+:root[data-theme] .brand-overview .overview-why p,
+:root[data-theme] .brand-overview .specialty-item,
+:root[data-theme] .brand-overview .overview-families h4,
+:root[data-theme] .brand-overview .overview-family-tag {
+  color: var(--tj-text-secondary);
+}
+
+:root[data-theme] .brand-overview .overview-stat__label {
+  color: var(--tj-text-muted);
+}
+
+:root[data-theme] .brand-overview :is(.overview-stat, .overview-specialties, .overview-families, .specialty-item, .overview-family-tag) {
+  background: var(--tj-bg-surface);
+  border-color: var(--tj-border-subtle);
+}
+
+:root[data-theme] .brand-overview :is(.overview-stat, .specialty-item, .overview-family-tag):hover {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-surface-raised);
+  border-color: color-mix(in srgb, var(--accent) 28%, var(--tj-border-default));
+}
+
+:root[data-theme] .brand-products {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-section-alt);
+}
+
+:root[data-theme] .brand-products .brand-products__title,
+:root[data-theme] .brand-products .brand-products__cta-text h3 {
+  color: var(--tj-text-primary);
+}
+
+:root[data-theme] .brand-products .brand-products__desc,
+:root[data-theme] .brand-products .brand-products__cta-text p,
+:root[data-theme] .brand-products .brand-products__empty p {
+  color: var(--tj-text-secondary);
+}
+
+:root[data-theme] .brand-products .brand-products__empty span {
+  color: var(--tj-text-muted);
+}
+
+:root[data-theme] .brand-products .filter-pill,
+:root[data-theme] .brand-products .brand-products__empty,
+:root[data-theme] .brand-products .brand-products__cta-card {
+  color: var(--tj-text-secondary);
+  background: var(--tj-bg-surface);
+  border-color: var(--tj-border-subtle);
+}
+
+:root[data-theme] .brand-products .filter-pill:hover {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-surface-raised);
+}
+
+:root[data-theme] .brand-products .filter-pill.is-active {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--tj-bg-surface));
+  border-color: color-mix(in srgb, var(--accent) 32%, var(--tj-border-default));
+}
+
+:root[data-theme] .brand-products .filter-pill__count {
+  background: var(--tj-bg-surface-soft);
+}
+
+:root[data-theme] .brand-products .brand-products__cta-btn--outline {
+  color: var(--tj-text-primary);
+  border-color: var(--tj-border-default);
+}
+
+:root[data-theme] .brand-products .brand-products__cta-btn--outline:hover {
+  background: var(--tj-bg-surface-soft);
+  border-color: var(--tj-border-strong);
+}
+
+:root[data-theme] .brand-products .product-card {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-surface);
+  border-color: var(--tj-border-subtle);
+  box-shadow: var(--tj-shadow-1);
+}
+
+:root[data-theme] .brand-products .product-card:hover {
+  border-color: color-mix(in srgb, var(--brand) 30%, var(--tj-border-default));
+  box-shadow: var(--tj-shadow-3);
+}
+
+:root[data-theme] .brand-products .product-card__type,
+:root[data-theme] .brand-products .product-card__desc,
+:root[data-theme] .brand-products .product-card__warranty {
+  color: var(--tj-text-muted);
+}
+
+:root[data-theme] .brand-products .product-card__title {
+  color: var(--tj-text-primary);
+}
+
+:root[data-theme] .brand-products .product-card__footer {
+  border-color: var(--tj-border-subtle);
+}
+
+:root[data-theme] .brand-products .product-card__energy {
+  background: var(--tj-bg-surface-soft);
+}
+
+/* Controls and fields share a visible focus/disabled contract in both themes. */
+:root[data-theme] :is(button, a, input, select, summary):focus-visible {
+  outline-color: var(--tj-focus-ring);
+}
+
+:root[data-theme] :is(input, select, textarea):disabled,
+:root[data-theme] button:disabled {
+  color: var(--tj-text-disabled);
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme-ready] .achievements-section,
+  :root[data-theme-ready] .brand-overview,
+  :root[data-theme-ready] .brand-products,
+  :root[data-theme-ready] .pd-page,
+  :root[data-theme-ready] .news-detail {
+    transition: none;
+  }
+}

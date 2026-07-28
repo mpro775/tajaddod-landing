@@ -1,5 +1,6 @@
 ---
 import type { Locale } from '../../lib/api/types';
+import { dictionary, formatMessage } from '../../i18n';
 
 interface Props {
   product: any;
@@ -8,7 +9,7 @@ interface Props {
 }
 
 const { product, brandColor, locale } = Astro.props;
-const isEn = locale === 'en';
+const labels = dictionary(locale).brands.productCard;
 
 // Extract RGB from hex
 const hexToRgb = (hex: string) => {
@@ -35,7 +36,7 @@ const rgb = hexToRgb(brandColor);
 
     <!-- Hover overlay -->
     <div class="product-card__overlay">
-      <span class="product-card__view-text">{isEn ? 'View details' : 'عرض التفاصيل'}</span>
+      <span class="product-card__view-text">{labels.details}</span>
     </div>
   </div>
 
@@ -58,7 +59,7 @@ const rgb = hexToRgb(brandColor);
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           </svg>
-          <span>{isEn ? `${product.warrantyYears}-year warranty` : `ضمان ${product.warrantyYears} سنوات`}</span>
+          <span>{formatMessage(labels.warranty, { count: product.warrantyYears })}</span>
         </div>
       )}
     </div>
@@ -74,8 +75,8 @@ const rgb = hexToRgb(brandColor);
   .product-card {
     position: relative;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.025);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--tj-inverse-alpha-02);
+    border: 1px solid var(--tj-inverse-alpha-06);
     border-radius: 22px;
     display: flex;
     flex-direction: column;
@@ -87,7 +88,7 @@ const rgb = hexToRgb(brandColor);
     transform: translateY(-6px);
     border-color: rgba(var(--brand-rgb), 0.25);
     box-shadow:
-      0 20px 50px rgba(0, 0, 0, 0.3),
+      0 20px 50px color-mix(in srgb, var(--tj-neutral-950) 30%, transparent),
       0 0 30px rgba(var(--brand-rgb), 0.06);
   }
 
@@ -109,7 +110,7 @@ const rgb = hexToRgb(brandColor);
     background: linear-gradient(
       145deg,
       rgba(var(--brand-rgb), 0.04),
-      rgba(255, 255, 255, 0.02)
+      var(--tj-inverse-alpha-02)
     );
     transition: background 0.4s ease;
   }
@@ -118,7 +119,7 @@ const rgb = hexToRgb(brandColor);
     background: linear-gradient(
       145deg,
       rgba(var(--brand-rgb), 0.08),
-      rgba(255, 255, 255, 0.03)
+      var(--tj-inverse-alpha-03)
     );
   }
 
@@ -129,7 +130,7 @@ const rgb = hexToRgb(brandColor);
     max-height: 100%;
     object-fit: contain;
     transition: transform 0.5s var(--tj-ease-smooth);
-    filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.15));
+    filter: drop-shadow(0 8px 20px color-mix(in srgb, var(--tj-neutral-950) 15%, transparent));
   }
 
   .product-card:hover .product-card__image {
@@ -149,7 +150,7 @@ const rgb = hexToRgb(brandColor);
 
   .product-card__badge {
     background: rgba(var(--brand-rgb), 0.85);
-    color: #fff;
+    color: var(--tj-text-inverse);
     font-size: var(--tj-text-micro);
     padding: 4px 10px;
     border-radius: 8px;
@@ -165,7 +166,7 @@ const rgb = hexToRgb(brandColor);
     z-index: 3;
     display: grid;
     place-items: center;
-    background: rgba(0, 0, 0, 0.5);
+    background: color-mix(in srgb, var(--tj-neutral-950) 50%, transparent);
     backdrop-filter: blur(4px);
     opacity: 0;
     transition: opacity 0.35s ease;
@@ -180,7 +181,7 @@ const rgb = hexToRgb(brandColor);
     padding: 10px 24px;
     border-radius: 999px;
     background: rgba(var(--brand-rgb), 0.85);
-    color: #fff;
+    color: var(--tj-text-inverse);
     font-size: var(--tj-text-small);
     font-weight: var(--tj-font-semibold);
     box-shadow: 0 8px 24px rgba(var(--brand-rgb), 0.3);
@@ -219,19 +220,19 @@ const rgb = hexToRgb(brandColor);
 
   .product-card__type {
     font-size: var(--tj-text-micro);
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--tj-inverse-alpha-40);
   }
 
   .product-card__title {
     font-size: 1.05rem;
-    color: #fff;
+    color: var(--tj-text-inverse);
     margin: 0;
     line-height: 1.45;
     font-weight: var(--tj-font-semibold);
   }
 
   .product-card__desc {
-    color: rgba(255, 255, 255, 0.45);
+    color: var(--tj-inverse-alpha-50);
     font-size: var(--tj-text-small);
     line-height: 1.7;
     margin: 0;
@@ -247,7 +248,7 @@ const rgb = hexToRgb(brandColor);
     gap: 16px;
     margin-top: auto;
     padding-top: 14px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid var(--tj-inverse-alpha-05);
   }
 
   .product-card__warranty {
@@ -255,7 +256,7 @@ const rgb = hexToRgb(brandColor);
     align-items: center;
     gap: 6px;
     font-size: var(--tj-text-micro);
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--tj-inverse-alpha-50);
   }
 
   .product-card__warranty svg {
@@ -268,7 +269,7 @@ const rgb = hexToRgb(brandColor);
   /* ── Energy bar ────────────────────────────────────────────── */
   .product-card__energy {
     height: 2px;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--tj-inverse-alpha-03);
     overflow: hidden;
   }
 

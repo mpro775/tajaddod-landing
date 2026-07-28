@@ -1,27 +1,29 @@
 ---
-import { siteCopy } from '../../data/site-copy';
+import type { Locale } from '../../lib/api/types';
+import { dictionary } from '../../i18n';
 
-const { journey } = siteCopy;
+const { locale } = Astro.props as { locale: Locale };
+const journey = dictionary(locale).home.energyJourney;
 
 const brandColors: Record<string, string> = {
   'CNC': '#e63946', // Red
   'Liper': '#ff8c00', // Orange
   'Liper / CNC': '#52af45', // Green blend
-  'تجدد': 'rgba(255, 255, 255, 0.8)',
+  'Tajaddod': 'rgba(255, 255, 255, 0.8)',
 };
 
 const brandLogos: Record<string, string> = {
   'CNC': '/logos/cnc-logo-white.svg',
   'Liper': '/logos/liper-logo-white.svg',
   'Liper / CNC': '/logos/tajaddod-icon.svg',
-  'تجدد': '/logos/tajaddod-icon.svg',
+  'Tajaddod': '/logos/tajaddod-icon.svg',
 };
 
 const brandIds: Record<string, string> = {
   'CNC': 'cnc',
   'Liper': 'liper',
   'Liper / CNC': 'liper-cnc',
-  'تجدد': 'tajaddod',
+  'Tajaddod': 'tajaddod',
 };
 
 ---
@@ -117,9 +119,9 @@ const brandIds: Record<string, string> = {
         <span class="ej-summary__plus">+</span>
         <img src="/logos/liper-logo-white.svg" alt="Liper" class="ej-summary__logo" loading="lazy" />
         <span class="ej-summary__eq">=</span>
-        <img src="/logos/tajaddod-icon.svg" alt="تجدد" class="ej-summary__logo ej-summary__logo--main" loading="lazy" />
+        <img src="/logos/tajaddod-icon.svg" alt={journey.tajaddodName} class="ej-summary__logo ej-summary__logo--main" loading="lazy" />
       </div>
-      <p class="ej-summary__text">منظومة واحدة تجمع كل مراحل الطاقة</p>
+      <p class="ej-summary__text">{journey.summary}</p>
     </div>
   </div>
 </section>
@@ -127,6 +129,7 @@ const brandIds: Record<string, string> = {
 <script>
   import { gsap } from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { documentDirection, fromInlineEnd, fromInlineStart } from '../../lib/direction';
 
   gsap.registerPlugin(ScrollTrigger);
 
@@ -137,7 +140,8 @@ const brandIds: Record<string, string> = {
     const beamProgress = document.querySelector('[data-ej-beam-progress]') as HTMLElement;
     const beamGlow = document.querySelector('[data-ej-beam-glow]') as HTMLElement;
     const canvas = document.querySelector('[data-ej-particles]') as HTMLCanvasElement;
-    const isMobile = window.matchMedia('(max-width: 820px)').matches;
+    const isMobile = window.matchMedia('(max-width: 1023px)').matches;
+    const direction = documentDirection();
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (!section || !timeline || steps.length === 0) return;
@@ -261,7 +265,7 @@ const brandIds: Record<string, string> = {
       })
       // Then card slides in
       .from(card, {
-        x: isMobile ? 0 : i % 2 === 0 ? -60 : 60,
+        x: isMobile ? 0 : i % 2 === 0 ? fromInlineStart(60, direction) : fromInlineEnd(60, direction),
         y: isMobile ? 18 : 0,
         opacity: 0,
         duration: isMobile ? 0.42 : 0.6,
@@ -349,7 +353,7 @@ const brandIds: Record<string, string> = {
   overflow: hidden;
   padding: clamp(100px, 12vw, 180px) 0;
   background: #030a0f !important;
-  color: #fff;
+  color: var(--tj-text-inverse);
   transition: background 1s ease;
 }
 
@@ -381,8 +385,8 @@ const brandIds: Record<string, string> = {
   inset: 0;
   opacity: 0.025;
   background-image:
-    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+    linear-gradient(var(--tj-inverse-alpha-06) 1px, transparent 1px),
+    linear-gradient(90deg, var(--tj-inverse-alpha-06) 1px, transparent 1px);
   background-size: 80px 80px;
 }
 
@@ -490,12 +494,12 @@ const brandIds: Record<string, string> = {
   font-weight: var(--tj-font-extrabold);
   line-height: var(--tj-leading-tight);
   margin-bottom: 20px;
-  color: #fff;
+  color: var(--tj-text-inverse);
 }
 
 .ej-header__desc {
   font-size: var(--tj-text-body-lg);
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--tj-inverse-alpha-50);
   line-height: var(--tj-leading-normal);
   max-width: 580px;
   margin-inline: auto;
@@ -517,22 +521,22 @@ const brandIds: Record<string, string> = {
   position: absolute;
   top: 0;
   bottom: 0;
-  right: 40px;
+  inset-inline-start: 40px;
   width: 3px;
   z-index: 1;
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .ej-beam {
-    right: 50%;
-    transform: translateX(50%);
+    inset-inline-start: 50%;
+    transform: translateX(calc(var(--tj-inline-direction) * -50%));
   }
 }
 
 .ej-beam__track {
   position: absolute;
   inset: 0;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--tj-inverse-alpha-06);
   border-radius: 999px;
 }
 
@@ -555,9 +559,9 @@ const brandIds: Record<string, string> = {
   right: -8px;
   bottom: 0;
   background: linear-gradient(180deg, 
-    rgba(30, 153, 211, 0.3), 
-    rgba(21, 150, 71, 0.3), 
-    rgba(255, 140, 0, 0.3)
+    color-mix(in srgb, var(--tj-blue) 30%, transparent),
+    color-mix(in srgb, var(--tj-green) 30%, transparent),
+    color-mix(in srgb, var(--tj-orange) 30%, transparent)
   );
   border-radius: 999px;
   filter: blur(12px);
@@ -573,7 +577,7 @@ const brandIds: Record<string, string> = {
   display: flex;
   align-items: center;
   padding: 40px 0;
-  padding-right: 80px; /* Space for the beam on the right */
+  padding-inline-start: 80px;
   opacity: 0.35;
   transition: opacity 0.6s var(--tj-ease-smooth);
 }
@@ -582,22 +586,22 @@ const brandIds: Record<string, string> = {
   opacity: 1;
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .ej-step {
     padding: 50px 0;
-    padding-right: 0;
+    padding-inline-start: 0;
     justify-content: flex-end;
     width: 50%;
-    margin-right: auto;
-    padding-left: 60px;
+    margin-inline-start: auto;
+    padding-inline-end: 60px;
   }
 
   .ej-step:nth-child(even) {
     justify-content: flex-start;
-    margin-right: 0;
-    margin-left: auto;
-    padding-left: 0;
-    padding-right: 60px;
+    margin-inline-start: 0;
+    margin-inline-end: auto;
+    padding-inline-end: 0;
+    padding-inline-start: 60px;
     flex-direction: row-reverse;
   }
 }
@@ -606,7 +610,7 @@ const brandIds: Record<string, string> = {
 
 .ej-step__node {
   position: absolute;
-  right: 26px;
+  inset-inline-start: 26px;
   width: 32px;
   height: 32px;
   display: flex;
@@ -616,19 +620,16 @@ const brandIds: Record<string, string> = {
   flex-shrink: 0;
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .ej-step__node {
-    right: auto;
-    left: auto;
+    inset-inline: auto;
     position: absolute;
   }
   .ej-step:nth-child(odd) .ej-step__node {
-    right: -16px;
-    left: auto;
+    inset-inline-start: -16px;
   }
   .ej-step:nth-child(even) .ej-step__node {
-    left: -16px;
-    right: auto;
+    inset-inline-end: -16px;
   }
 }
 
@@ -652,7 +653,7 @@ const brandIds: Record<string, string> = {
   inset: 4px;
   border-radius: 50%;
   background: #0a1520;
-  border: 2px solid rgba(255,255,255,0.15);
+  border: 2px solid var(--tj-inverse-alpha-15);
   transition: all 0.5s var(--tj-ease-smooth);
 }
 
@@ -687,7 +688,7 @@ const brandIds: Record<string, string> = {
   top: -28px;
   font-size: 0.6rem;
   font-weight: var(--tj-font-bold);
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--tj-inverse-alpha-20);
   letter-spacing: 0.1em;
   transition: color 0.4s ease;
 }
@@ -723,10 +724,10 @@ const brandIds: Record<string, string> = {
 
 .ej-step__card-inner {
   position: relative;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--tj-inverse-alpha-03);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--tj-inverse-alpha-06);
   border-radius: 22px;
   padding: 32px;
   overflow: hidden;
@@ -740,18 +741,18 @@ const brandIds: Record<string, string> = {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  color: rgba(255,255,255,.38);
+  color: var(--tj-inverse-alpha-40);
   font-size: var(--tj-text-nano);
   font-weight: var(--tj-font-bold);
   letter-spacing: 0;
 }
 
 .ej-step.is-active .ej-step__card-inner {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.12);
+  background: var(--tj-inverse-alpha-05);
+  border-color: var(--tj-inverse-alpha-12);
   box-shadow: 
-    0 24px 48px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    0 24px 48px color-mix(in srgb, var(--tj-neutral-950) 40%, transparent),
+    inset 0 1px 0 var(--tj-inverse-alpha-06);
 }
 
 /* Corner accents */
@@ -787,8 +788,8 @@ const brandIds: Record<string, string> = {
   width: 48px;
   height: 48px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--tj-inverse-alpha-04);
+  border: 1px solid var(--tj-inverse-alpha-08);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -828,7 +829,7 @@ const brandIds: Record<string, string> = {
 .ej-step__title {
   font-size: var(--tj-text-h3);
   font-weight: var(--tj-font-bold);
-  color: #fff;
+  color: var(--tj-text-inverse);
   margin-bottom: 12px;
   line-height: var(--tj-leading-tight);
   transition: color 0.4s ease;
@@ -836,13 +837,13 @@ const brandIds: Record<string, string> = {
 
 .ej-step__desc {
   font-size: var(--tj-text-body);
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--tj-inverse-alpha-50);
   line-height: 1.8;
   transition: color 0.4s ease;
 }
 
 .ej-step.is-active .ej-step__desc {
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--tj-inverse-alpha-65);
 }
 
 /* ─── Summary ──────────────────────────────────────────────── */
@@ -892,7 +893,7 @@ const brandIds: Record<string, string> = {
 .ej-summary__plus,
 .ej-summary__eq {
   font-size: 1.2rem;
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--tj-inverse-alpha-20);
   font-weight: var(--tj-font-extralight);
 }
 
@@ -904,13 +905,13 @@ const brandIds: Record<string, string> = {
 
 .ej-summary__text {
   font-size: var(--tj-text-body);
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--tj-inverse-alpha-40);
   letter-spacing: 0.02em;
 }
 
 /* ─── Desktop Alternating Layout ───────────────────────────── */
 
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .ej-timeline {
     padding: 0;
   }
@@ -920,7 +921,7 @@ const brandIds: Record<string, string> = {
   }
 
   .ej-step:nth-child(even) .ej-step__card-inner {
-    text-align: left;
+    text-align: end;
   }
 
   /* Connect card to beam with a thin line */
@@ -930,19 +931,19 @@ const brandIds: Record<string, string> = {
     top: 50%;
     height: 1px;
     width: 40px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1));
+    background: linear-gradient(90deg, transparent, var(--tj-inverse-alpha-10));
     opacity: 0;
     transition: opacity 0.5s ease;
   }
 
   .ej-step:nth-child(odd)::before {
-    right: -40px;
-    background: linear-gradient(270deg, transparent, rgba(255,255,255,0.1));
+    inset-inline-start: -40px;
+    background: linear-gradient(270deg, transparent, var(--tj-inverse-alpha-10));
   }
 
   .ej-step:nth-child(even)::before {
-    left: -40px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1));
+    inset-inline-end: -40px;
+    background: linear-gradient(90deg, transparent, var(--tj-inverse-alpha-10));
   }
 
   .ej-step.is-active::before {
@@ -957,10 +958,10 @@ const brandIds: Record<string, string> = {
 
 /* ─── Mobile Responsive ────────────────────────────────────── */
 
-@media (max-width: 991px) {
+@media (max-width: 1023px) {
   .ej-step {
     padding: 30px 0;
-    padding-right: 65px;
+    padding-inline-start: 65px;
   }
 
   .ej-step__card-inner {
@@ -980,11 +981,11 @@ const brandIds: Record<string, string> = {
   }
 
   .ej-beam {
-    right: 30px;
+    inset-inline-start: 30px;
   }
 
   .ej-step__node {
-    right: 16px;
+    inset-inline-start: 16px;
     width: 28px;
     height: 28px;
   }
@@ -1004,7 +1005,7 @@ const brandIds: Record<string, string> = {
   }
 }
 
-@media (max-width: 820px) {
+@media (max-width: 767px) {
   .ej-section {
     padding: clamp(4rem, 12vw, 6rem) 0;
   }
@@ -1036,7 +1037,7 @@ const brandIds: Record<string, string> = {
   }
 
   .ej-beam {
-    right: 23px;
+    inset-inline-start: 23px;
     width: 2px;
   }
 
@@ -1048,12 +1049,13 @@ const brandIds: Record<string, string> = {
 
   .ej-step {
     opacity: 1;
-    padding: 14px 54px 14px 0;
+    padding-block: 14px;
+    padding-inline: 54px 0;
     width: 100%;
   }
 
   .ej-step__node {
-    right: 10px;
+    inset-inline-start: 10px;
     width: 28px;
     height: 28px;
   }
@@ -1082,7 +1084,7 @@ const brandIds: Record<string, string> = {
 
   .ej-step__progress {
     top: 14px;
-    left: 16px;
+    inset-inline-end: 16px;
   }
 
   .ej-step__title {
@@ -1106,22 +1108,21 @@ const brandIds: Record<string, string> = {
 }
 
 /* ─── Small Mobile ─────────────────────────────────────────── */
-@media (max-width: 480px) {
+@media (max-width: 359px) {
   .ej-header__title {
     font-size: clamp(1.3rem, 7vw, 1.6rem);
   }
 
   .ej-step {
-    padding-right: 46px;
-    padding-left: 0;
+    padding-inline: 46px 0;
   }
 
   .ej-beam {
-    right: 18px;
+    inset-inline-start: 18px;
   }
 
   .ej-step__node {
-    right: 8px;
+    inset-inline-start: 8px;
     width: 22px;
     height: 22px;
   }

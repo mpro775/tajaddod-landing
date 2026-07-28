@@ -1,21 +1,16 @@
 import { gsap } from 'gsap';
+import { documentDirection, fromInlineStart } from '../lib/direction';
 
 export function initHeroMotion() {
   const hero = document.querySelector<HTMLElement>('.cinematic-hero');
   if (!hero) return;
 
   const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const isMobileViewport = window.matchMedia('(max-width: 820px)').matches;
-  const heroBg = hero.querySelector<HTMLImageElement>('.hero-bg');
+  const direction = documentDirection();
+  const isMobileViewport = window.matchMedia('(max-width: 767px)').matches;
+  const motionScale = isMobileViewport ? 0.58 : 1;
+  const duration = (seconds: number) => seconds * motionScale;
   const brandAnchors = hero.querySelectorAll<HTMLElement>('.brand-anchor');
-
-  if (isMobileViewport && heroBg?.dataset.mobileSrc) {
-    const mobileScene = new Image();
-    mobileScene.onload = () => {
-      heroBg.src = heroBg.dataset.mobileSrc || heroBg.src;
-    };
-    mobileScene.src = heroBg.dataset.mobileSrc;
-  }
 
   brandAnchors.forEach((anchor) => {
     const brandId = anchor.getAttribute('data-brand');
@@ -88,7 +83,7 @@ export function initHeroMotion() {
   tl.to('.hero-bg', {
     opacity: 1,
     scale: 1.01,
-    duration: 0.9,
+    duration: duration(0.9),
   })
     .fromTo('.hero-center-glow', {
       opacity: 0,
@@ -96,7 +91,7 @@ export function initHeroMotion() {
     }, {
       opacity: 0.78,
       scale: 1,
-      duration: 0.75,
+      duration: duration(0.75),
     }, '-=0.45')
     .fromTo('.tajaddod-logo-hero', {
       opacity: 0,
@@ -106,38 +101,38 @@ export function initHeroMotion() {
       opacity: 1,
       scale: 1,
       filter: 'blur(0px)',
-      duration: 0.75,
+      duration: duration(0.75),
     }, '-=0.42')
     .fromTo('.brand-anchor-liper', {
       opacity: 0,
-      x: -28,
+      x: fromInlineStart(28, direction),
       y: -16,
     }, {
       opacity: 1,
       x: 0,
       y: 0,
-      duration: 0.68,
+      duration: duration(0.68),
     }, '-=0.25')
     .fromTo('.brand-anchor-cnc', {
       opacity: 0,
-      x: -28,
+      x: fromInlineStart(28, direction),
       y: 18,
     }, {
       opacity: 1,
       x: 0,
       y: 0,
-      duration: 0.68,
+      duration: duration(0.68),
     }, '-=0.52')
     .to('.energy-path', {
       strokeDashoffset: 0,
-      duration: 1.8,
-      stagger: 0.16,
+      duration: duration(1.8),
+      stagger: duration(0.16),
       ease: 'power2.inOut',
     }, '-=0.16')
     .to('.energy-core', {
       opacity: 0.92,
       scale: 1,
-      duration: 0.45,
+      duration: duration(0.45),
     }, '-=0.7')
     .fromTo('.hero-content h1, .hero-content p, .hero-actions', {
       opacity: 0,
@@ -145,8 +140,8 @@ export function initHeroMotion() {
     }, {
       opacity: 1,
       y: 0,
-      stagger: 0.12,
-      duration: 0.72,
+      stagger: duration(0.12),
+      duration: duration(0.72),
     }, '-=1.05')
     .fromTo('.hero-trust-item', {
       opacity: 0,
@@ -154,8 +149,8 @@ export function initHeroMotion() {
     }, {
       opacity: 1,
       y: 0,
-      stagger: 0.08,
-      duration: 0.58,
+      stagger: duration(0.08),
+      duration: duration(0.58),
     }, '-=0.42');
 
   if (!isMobileViewport) {

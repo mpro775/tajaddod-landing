@@ -6,86 +6,52 @@
  */
 import Icon from '../ui/Icon.astro';
 import SectionHeader from '../layout/SectionHeader.astro';
+import type { Locale } from '../../lib/api/types';
+import { dictionary } from '../../i18n';
 
-// Detailed data representing who we serve and their specific value propositions
-const sectorDetails = [
+const { locale } = Astro.props as { locale: Locale };
+const content = dictionary(locale).home.sectors;
+const sectorVisuals = [
   {
     id: 'retailers',
-    title: 'التجار والموزعون',
     icon: 'store',
     accent: 'blue',
     accentColor: 'var(--tj-blue)',
     accentColorRgb: '30, 153, 211',
-    statement: 'شراكة نمو مستدامة تضمن تدفق المنتجات، استقرار الأسعار، وزيادة المبيعات.',
-    features: [
-      'حلول متخصصة في الحماية، التحكم، الإضاءة والطاقة عبر علامات موثوقة ومنظومة توريد واضحة.',
-      'سلسلة إمداد مرنة تضمن التوريد المستمر وتفادي انقطاع المخزون.',
-      'دعم تسويقي وتدريبي متكامل لفرق المبيعات لديكم لرفع الكفاءة.',
-      'سياسات ضمان واضحة وموثوقة تضمن حماية ورضا عملائكم.'
-    ],
-    brands: [
-      { name: 'CNC', logo: '/logos/cnc-logo.svg', role: 'حماية وتحكم' },
-      { name: 'Liper', logo: '/logos/liper-logo.svg', role: 'إنارة وطاقة' }
-    ]
   },
   {
     id: 'contractors',
-    title: 'المقاولون',
     icon: 'helmet',
     accent: 'green',
     accentColor: 'var(--tj-green)',
     accentColorRgb: '21, 150, 71',
-    statement: 'حلول كهربائية معتمدة ومطابقة للمواصفات تسرّع تسليم المشاريع وتضمن متانتها.',
-    features: [
-      'منظومة كهرباء متكاملة من نقطة التشغيل إلى الحماية ثم الإنارة.',
-      'قواطع ومكونات حماية مطابقة لأعلى المعايير الحكومية والهندسية.',
-      'تسعير منافس وتوريد مرن يتناسب مع الجداول الزمنية للمشاريع.',
-      'دعم فني هندسي متكامل لمراجعة المخططات وتقديم حلول بديلة ذكية.'
-    ],
-    brands: [
-      { name: 'CNC', logo: '/logos/cnc-logo.svg', role: 'حماية وتوزيع' },
-      { name: 'Liper', logo: '/logos/liper-logo.svg', role: 'حلول الإضاءة' }
-    ]
   },
   {
     id: 'technicians',
-    title: 'الفنيون',
     icon: 'tool',
     accent: 'lime',
     accentColor: 'var(--tj-orange)',
     accentColorRgb: '255, 140, 0',
-    statement: 'أدوات وحلول كهربائية مصممة لسهولة التركيب وأمان الصيانة لزيادة كفاءة عملك.',
-    features: [
-      'تصاميم ذكية وسريعة التوصيل توفر نصف وقت التركيب والجهد.',
-      'مقاومة عالية للظروف التشغيلية لتقليل احتمالات الصيانة والأعطال.',
-      'توفر كتالوجات تفصيلية ومخططات واضحة لكل المنتجات واللوحات.',
-      'دعم فني هاتفي وميداني مباشر لحل مشكلات التركيب والتحكم الصناعي.'
-    ],
-    brands: [
-      { name: 'CNC', logo: '/logos/cnc-logo.svg', role: 'تحكم وحماية' },
-      { name: 'Liper', logo: '/logos/liper-logo.svg', role: 'تركيبات إنارة' }
-    ]
   },
   {
     id: 'owners',
-    title: 'أصحاب المشاريع والمطورون',
     icon: 'building',
     accent: 'blue',
     accentColor: 'var(--tj-blue)',
     accentColorRgb: '30, 153, 211',
-    statement: 'منظومة كهرباء وطاقة آمنة، موفرة للاستهلاك، وتضفي قيمة استثمارية جمالية لعقاراتكم.',
-    features: [
-      'إضاءة وحلول طاقة متناسقة مع متطلبات المشاريع الحديثة، مع حماية كهربائية موثوقة.',
-      'حماية فائقة للأفراد والأجهزة الحساسة داخل المنشأة (CNC).',
-      'توفير استهلاك الطاقة وحلول مستقلة صديقة للبيئة (Liper Solar).',
-      'قيمة حقيقية مقابل الاستثمار بضمان حقيقي طويل الأجل لبناء الثقة.'
-    ],
-    brands: [
-      { name: 'CNC', logo: '/logos/cnc-logo.svg', role: 'أمان واستمرارية' },
-      { name: 'Liper', logo: '/logos/liper-logo.svg', role: 'إنارة وطاقة مستدامة' }
-    ]
   }
 ];
+const sectorDetails = content.items.map((item) => {
+  const visual = sectorVisuals.find((entry) => entry.id === item.id)!;
+  return {
+    ...item,
+    ...visual,
+    brands: [
+      { name: 'CNC', logo: '/logos/cnc-logo.svg', role: item.brandRoles.cnc },
+      { name: 'Liper', logo: '/logos/liper-logo.svg', role: item.brandRoles.liper },
+    ],
+  };
+});
 ---
 <section class="section sectors-section layer-cinematic" id="sectors">
   <!-- Cinematic Background -->
@@ -101,9 +67,9 @@ const sectorDetails = [
     <div class="sectors-sidebar">
       <SectionHeader
         dark
-        eyebrow="من نخدم"
-        title="صفحة واحدة تفهم منها كل فئة أين تجد قيمتها"
-        description="صممنا حلولنا لتلبي احتياجات فئات السوق المختلفة؛ من التجار والمقاولين إلى الفنيين والمطورين، بلغة واضحة وفوائد ملموسة."
+        eyebrow={content.eyebrow}
+        title={content.title}
+        description={content.description}
       />
 
       <div class="sc-tabs" data-reveal>
@@ -114,7 +80,7 @@ const sectorDetails = [
             </span>
             <div class="sc-tab__label">
               <strong>{sec.title}</strong>
-              <span>اكتشف القيمة المخصصة</span>
+              <span>{content.discover}</span>
             </div>
             <span class="sc-tab__arrow" aria-hidden="true">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -138,21 +104,19 @@ const sectorDetails = [
             <Icon name="store" />
           </div>
           <div class="sc-board__meta">
-            <h3 id="board-title">التجار والموزعون</h3>
-            <span class="sc-board__badge">قيمة استثمارية مخصصة</span>
+            <h3 id="board-title">{sectorDetails[0].title}</h3>
+            <span class="sc-board__badge">{content.badge}</span>
           </div>
         </div>
 
         <!-- Value Statement -->
-        <p class="sc-board__statement" id="board-statement">
-          شراكة نمو مستدامة تضمن تدفق المنتجات، استقرار الأسعار، وزيادة المبيعات.
-        </p>
+        <p class="sc-board__statement" id="board-statement">{sectorDetails[0].statement}</p>
 
         <div class="sc-board__divider"></div>
 
         <!-- Value Propositions Checklist -->
         <div class="sc-board__checklist-wrapper">
-          <h4>ما نقدمه لك:</h4>
+          <h4>{content.offer}</h4>
           <ul class="sc-board__checklist" id="board-checklist">
             {sectorDetails[0].features.map((feat) => (
               <li>
@@ -169,7 +133,7 @@ const sectorDetails = [
 
         <!-- Associated Brands Chips -->
         <div class="sc-board__brands-wrapper">
-          <h4>العلامات المرتبطة:</h4>
+          <h4>{content.relatedBrands}</h4>
           <div class="sc-board__brands" id="board-brands">
             {sectorDetails[0].brands.map((brand) => (
               <div class="sc-brand-tag">
@@ -189,12 +153,12 @@ const sectorDetails = [
     <SectionHeader
       align="center"
       dark
-      eyebrow="من نخدم"
-      title="صفحة واحدة تفهم منها كل فئة أين تجد قيمتها"
-      description="صممنا حلولنا لتلبي احتياجات فئات السوق المختلفة؛ من التجار والمقاولين إلى الفنيين والمطورين، بلغة واضحة وفوائد ملموسة."
+      eyebrow={content.eyebrow}
+      title={content.title}
+      description={content.description}
     />
 
-    <div class="sc-mobile-tabs" role="tablist" aria-label="اختيار الفئة">
+    <div class="sc-mobile-tabs" role="tablist" aria-label={content.tabsLabel}>
       {sectorDetails.map((sec, i) => (
         <button
           class={`sc-mobile-tab sc-mobile-tab--${sec.accent} ${i === 0 ? 'is-active' : ''}`}
@@ -203,6 +167,7 @@ const sectorDetails = [
           id={`sector-mobile-tab-${sec.id}`}
           aria-selected={i === 0 ? 'true' : 'false'}
           aria-controls={`sector-mobile-panel-${sec.id}`}
+          tabindex={i === 0 ? '0' : '-1'}
           data-mobile-sector-tab={sec.id}
         >
           {sec.title}
@@ -231,7 +196,7 @@ const sectorDetails = [
             
             <p class="sc-mobile-card__statement">{sec.statement}</p>
             
-            <div class="sc-mobile-card__checklist-title">ما نقدمه لك:</div>
+            <div class="sc-mobile-card__checklist-title">{content.offer}</div>
             <ul class="sc-mobile-card__checklist">
               {sec.features.slice(0, 3).map((feat) => (
                 <li>
@@ -245,7 +210,7 @@ const sectorDetails = [
               ))}
             </ul>
 
-            <div class="sc-mobile-card__brands-title">العلامات المرتبطة:</div>
+            <div class="sc-mobile-card__brands-title">{content.relatedBrands}</div>
             <div class="sc-mobile-card__brands">
               {sec.brands.map((brand) => (
                 <div class="sc-brand-tag">
@@ -348,15 +313,16 @@ const sectorDetails = [
 
     const mobileTabs = document.querySelectorAll('[data-mobile-sector-tab]');
     const mobilePanels = document.querySelectorAll('[data-mobile-sector-panel]');
+    const isRtl = document.documentElement.dir === 'rtl';
 
-    mobileTabs.forEach(tab => {
-      tab.addEventListener('click', () => {
+    const activateMobileTab = (tab) => {
         const sectorId = tab.getAttribute('data-mobile-sector-tab');
         if (!sectorId) return;
 
         mobileTabs.forEach(item => {
           item.classList.remove('is-active');
           item.setAttribute('aria-selected', 'false');
+          item.setAttribute('tabindex', '-1');
         });
 
         mobilePanels.forEach(panel => {
@@ -367,9 +333,32 @@ const sectorDetails = [
 
         tab.classList.add('is-active');
         tab.setAttribute('aria-selected', 'true');
+        tab.setAttribute('tabindex', '0');
         if (tab instanceof HTMLElement) {
           tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
+    };
+
+    mobileTabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activateMobileTab(tab));
+      tab.addEventListener('keydown', (event) => {
+        if (!(event instanceof KeyboardEvent)) return;
+        const lastIndex = mobileTabs.length - 1;
+        let targetIndex = index;
+        const inlineNext = isRtl ? -1 : 1;
+        if (event.key === 'ArrowRight') {
+          targetIndex = (index + inlineNext + mobileTabs.length) % mobileTabs.length;
+        } else if (event.key === 'ArrowLeft') {
+          targetIndex = (index - inlineNext + mobileTabs.length) % mobileTabs.length;
+        }
+        else if (event.key === 'Home') targetIndex = 0;
+        else if (event.key === 'End') targetIndex = lastIndex;
+        else return;
+
+        event.preventDefault();
+        const target = mobileTabs[targetIndex];
+        activateMobileTab(target);
+        if (target instanceof HTMLElement) target.focus();
       });
     });
   });
@@ -384,10 +373,10 @@ const sectorDetails = [
 .sectors-section {
   position: relative;
   background: #020609;
-  color: #fff;
+  color: var(--tj-text-inverse);
   overflow: hidden;
   padding: clamp(90px, 11vw, 150px) 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--tj-inverse-alpha-05);
 }
 
 /* Background Grids & Glows */
@@ -403,8 +392,8 @@ const sectorDetails = [
   inset: 0;
   opacity: 0.03;
   background-image:
-    linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+    linear-gradient(var(--tj-inverse-alpha-08) 1px, transparent 1px),
+    linear-gradient(90deg, var(--tj-inverse-alpha-08) 1px, transparent 1px);
   background-size: 64px 64px;
 }
 
@@ -466,8 +455,8 @@ const sectorDetails = [
   gap: 16px;
   padding: 16px 20px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--tj-inverse-alpha-02);
+  border: 1px solid var(--tj-inverse-alpha-05);
   text-align: start;
   cursor: pointer;
   position: relative;
@@ -495,17 +484,17 @@ const sectorDetails = [
 
 /* Hover and Active Tab states */
 .sc-tab:hover {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: var(--tj-inverse-alpha-04);
+  border-color: var(--tj-inverse-alpha-10);
 }
 
 .sc-tab.is-active {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--tj-inverse-alpha-08);
   border-color: rgba(var(--tab-accent-rgb), 0.3);
   box-shadow:
-    0 12px 30px rgba(0, 0, 0, 0.3),
+    0 12px 30px color-mix(in srgb, var(--tj-neutral-950) 30%, transparent),
     inset 0 0 15px rgba(var(--tab-accent-rgb), 0.1);
-  transform: translateX(-6px);
+  transform: translateX(calc(var(--tj-inline-direction) * 6px));
 }
 
 .sc-tab.is-active::before {
@@ -525,9 +514,9 @@ const sectorDetails = [
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.6);
+  background: var(--tj-inverse-alpha-05);
+  border: 1px solid var(--tj-inverse-alpha-08);
+  color: var(--tj-inverse-alpha-60);
   transition: background 0.3s, color 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
 }
 
@@ -550,27 +539,27 @@ const sectorDetails = [
 
 .sc-tab__label strong {
   display: block;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--tj-inverse-alpha-70);
   font-size: var(--tj-text-body-lg);
   font-weight: var(--tj-font-bold);
   transition: color 0.3s;
 }
 
 .sc-tab.is-active .sc-tab__label strong {
-  color: #fff;
+  color: var(--tj-text-inverse);
 }
 
 .sc-tab__label span {
   display: block;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--tj-inverse-alpha-50);
   font-size: var(--tj-text-nano);
   margin-top: 2px;
 }
 
 .sc-tab__arrow {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--tj-inverse-alpha-30);
   opacity: 0;
-  transform: translateX(10px);
+  transform: translateX(calc(var(--tj-inline-direction) * -10px));
   transition: opacity 0.3s, transform 0.3s, color 0.3s;
 }
 
@@ -595,12 +584,12 @@ const sectorDetails = [
   position: relative;
   overflow: hidden;
   padding: 44px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--tj-inverse-alpha-02);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--tj-inverse-alpha-06);
   border-radius: 38px;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 30px 60px color-mix(in srgb, var(--tj-neutral-950) 40%, transparent);
   transition:
     opacity 0.3s ease,
     transform 0.4s var(--tj-ease-smooth),
@@ -620,7 +609,7 @@ const sectorDetails = [
 .sc-board:hover {
   border-color: rgba(var(--board-accent-color-rgb), 0.3);
   box-shadow:
-    0 40px 80px rgba(0, 0, 0, 0.5),
+    0 40px 80px color-mix(in srgb, var(--tj-neutral-950) 50%, transparent),
     0 0 30px rgba(var(--board-accent-color-rgb), 0.15);
 }
 
@@ -667,7 +656,7 @@ const sectorDetails = [
 }
 
 .sc-board__meta h3 {
-  color: #fff;
+  color: var(--tj-text-inverse);
   font-size: clamp(1.4rem, 2.2vw, 1.8rem);
   font-weight: var(--tj-font-bold);
   margin-bottom: 4px;
@@ -689,7 +678,7 @@ const sectorDetails = [
 .sc-board__statement {
   position: relative;
   z-index: 1;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--tj-inverse-alpha-90);
   font-size: var(--tj-text-body-lg);
   font-weight: var(--tj-font-semibold);
   line-height: 1.8;
@@ -699,7 +688,7 @@ const sectorDetails = [
 .sc-board__divider {
   height: 1px;
   width: 100%;
-  background: linear-gradient(90deg, rgba(255,255,255,0.1), transparent);
+  background: linear-gradient(90deg, var(--tj-inverse-alpha-10), transparent);
   margin-bottom: 28px;
 }
 
@@ -712,7 +701,7 @@ const sectorDetails = [
 
 .sc-board__checklist-wrapper h4,
 .sc-board__brands-wrapper h4 {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--tj-inverse-alpha-90);
   font-size: var(--tj-text-small);
   font-weight: var(--tj-font-bold);
   margin-bottom: 16px;
@@ -731,7 +720,7 @@ const sectorDetails = [
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--tj-inverse-alpha-60);
   font-size: var(--tj-text-body);
   line-height: 1.65;
 }
@@ -772,15 +761,15 @@ const sectorDetails = [
   align-items: center;
   gap: 10px;
   padding: 8px 14px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--tj-inverse-alpha-03);
+  border: 1px solid var(--tj-inverse-alpha-08);
   border-radius: 14px;
   transition: border-color 0.3s, background 0.3s, transform 0.3s;
 }
 
 .sc-brand-tag:hover {
-  border-color: rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--tj-inverse-alpha-20);
+  background: var(--tj-inverse-alpha-05);
   transform: translateY(-2px);
 }
 
@@ -797,18 +786,18 @@ const sectorDetails = [
 }
 
 .sc-brand-tag__name {
-  color: #fff;
+  color: var(--tj-text-inverse);
   font-size: var(--tj-text-caption);
   font-weight: var(--tj-font-bold);
   display: none;
 }
 
 .sc-brand-tag__role {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--tj-inverse-alpha-50);
   font-size: var(--tj-text-nano);
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
-  padding-right: 8px;
-  margin-right: 2px;
+  border-inline-start: 1px solid var(--tj-inverse-alpha-10);
+  padding-inline-start: 8px;
+  margin-inline-start: 2px;
 }
 
 /* ────────────────────────────────────────────────────────────────────────
@@ -821,7 +810,7 @@ const sectorDetails = [
   }
 }
 
-@media (max-width: 820px) {
+@media (max-width: 767px) {
   .sectors-desktop-layout {
     display: none;
   }
@@ -850,10 +839,10 @@ const sectorDetails = [
     flex: 1 1 calc(50% - 10px);
     min-height: 46px;
     padding: 10px 14px;
-    border: 1px solid rgba(255,255,255,.08);
+    border: 1px solid var(--tj-inverse-alpha-08);
     border-radius: 14px;
-    color: rgba(255,255,255,.66);
-    background: rgba(255,255,255,.04);
+    color: var(--tj-inverse-alpha-65);
+    background: var(--tj-inverse-alpha-04);
     font-size: .85rem;
     font-weight: var(--tj-font-bold);
     text-align: center;
@@ -865,7 +854,7 @@ const sectorDetails = [
   .sc-mobile-tab--lime { --tab-accent: var(--tj-orange); --tab-accent-rgb: 255, 140, 0; }
 
   .sc-mobile-tab.is-active {
-    color: #fff;
+    color: var(--tj-text-inverse);
     border-color: rgba(var(--tab-accent-rgb), .34);
     background: rgba(var(--tab-accent-rgb), .14);
     box-shadow: 0 10px 28px rgba(var(--tab-accent-rgb), .14);
@@ -883,10 +872,10 @@ const sectorDetails = [
   .sc-mobile-card {
     position: relative;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--tj-inverse-alpha-02);
+    border: 1px solid var(--tj-inverse-alpha-05);
     border-radius: 28px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 40px color-mix(in srgb, var(--tj-neutral-950) 30%, transparent);
     animation: scMobilePanelIn .24s ease;
   }
 
@@ -948,13 +937,13 @@ const sectorDetails = [
 
   .sc-mobile-card h3 {
     margin: 0;
-    color: #fff;
+    color: var(--tj-text-inverse);
     font-size: var(--tj-text-h4);
     font-weight: var(--tj-font-bold);
   }
 
   .sc-mobile-card__statement {
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--tj-inverse-alpha-90);
     font-size: .92rem;
     font-weight: var(--tj-font-semibold);
     line-height: 1.75;
@@ -963,7 +952,7 @@ const sectorDetails = [
 
   .sc-mobile-card__checklist-title,
   .sc-mobile-card__brands-title {
-    color: #fff;
+    color: var(--tj-text-inverse);
     font-size: var(--tj-text-small);
     font-weight: var(--tj-font-bold);
     margin-bottom: 12px;
@@ -981,7 +970,7 @@ const sectorDetails = [
     display: flex;
     align-items: flex-start;
     gap: 10px;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--tj-inverse-alpha-60);
     font-size: .84rem;
     line-height: 1.6;
   }

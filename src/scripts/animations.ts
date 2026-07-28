@@ -1,5 +1,6 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { documentDirection, fromInlineEnd, fromInlineStart } from '../lib/direction';
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -7,7 +8,15 @@ const header = document.querySelector<HTMLElement>('[data-header]');
 const menuToggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
 const mobileNav = document.querySelector<HTMLElement>('[data-mobile-nav]');
 const mobileNavBackdrop = document.querySelector<HTMLButtonElement>('[data-mobile-nav-backdrop]');
-const isMobileViewport = window.matchMedia('(max-width: 820px)').matches;
+const isMobileViewport = window.matchMedia('(max-width: 1023px)').matches;
+const direction = documentDirection();
+let restoreMenuFocus = false;
+
+const mobileMenuFocusable = () => mobileNav
+  ? Array.from(mobileNav.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    )).filter((element) => !element.hasAttribute('hidden'))
+  : [];
 
 const setHeaderState = () => {
   header?.classList.toggle('is-scrolled', window.scrollY > 20);
@@ -22,7 +31,21 @@ const setMobileMenu = (open: boolean) => {
   menuToggle?.classList.toggle('is-active', open);
   header?.classList.toggle('is-menu-open', open);
   menuToggle?.setAttribute('aria-expanded', String(open));
+  menuToggle?.setAttribute(
+    'aria-label',
+    open ? menuToggle.dataset.closeLabel || '' : menuToggle.dataset.openLabel || '',
+  );
+  mobileNav?.setAttribute('aria-hidden', String(!open));
+  if (mobileNav) mobileNav.inert = !open;
   document.body.style.overflow = open ? 'hidden' : '';
+
+  if (open) {
+    restoreMenuFocus = true;
+    requestAnimationFrame(() => mobileMenuFocusable()[0]?.focus());
+  } else if (restoreMenuFocus) {
+    restoreMenuFocus = false;
+    menuToggle?.focus();
+  }
 };
 
 menuToggle?.addEventListener('click', () => {
@@ -41,7 +64,29 @@ mobileNav?.querySelectorAll('a').forEach((link) => {
 });
 
 window.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape') setMobileMenu(false);
+  if (event.key === 'Escape' && mobileNav?.classList.contains('is-open')) {
+    setMobileMenu(false);
+    return;
+  }
+
+  if (event.key !== 'Tab' || !mobileNav?.classList.contains('is-open')) return;
+  const focusable = mobileMenuFocusable();
+  if (focusable.length === 0) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+});
+
+window.addEventListener('resize', () => {
+  if (window.innerWidth >= 1024 && mobileNav?.classList.contains('is-open')) {
+    setMobileMenu(false);
+  }
 });
 
 if (!reduceMotion) {
@@ -106,7 +151,7 @@ if (!reduceMotion) {
 
   gsap.utils.toArray<HTMLElement>('[data-journey] li').forEach((step, index) => {
     gsap.from(step, {
-      x: index % 2 === 0 ? 34 : -34,
+      x: index % 2 === 0 ? fromInlineStart(34, direction) : fromInlineEnd(34, direction),
       opacity: 0,
       duration: 0.65,
       ease: 'power2.out',

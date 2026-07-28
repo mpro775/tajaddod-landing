@@ -21,12 +21,12 @@
 /* توهج كهربائي على الحواف */
 @keyframes electricGlow {
   0%, 100% {
-    box-shadow: 0 0 8px var(--glow-color, rgba(30, 153, 211, 0.3));
+    box-shadow: 0 0 8px var(--glow-color, color-mix(in srgb, var(--tj-blue) 30%, transparent));
   }
   50% {
     box-shadow:
-      0 0 20px var(--glow-color, rgba(30, 153, 211, 0.5)),
-      0 0 40px var(--glow-color, rgba(30, 153, 211, 0.2));
+      0 0 20px var(--glow-color, color-mix(in srgb, var(--tj-blue) 50%, transparent)),
+      0 0 40px var(--glow-color, color-mix(in srgb, var(--tj-blue) 20%, transparent));
   }
 }
 
@@ -197,7 +197,7 @@
   height: 2px;
   width: 44vw;
   background: var(--tj-gradient-energy);
-  filter: drop-shadow(0 0 12px rgba(139, 197, 67, 0.6));
+  filter: drop-shadow(0 0 12px color-mix(in srgb, var(--tj-green-light) 60%, transparent));
   animation: lineFlow 7s linear infinite;
   opacity: 0.58;
   pointer-events: none;
@@ -252,7 +252,7 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.08) 50%,
+    var(--tj-inverse-alpha-08) 50%,
     transparent 100%
   );
   background-size: 200% 100%;
@@ -332,7 +332,7 @@
 .hover-energy:hover {
   transform: translateY(-6px);
   box-shadow:
-    0 22px 58px rgba(33, 33, 36, 0.12),
+    0 22px 58px color-mix(in srgb, var(--tj-neutral-950) 12%, transparent),
     0 0 30px var(--accent-glow, var(--tj-blue-glow));
 }
 
@@ -439,7 +439,7 @@
 
 /* ─── Mobile Performance ─────────────────────────────────────────────── */
 
-@media (max-width: 820px) {
+@media (max-width: 767px) {
   .energy-line {
     opacity: 0.3;
     width: 60vw;

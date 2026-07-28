@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '../../lib/api/types';
 import type { VisualBrand } from '../../lib/visual/legacy-view';
+import { dictionary } from '../../i18n';
 
 interface Props {
   brand: VisualBrand;
@@ -8,7 +9,7 @@ interface Props {
 }
 
 const { brand, locale } = Astro.props;
-const isEn = locale === 'en';
+const labels = dictionary(locale).brands.applications;
 
 const accentMap: Record<string, { color: string; rgb: string }> = {
   cnc: { color: '#e63946', rgb: '230, 57, 70' },
@@ -17,33 +18,23 @@ const accentMap: Record<string, { color: string; rgb: string }> = {
 
 const accent = accentMap[brand.id] || accentMap.cnc;
 
-// Application icons mapped by name patterns
-const appIcons: Record<string, string> = {
-  'المشاريع السكنية': 'M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10',
-  'المنازل': 'M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10',
-  'المصانع والورش': 'M2 20h20 M4 20V10l4-6h8l4 6v10 M9 20v-4h6v4 M9 10h6',
-  'المكاتب والمباني التجارية': 'M6 2h12l4 8v12H2V10l4-8z M10 22V16h4v6 M10 8h4 M10 12h4',
-  'المرافق التجارية': 'M6 2h12l4 8v12H2V10l4-8z M10 22V16h4v6 M10 8h4 M10 12h4',
-  'منظومات الطاقة الشمسية': 'M12 2v4 M12 18v4 M4.93 4.93l2.83 2.83 M16.24 16.24l2.83 2.83 M2 12h4 M18 12h4 M4.93 19.07l2.83-2.83 M16.24 7.76l2.83-2.83',
-  'الشوارع والساحات': 'M9 18V6l6-3v12 M3 22v-2a3 3 0 013-3h12a3 3 0 013 3v2',
-  'الحدائق والمزارع': 'M12 22V10 M6 14c0-3.3 2.7-6 6-6s6 2.7 6 6 M8 22h8',
-  'Residential projects': 'M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10',
-  'Homes': 'M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10',
-  'Factories and workshops': 'M2 20h20 M4 20V10l4-6h8l4 6v10 M9 20v-4h6v4 M9 10h6',
-  'Commercial facilities': 'M6 2h12l4 8v12H2V10l4-8z M10 22V16h4v6 M10 8h4 M10 12h4',
-  'Offices and commercial buildings': 'M6 2h12l4 8v12H2V10l4-8z M10 22V16h4v6 M10 8h4 M10 12h4',
-  'Solar energy systems': 'M12 2v4 M12 18v4 M4.93 4.93l2.83 2.83 M16.24 16.24l2.83 2.83 M2 12h4 M18 12h4 M4.93 19.07l2.83-2.83 M16.24 7.76l2.83-2.83',
-  'Streets and public spaces': 'M9 18V6l6-3v12 M3 22v-2a3 3 0 013-3h12a3 3 0 013 3v2',
-  'Gardens and farms': 'M12 22V10 M6 14c0-3.3 2.7-6 6-6s6 2.7 6 6 M8 22h8',
+const iconPaths = {
+  home: 'M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10',
+  factory: 'M2 20h20 M4 20V10l4-6h8l4 6v10 M9 20v-4h6v4 M9 10h6',
+  commercial: 'M6 2h12l4 8v12H2V10l4-8z M10 22V16h4v6 M10 8h4 M10 12h4',
+  solar: 'M12 2v4 M12 18v4 M4.93 4.93l2.83 2.83 M16.24 16.24l2.83 2.83 M2 12h4 M18 12h4 M4.93 19.07l2.83-2.83 M16.24 7.76l2.83-2.83',
+  street: 'M9 18V6l6-3v12 M3 22v-2a3 3 0 013-3h12a3 3 0 013 3v2',
+  garden: 'M12 22V10 M6 14c0-3.3 2.7-6 6-6s6 2.7 6 6 M8 22h8',
+  fallback: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2',
 };
-
-const getIconPath = (app: string) => {
-  return appIcons[app] || Object.entries(appIcons).find(([key]) => app.includes(key.split(' ')[0]))?.[1]
-    || 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2';
+const brandApplicationIcons: Record<string, string[]> = {
+  cnc: [iconPaths.home, iconPaths.factory, iconPaths.commercial, iconPaths.solar],
+  liper: [iconPaths.home, iconPaths.commercial, iconPaths.street, iconPaths.garden],
 };
+const applicationIcons = brandApplicationIcons[brand.id] || [];
 ---
 
-<section class="brand-apps section" style={`--accent: ${accent.color}; --accent-rgb: ${accent.rgb};`}>
+<section class="brand-apps section theme-inverse" style={`--accent: ${accent.color}; --accent-rgb: ${accent.rgb};`}>
   <!-- Section background accent -->
   <div class="brand-apps__bg" aria-hidden="true">
     <div class="brand-apps__glow"></div>
@@ -54,13 +45,13 @@ const getIconPath = (app: string) => {
     <div class="brand-apps__header">
       <div class="brand-apps__eyebrow">
         <span class="brand-apps__eyebrow-line"></span>
-        <span class="brand-apps__eyebrow-tag">{isEn ? 'Applications' : 'مجالات التطبيق'}</span>
+        <span class="brand-apps__eyebrow-tag">{labels.eyebrow}</span>
         <span class="brand-apps__eyebrow-line"></span>
       </div>
       <h2 class="brand-apps__title">
-        {isEn ? 'Where are' : 'أين تستخدم منتجات'} <span>{brand.name}</span>{isEn ? ' products used?' : '؟'}
+        {labels.titleLead} <span>{brand.name}</span>{labels.titleTail}
       </h2>
-      <p class="brand-apps__desc">{isEn ? 'These solutions serve a wide range of sectors, projects and operating environments.' : 'تغطي منتجاتنا قطاعات واسعة تلبي احتياجات مختلف المشاريع والبيئات'}</p>
+      <p class="brand-apps__desc">{labels.description}</p>
     </div>
 
     <!-- Applications grid -->
@@ -76,7 +67,7 @@ const getIconPath = (app: string) => {
           <!-- Icon -->
           <div class="app-card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d={getIconPath(app)} />
+              <path d={applicationIcons[index] || iconPaths.fallback} />
             </svg>
           </div>
 
@@ -94,7 +85,7 @@ const getIconPath = (app: string) => {
 <style>
   .brand-apps {
     padding: clamp(70px, 9vw, 110px) 0;
-    color: #fff;
+    color: var(--tj-text-inverse);
     position: relative;
     overflow: hidden;
   }
@@ -153,7 +144,7 @@ const getIconPath = (app: string) => {
     font-size: clamp(2rem, 3.5vw, 2.6rem);
     font-weight: var(--tj-font-bold);
     margin-bottom: 16px;
-    color: #fff;
+    color: var(--tj-text-inverse);
   }
 
   .brand-apps__title span {
@@ -161,7 +152,7 @@ const getIconPath = (app: string) => {
   }
 
   .brand-apps__desc {
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--tj-inverse-alpha-50);
     font-size: 1.05rem;
     max-width: 550px;
     margin: 0 auto;
@@ -179,8 +170,8 @@ const getIconPath = (app: string) => {
   .app-card {
     position: relative;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.025);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--tj-inverse-alpha-02);
+    border: 1px solid var(--tj-inverse-alpha-06);
     border-radius: 24px;
     padding: 32px 28px;
     backdrop-filter: blur(10px);
@@ -197,7 +188,7 @@ const getIconPath = (app: string) => {
     border-color: rgba(var(--accent-rgb), 0.2);
     background: rgba(var(--accent-rgb), 0.04);
     box-shadow:
-      0 20px 50px rgba(0, 0, 0, 0.25),
+      0 20px 50px color-mix(in srgb, var(--tj-neutral-950) 25%, transparent),
       0 0 40px rgba(var(--accent-rgb), 0.06);
   }
 
@@ -226,7 +217,7 @@ const getIconPath = (app: string) => {
     top: 16px;
     right: 18px;
     font-size: var(--tj-text-micro);
-    color: rgba(255, 255, 255, 0.15);
+    color: var(--tj-inverse-alpha-15);
     font-weight: var(--tj-font-bold);
     font-variant-numeric: tabular-nums;
   }
@@ -259,7 +250,7 @@ const getIconPath = (app: string) => {
   .app-card__title {
     font-size: 1.15rem;
     font-weight: var(--tj-font-semibold);
-    color: #fff;
+    color: var(--tj-text-inverse);
     margin: 0;
     transition: color 0.3s ease;
   }
@@ -280,7 +271,7 @@ const getIconPath = (app: string) => {
   }
 
   /* ── Responsive ────────────────────────────────────────────── */
-  @media (max-width: 820px) {
+  @media (max-width: 767px) {
     .brand-apps__grid {
       grid-template-columns: repeat(2, 1fr);
       gap: 14px;
@@ -301,7 +292,7 @@ const getIconPath = (app: string) => {
     }
   }
 
-  @media (max-width: 520px) {
+  @media (max-width: 359px) {
     .brand-apps__grid {
       grid-template-columns: 1fr;
     }

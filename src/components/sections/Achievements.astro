@@ -1,5 +1,9 @@
 ---
-import { achievements } from '../../data/achievements';
+import type { Locale } from '../../lib/api/types';
+import { dictionary } from '../../i18n';
+
+const { locale } = Astro.props as { locale: Locale };
+const copy = dictionary(locale).home.achievements;
 
 const iconMap: Record<string, string> = {
   calendar: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 10H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
@@ -18,12 +22,12 @@ const iconMap: Record<string, string> = {
 
   <div class="container">
     <div class="section-header">
-      <span class="eyebrow">إنجازات تجدد</span>
-      <h2 class="section-title">أرقام تعكس حضورنا في سوق الكهرباء والطاقة</h2>
+      <span class="eyebrow">{copy.eyebrow}</span>
+      <h2 class="section-title">{copy.title}</h2>
     </div>
 
     <div class="achievements-grid" id="achievements-grid">
-      {achievements.map((item) => (
+      {copy.items.map((item) => (
         <div class="achievement-card">
           <div class="card-icon" set:html={iconMap[item.icon] || ''}></div>
           <div class="card-content">
@@ -52,7 +56,7 @@ const iconMap: Record<string, string> = {
       #091f2b 100%
     );
     overflow: hidden;
-    color: #fff;
+    color: var(--tj-text-inverse);
   }
   .achievements-bg {
     position: absolute;
@@ -67,18 +71,18 @@ const iconMap: Record<string, string> = {
     transform: translate(-50%, -50%);
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(30,153,211,0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, color-mix(in srgb, var(--tj-blue) 8%, transparent) 0%, transparent 70%);
     border-radius: 50%;
   }
   .energy-lines {
     position: absolute;
     inset: 0;
     background-image: 
-      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      linear-gradient(var(--tj-inverse-alpha-03) 1px, transparent 1px),
+      linear-gradient(90deg, var(--tj-inverse-alpha-03) 1px, transparent 1px);
     background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
-    -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
+    mask-image: radial-gradient(ellipse at center, var(--tj-neutral-950) 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse at center, var(--tj-neutral-950) 30%, transparent 80%);
   }
   .container {
     position: relative;
@@ -91,18 +95,18 @@ const iconMap: Record<string, string> = {
   .eyebrow {
     display: inline-block;
     padding: 6px 16px;
-    background: rgba(30,153,211,0.1);
-    color: #9be8ff;
-    border: 1px solid rgba(30,153,211,0.2);
+    background: color-mix(in srgb, var(--tj-blue) 10%, transparent);
+    color: var(--tj-blue-light);
+    border: 1px solid color-mix(in srgb, var(--tj-blue) 20%, transparent);
     border-radius: 999px;
     font-size: 0.9rem;
-    font-weight: var(--tj-font-medium);
+    font-weight: var(--tj-font-semibold);
     margin-bottom: 16px;
   }
   .section-title {
     font-size: clamp(2rem, 4vw, 2.8rem);
     font-weight: var(--tj-font-bold);
-    background: linear-gradient(135deg, #fff, rgba(255,255,255,0.7));
+    background: linear-gradient(135deg, var(--tj-text-inverse), var(--tj-inverse-alpha-70));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -132,10 +136,10 @@ const iconMap: Record<string, string> = {
   }
 
   .achievement-card {
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--tj-inverse-alpha-02);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--tj-inverse-alpha-05);
     border-radius: 20px;
     padding: 32px 24px;
     text-align: center;
@@ -154,15 +158,15 @@ const iconMap: Record<string, string> = {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(180deg, rgba(30,153,211,0.05) 0%, transparent 100%);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--tj-blue) 5%, transparent) 0%, transparent 100%);
     opacity: 0;
     transition: opacity 0.4s ease;
   }
 
   .achievement-card:hover {
     transform: translateY(-8px);
-    border-color: rgba(30,153,211,0.3);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.4), 0 0 20px rgba(30,153,211,0.1);
+    border-color: color-mix(in srgb, var(--tj-blue) 30%, transparent);
+    box-shadow: 0 15px 35px color-mix(in srgb, var(--tj-neutral-950) 40%, transparent), 0 0 20px color-mix(in srgb, var(--tj-blue) 10%, transparent);
   }
   
   .achievement-card:hover::before {
@@ -172,7 +176,7 @@ const iconMap: Record<string, string> = {
   .card-icon {
     width: 48px;
     height: 48px;
-    color: var(--tj-primary);
+    color: var(--tj-text-accent);
     margin-bottom: 24px;
     position: relative;
     z-index: 1;
@@ -191,7 +195,7 @@ const iconMap: Record<string, string> = {
   .card-number {
     font-size: 2.8rem;
     font-weight: var(--tj-font-black);
-    color: #fff;
+    color: var(--tj-text-inverse);
     line-height: 1;
     font-variant-numeric: tabular-nums;
   }
@@ -199,13 +203,13 @@ const iconMap: Record<string, string> = {
   .card-suffix {
     font-size: 1.5rem;
     font-weight: var(--tj-font-bold);
-    color: var(--tj-primary);
+    color: var(--tj-text-accent);
   }
 
   .card-label {
     font-size: 1.1rem;
     font-weight: var(--tj-font-semibold);
-    color: rgba(255,255,255,0.9);
+    color: var(--tj-inverse-alpha-90);
     margin-bottom: 12px;
     position: relative;
     z-index: 1;
@@ -213,7 +217,7 @@ const iconMap: Record<string, string> = {
 
   .card-desc {
     font-size: 0.85rem;
-    color: rgba(255,255,255,0.5);
+    color: var(--tj-inverse-alpha-50);
     line-height: 1.6;
     margin: 0;
     position: relative;
@@ -226,6 +230,7 @@ const iconMap: Record<string, string> = {
   document.addEventListener('DOMContentLoaded', () => {
     const counters = document.querySelectorAll('.counter');
     let hasAnimated = false;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const animateCounters = () => {
       if (hasAnimated) return;
@@ -234,6 +239,10 @@ const iconMap: Record<string, string> = {
       counters.forEach(counter => {
         const targetStr = counter.getAttribute('data-target');
         if (!targetStr) return;
+        if (reduceMotion) {
+          counter.textContent = targetStr;
+          return;
+        }
         
         const target = parseFloat(targetStr);
         const duration = 2000; // ms

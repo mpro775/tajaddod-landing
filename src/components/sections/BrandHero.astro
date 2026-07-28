@@ -2,6 +2,7 @@
 import type { Locale } from '../../lib/api/types';
 import type { VisualBrand } from '../../lib/visual/legacy-view';
 import { localePath } from '../../lib/content';
+import { dictionary, formatMessage } from '../../i18n';
 
 interface Props {
   brand: VisualBrand;
@@ -9,7 +10,7 @@ interface Props {
 }
 
 const { brand, locale } = Astro.props;
-const isEn = locale === 'en';
+const labels = dictionary(locale).brands.hero;
 
 const accentMap: Record<string, { color: string; rgb: string; gradient: string }> = {
   cnc: { color: '#e63946', rgb: '230, 57, 70', gradient: 'linear-gradient(135deg, #e63946, #ff6b6b)' },
@@ -19,7 +20,7 @@ const accentMap: Record<string, { color: string; rgb: string; gradient: string }
 const accent = accentMap[brand.id] || accentMap.cnc;
 ---
 
-<section class="brand-hero" style={`--accent: ${accent.color}; --accent-rgb: ${accent.rgb};`}>
+<section class="brand-hero theme-inverse" style={`--accent: ${accent.color}; --accent-rgb: ${accent.rgb};`}>
   <!-- Layered background -->
   <div class="brand-hero__bg" aria-hidden="true">
     <div class="brand-hero__gradient"></div>
@@ -43,11 +44,11 @@ const accent = accentMap[brand.id] || accentMap.cnc;
 
   <div class="container brand-hero__container">
     <!-- Breadcrumb -->
-    <nav class="brand-hero__breadcrumb" aria-label={isEn ? 'Breadcrumb' : 'مسار التنقل'}>
-      <a href={localePath(locale, '/')}>{isEn ? 'Home' : 'الرئيسية'}</a>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-      <a href={`${localePath(locale, '/')}#brands`}>{isEn ? 'Brands' : 'العلامات التجارية'}</a>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    <nav class="brand-hero__breadcrumb" aria-label={labels.breadcrumb}>
+      <a href={localePath(locale, '/')}>{labels.home}</a>
+      <svg class="directional-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      <a href={`${localePath(locale, '/')}#brands`}>{labels.brands}</a>
+      <svg class="directional-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
       <span>{brand.displayName}</span>
     </nav>
 
@@ -76,12 +77,12 @@ const accent = accentMap[brand.id] || accentMap.cnc;
       <div class="brand-hero__actions">
         <a href={`${localePath(locale, '/')}#contact`} class="brand-hero__btn brand-hero__btn--primary">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-          <span>{isEn ? `Contact us about ${brand.name}` : `تواصل معنا بخصوص ${brand.name}`}</span>
+          <span>{formatMessage(labels.contact, { brand: brand.name })}</span>
         </a>
         {brand.officialWebsite && (
           <a href={brand.officialWebsite} target="_blank" rel="noopener noreferrer" class="brand-hero__btn brand-hero__btn--outline">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-            <span>{isEn ? 'Official website' : 'الموقع الرسمي'}</span>
+            <span>{labels.officialWebsite}</span>
           </a>
         )}
       </div>
@@ -90,17 +91,17 @@ const accent = accentMap[brand.id] || accentMap.cnc;
       <div class="brand-hero__badges">
         <div class="brand-hero__badge">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <span>{isEn ? 'Authorized representative' : 'وكيل معتمد'}</span>
+          <span>{labels.representative}</span>
         </div>
         <div class="brand-hero__badge-divider"></div>
         <div class="brand-hero__badge">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          <span>{isEn ? 'Official warranty' : 'ضمان رسمي'}</span>
+          <span>{labels.warranty}</span>
         </div>
         <div class="brand-hero__badge-divider"></div>
         <div class="brand-hero__badge">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-          <span>{isEn ? 'Delivery across Yemen' : 'توصيل لجميع المحافظات'}</span>
+          <span>{labels.delivery}</span>
         </div>
       </div>
     </div>
@@ -117,7 +118,7 @@ const accent = accentMap[brand.id] || accentMap.cnc;
     position: relative;
     padding: clamp(140px, 18vw, 200px) 0 clamp(80px, 10vw, 120px);
     overflow: hidden;
-    color: #fff;
+    color: var(--tj-text-inverse);
     text-align: center;
     min-height: 85vh;
     display: flex;
@@ -149,11 +150,11 @@ const accent = accentMap[brand.id] || accentMap.cnc;
     inset: 0;
     opacity: 0.04;
     background-image:
-      linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px);
+      linear-gradient(var(--tj-inverse-alpha-15) 1px, transparent 1px),
+      linear-gradient(90deg, var(--tj-inverse-alpha-15) 1px, transparent 1px);
     background-size: 64px 64px;
-    mask-image: radial-gradient(ellipse at 50% 30%, #000 10%, transparent 70%);
-    -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 10%, transparent 70%);
+    mask-image: radial-gradient(ellipse at 50% 30%, var(--tj-neutral-950) 10%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 30%, var(--tj-neutral-950) 10%, transparent 70%);
   }
 
   .brand-hero__glow {
@@ -178,7 +179,7 @@ const accent = accentMap[brand.id] || accentMap.cnc;
     right: -10%;
     width: 500px;
     height: 500px;
-    background: rgba(30, 153, 211, 0.1);
+    background: color-mix(in srgb, var(--tj-blue) 10%, transparent);
     animation: heroGlowFloat 12s ease-in-out infinite alternate;
   }
 
@@ -187,7 +188,7 @@ const accent = accentMap[brand.id] || accentMap.cnc;
     left: -10%;
     width: 400px;
     height: 400px;
-    background: rgba(139, 197, 67, 0.08);
+    background: color-mix(in srgb, var(--tj-green-light) 8%, transparent);
     animation: heroGlowFloat 15s ease-in-out infinite alternate-reverse;
   }
 
@@ -206,7 +207,7 @@ const accent = accentMap[brand.id] || accentMap.cnc;
     position: absolute;
     height: 2px;
     width: 50vw;
-    background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.5), rgba(30, 153, 211, 0.4), transparent);
+    background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.5), color-mix(in srgb, var(--tj-blue) 40%, transparent), transparent);
     filter: drop-shadow(0 0 10px rgba(var(--accent-rgb), 0.4));
     animation: heroLineFlow 8s linear infinite;
     opacity: 0.4;
@@ -254,11 +255,11 @@ const accent = accentMap[brand.id] || accentMap.cnc;
     gap: 8px;
     margin-bottom: 40px;
     font-size: var(--tj-text-small);
-    color: rgba(255, 255, 255, 0.45);
+    color: var(--tj-inverse-alpha-50);
   }
 
   .brand-hero__breadcrumb a {
-    color: rgba(255, 255, 255, 0.55);
+    color: var(--tj-inverse-alpha-55);
     text-decoration: none;
     transition: color 0.25s ease;
   }
@@ -316,7 +317,7 @@ const accent = accentMap[brand.id] || accentMap.cnc;
 
   .brand-hero__orbit-ring--2 {
     inset: -22px;
-    border-color: rgba(255, 255, 255, 0.06);
+    border-color: var(--tj-inverse-alpha-06);
     animation-duration: 30s;
     animation-direction: reverse;
   }
@@ -336,7 +337,7 @@ const accent = accentMap[brand.id] || accentMap.cnc;
   .brand-hero__logo-wrapper {
     position: absolute;
     inset: 0;
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--tj-inverse-alpha-04);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-radius: 50%;
@@ -386,14 +387,14 @@ const accent = accentMap[brand.id] || accentMap.cnc;
     font-weight: var(--tj-font-bold);
     line-height: 1.2;
     margin-bottom: 24px;
-    color: #fff;
+    color: var(--tj-text-inverse);
     max-width: 700px;
   }
 
   /* ── Description ───────────────────────────────────────────── */
   .brand-hero__desc {
     font-size: clamp(1.05rem, 2vw, 1.2rem);
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--tj-inverse-alpha-60);
     line-height: 1.9;
     margin-bottom: 40px;
     max-width: 620px;
@@ -428,7 +429,7 @@ const accent = accentMap[brand.id] || accentMap.cnc;
 
   .brand-hero__btn--primary {
     background: var(--accent);
-    color: #fff;
+    color: var(--tj-text-inverse);
     box-shadow: 0 12px 32px rgba(var(--accent-rgb), 0.3);
   }
 
@@ -439,15 +440,15 @@ const accent = accentMap[brand.id] || accentMap.cnc;
   }
 
   .brand-hero__btn--outline {
-    background: rgba(255, 255, 255, 0.05);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: var(--tj-inverse-alpha-05);
+    color: var(--tj-text-inverse);
+    border: 1px solid var(--tj-inverse-alpha-15);
     backdrop-filter: blur(10px);
   }
 
   .brand-hero__btn--outline:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: var(--tj-inverse-alpha-10);
+    border-color: var(--tj-inverse-alpha-30);
     transform: translateY(-3px);
   }
 
@@ -458,8 +459,8 @@ const accent = accentMap[brand.id] || accentMap.cnc;
     gap: 20px;
     padding: 16px 28px;
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--tj-inverse-alpha-03);
+    border: 1px solid var(--tj-inverse-alpha-06);
     backdrop-filter: blur(12px);
   }
 
@@ -467,7 +468,7 @@ const accent = accentMap[brand.id] || accentMap.cnc;
     display: flex;
     align-items: center;
     gap: 8px;
-    color: rgba(255, 255, 255, 0.55);
+    color: var(--tj-inverse-alpha-55);
     font-size: var(--tj-text-small);
   }
 
@@ -481,7 +482,7 @@ const accent = accentMap[brand.id] || accentMap.cnc;
   .brand-hero__badge-divider {
     width: 1px;
     height: 18px;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--tj-inverse-alpha-10);
   }
 
   /* ── Scroll indicator ──────────────────────────────────────── */
@@ -507,7 +508,7 @@ const accent = accentMap[brand.id] || accentMap.cnc;
   }
 
   /* ── Responsive ────────────────────────────────────────────── */
-  @media (max-width: 820px) {
+  @media (max-width: 767px) {
     .brand-hero {
       min-height: auto;
       padding: 120px 0 60px;
@@ -543,7 +544,7 @@ const accent = accentMap[brand.id] || accentMap.cnc;
     }
   }
 
-  @media (max-width: 520px) {
+  @media (max-width: 359px) {
     .brand-hero__actions {
       width: 100%;
     }

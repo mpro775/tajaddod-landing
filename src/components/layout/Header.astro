@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '../../lib/api/types';
 import { alternatePath, localePath } from '../../lib/content';
+import { dictionary } from '../../i18n';
 
 interface Props {
   locale: Locale;
@@ -8,38 +9,86 @@ interface Props {
 }
 
 const { locale, pathname } = Astro.props;
-const isEn = locale === 'en';
+const copy = dictionary(locale);
 const home = localePath(locale, '/');
 const navigation = [
-  { label: isEn ? 'About' : 'من نحن', href: `${home}#about` },
-  { label: isEn ? 'Brands' : 'العلامات', href: `${home}#brands` },
-  { label: isEn ? 'Projects' : 'المشاريع', href: localePath(locale, '/projects') },
-  { label: isEn ? 'Achievements' : 'الإنجازات', href: `${home}#achievements` },
-  { label: isEn ? 'News' : 'الأخبار', href: localePath(locale, '/news') },
-  { label: isEn ? 'Contact' : 'تواصل معنا', href: `${home}#contact` },
+  { label: copy.nav.about, href: `${home}#about` },
+  { label: copy.nav.brands, href: `${home}#brands` },
+  { label: copy.nav.projects, href: localePath(locale, '/projects') },
+  { label: copy.nav.achievements, href: `${home}#achievements` },
+  { label: copy.nav.news, href: localePath(locale, '/news') },
+  { label: copy.nav.contact, href: `${home}#contact` },
 ];
 ---
 <header class="site-header" data-header>
   <div class="container header-inner">
-    <a class="brand-lockup" href={home} aria-label={isEn ? 'Tajaddod - Home' : 'تجدد - العودة للرئيسية'}>
-      <img src="/logos/tajaddod-logo.svg" alt={isEn ? 'Tajaddod logo' : 'شعار تجدد'} width="164" height="58" />
+    <a class="brand-lockup" href={home} aria-label={copy.header.homeLabel}>
+      <img class="brand-lockup__logo brand-lockup__logo--color" src="/logos/tajaddod-logo.svg" alt="" width="164" height="58" />
+      <img class="brand-lockup__logo brand-lockup__logo--white" src="/logos/tajaddod-logo-white.svg" alt="" width="164" height="58" />
     </a>
-    <nav class="desktop-nav" aria-label={isEn ? 'Main navigation' : 'التنقل الرئيسي'}>
+    <nav class="desktop-nav" aria-label={copy.header.navigationLabel}>
       {navigation.map((item) => <a href={item.href}>{item.label}</a>)}
     </nav>
-    <a class="header-language" href={alternatePath(pathname, locale)} hreflang={isEn ? 'ar' : 'en'}>
-      {isEn ? 'العربية' : 'EN'}
-    </a>
-    <a class="header-cta" href={`${home}#contact`}>{isEn ? 'Business inquiry' : 'تواصل تجاري'}</a>
-    <button class="menu-toggle" type="button" aria-label={isEn ? 'Open menu' : 'فتح القائمة'} aria-expanded="false" aria-controls="mobile-nav" data-menu-toggle>
+    <div class="theme-controls theme-controls--desktop" aria-label={copy.theme.label}>
+      <button
+        class="theme-quick-toggle"
+        type="button"
+        data-theme-toggle
+        aria-label={copy.theme.toggle}
+        aria-pressed="false"
+      >
+        <svg class="theme-icon theme-icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path></svg>
+        <svg class="theme-icon theme-icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"></path></svg>
+      </button>
+      <details class="theme-menu">
+        <summary aria-label={copy.theme.choose}>
+          <span aria-hidden="true">◐</span>
+        </summary>
+        <fieldset class="theme-options">
+          <legend>{copy.theme.appearance}</legend>
+          <label><input type="radio" name="theme-desktop" value="light" data-theme-option />{copy.theme.light}</label>
+          <label><input type="radio" name="theme-desktop" value="dark" data-theme-option />{copy.theme.dark}</label>
+          <label><input type="radio" name="theme-desktop" value="system" data-theme-option />{copy.theme.system}</label>
+        </fieldset>
+      </details>
+    </div>
+    <div class="header-mobile-actions">
+      <button
+        class="theme-quick-toggle theme-quick-toggle--mobile"
+        type="button"
+        data-theme-toggle
+        aria-label={copy.theme.toggle}
+        aria-pressed="false"
+      >
+        <svg class="theme-icon theme-icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path></svg>
+        <svg class="theme-icon theme-icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"></path></svg>
+      </button>
+      <a class="header-language" href={alternatePath(pathname, locale)} hreflang={locale === 'en' ? 'ar' : 'en'}>
+        {copy.common.language}
+      </a>
+    </div>
+    <a class="header-cta" href={`${home}#contact`}>{copy.header.businessInquiry}</a>
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-label={copy.header.openMenu}
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+      data-open-label={copy.header.openMenu}
+      data-close-label={copy.header.closeMenu}
+      data-menu-toggle
+    >
       <span></span><span></span><span></span>
     </button>
   </div>
-  <button class="mobile-nav-backdrop" type="button" aria-label={isEn ? 'Close menu' : 'إغلاق القائمة'} data-mobile-nav-backdrop></button>
-  <nav class="mobile-nav" id="mobile-nav" aria-label={isEn ? 'Mobile navigation' : 'قائمة الجوال'} data-mobile-nav>
+  <button class="mobile-nav-backdrop" type="button" aria-label={copy.header.closeMenu} data-mobile-nav-backdrop></button>
+  <nav class="mobile-nav" id="mobile-nav" aria-label={copy.header.mobileNavigation} aria-hidden="true" data-mobile-nav inert>
     <div class="mobile-nav__head">
-      <img src="/logos/tajaddod-logo-white.svg" alt={isEn ? 'Tajaddod logo' : 'شعار تجدد'} width="142" height="52" loading="lazy" />
-      <span>{isEn ? 'Energy & electricity ecosystem' : 'منظومة الكهرباء والطاقة'}</span>
+      <span class="mobile-nav__logos" aria-hidden="true">
+        <img class="mobile-nav__logo mobile-nav__logo--color" src="/logos/tajaddod-logo.svg" alt="" width="142" height="52" loading="lazy" />
+        <img class="mobile-nav__logo mobile-nav__logo--white" src="/logos/tajaddod-logo-white.svg" alt="" width="142" height="52" loading="lazy" />
+      </span>
+      <span>{copy.header.ecosystem}</span>
     </div>
 
     <div class="mobile-nav__links">
@@ -49,34 +98,244 @@ const navigation = [
           <span class="mobile-nav__label">{item.label}</span>
         </a>
       ))}
-      <a href={alternatePath(pathname, locale)} hreflang={isEn ? 'ar' : 'en'} data-mobile-nav-link>
+      <a href={alternatePath(pathname, locale)} hreflang={locale === 'en' ? 'ar' : 'en'} data-mobile-nav-link>
         <span class="mobile-nav__index">{String(navigation.length + 1).padStart(2, '0')}</span>
-        <span class="mobile-nav__label">{isEn ? 'العربية' : 'English'}</span>
+        <span class="mobile-nav__label">{copy.common.language}</span>
       </a>
     </div>
 
-    <a class="mobile-nav__cta" href={`${home}#contact`} data-mobile-nav-link>{isEn ? 'Business inquiry' : 'تواصل تجاري'}</a>
+    <fieldset class="mobile-theme-options theme-options">
+      <legend>{copy.theme.label}</legend>
+      <label><input type="radio" name="theme-mobile" value="light" data-theme-option />{copy.theme.light}</label>
+      <label><input type="radio" name="theme-mobile" value="dark" data-theme-option />{copy.theme.dark}</label>
+      <label><input type="radio" name="theme-mobile" value="system" data-theme-option />{copy.theme.system}</label>
+    </fieldset>
+
+    <a class="mobile-nav__cta" href={`${home}#contact`} data-mobile-nav-link>{copy.header.businessInquiry}</a>
   </nav>
 </header>
 
 <style>
+  .brand-lockup {
+    position: relative;
+    width: 152px;
+    min-height: 58px;
+  }
+  .brand-lockup__logo {
+    position: absolute;
+    inset: 50% 0 auto;
+    width: 152px;
+    height: auto;
+    transform: translateY(-50%);
+    transition: opacity var(--tj-transition-base);
+  }
+  .brand-lockup__logo--color { opacity: 0; }
+  .brand-lockup__logo--white { opacity: 1; }
+  :global(:root[data-theme="light"]) .site-header.is-scrolled .brand-lockup__logo--color { opacity: 1; }
+  :global(:root[data-theme="light"]) .site-header.is-scrolled .brand-lockup__logo--white { opacity: 0; }
+
   .header-language {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 42px;
-    height: 34px;
+    min-width: 44px;
+    min-height: 44px;
     padding: 0 10px;
-    border: 1px solid rgba(255,255,255,.22);
-    border-radius: 999px;
-    color: rgba(255,255,255,.9);
-    font-size: .78rem;
+    border: 1px solid var(--tj-border-inverse);
+    border-radius: var(--tj-radius-pill);
+    color: var(--tj-inverse-alpha-90);
+    font-size: var(--tj-type-caption);
     font-weight: var(--tj-font-semibold);
+    white-space: nowrap;
     backdrop-filter: blur(10px);
-    transition: border-color 180ms ease, background 180ms ease, color 180ms ease;
+    transition: border-color var(--tj-transition-base), background-color var(--tj-transition-base), color var(--tj-transition-base);
   }
-  .header-language:hover { border-color: rgba(155,232,255,.55); background: rgba(255,255,255,.08); color: #fff; }
-  @media (max-width: 820px) {
-    .header-language { justify-self: end; margin-inline-start: auto; }
+  .site-header.is-scrolled .header-language {
+    color: var(--tj-header-text);
+    border-color: var(--tj-header-border);
+    background: var(--tj-action-soft);
+  }
+  .header-language:hover {
+    border-color: var(--tj-focus-ring);
+    background: var(--tj-action-soft);
+    color: var(--tj-text-accent);
+  }
+
+  .theme-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--tj-space-2);
+  }
+  .theme-quick-toggle,
+  .theme-menu summary {
+    display: inline-grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid var(--tj-border-inverse);
+    border-radius: var(--tj-radius-pill);
+    color: var(--tj-text-inverse);
+    background: var(--tj-inverse-alpha-08);
+    list-style: none;
+    transition: color var(--tj-transition-base), background-color var(--tj-transition-base), border-color var(--tj-transition-base);
+  }
+  .site-header.is-scrolled .theme-quick-toggle,
+  .site-header.is-scrolled .theme-menu summary {
+    color: var(--tj-header-text);
+    background: var(--tj-action-soft);
+    border-color: var(--tj-header-border);
+  }
+  .theme-quick-toggle:hover,
+  .theme-menu summary:hover {
+    color: var(--tj-text-accent);
+    border-color: var(--tj-focus-ring);
+  }
+  .theme-icon {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .theme-icon--moon { display: none; }
+  :global(:root[data-theme="dark"]) .theme-icon--sun { display: none; }
+  :global(:root[data-theme="dark"]) .theme-icon--moon { display: block; }
+  .theme-menu { position: relative; }
+  .theme-menu summary::-webkit-details-marker { display: none; }
+  .theme-menu[open] summary {
+    color: var(--tj-text-accent);
+    border-color: var(--tj-focus-ring);
+  }
+  .theme-options {
+    margin: 0;
+    border: 1px solid var(--tj-border-default);
+    color: var(--tj-text-primary);
+    background: var(--tj-bg-surface-raised);
+    box-shadow: var(--tj-shadow-3);
+  }
+  .theme-menu .theme-options {
+    position: absolute;
+    inset-block-start: calc(100% + var(--tj-space-2));
+    inset-inline-end: 0;
+    z-index: var(--tj-z-modal);
+    display: grid;
+    width: 164px;
+    gap: var(--tj-space-1);
+    padding: var(--tj-space-3);
+    border-radius: var(--tj-radius-lg);
+  }
+  .theme-options legend {
+    padding: 0 var(--tj-space-1);
+    color: var(--tj-text-secondary);
+    font-size: var(--tj-type-caption);
+    font-weight: var(--tj-font-semibold);
+  }
+  .theme-options label {
+    display: flex;
+    align-items: center;
+    gap: var(--tj-space-2);
+    min-height: 38px;
+    padding: var(--tj-space-2) var(--tj-space-3);
+    border-radius: var(--tj-radius-md);
+    color: var(--tj-text-secondary);
+    cursor: pointer;
+  }
+  .theme-options label:hover,
+  .theme-options label[data-active] {
+    color: var(--tj-text-primary);
+    background: var(--tj-action-soft);
+  }
+  .theme-options input {
+    accent-color: var(--tj-action-primary);
+  }
+  .mobile-theme-options {
+    display: none;
+  }
+  .header-mobile-actions {
+    display: contents;
+  }
+  .theme-quick-toggle--mobile {
+    display: none;
+  }
+
+  @media (max-width: 1023px) {
+    .theme-controls--desktop { display: none; }
+    .header-mobile-actions {
+      display: inline-flex;
+      grid-column: 3;
+      align-items: center;
+      justify-self: end;
+      gap: var(--tj-space-1);
+    }
+    .theme-quick-toggle--mobile {
+      display: inline-grid;
+      width: var(--tj-icon-touch-target);
+      height: var(--tj-icon-touch-target);
+    }
+    .header-language {
+      margin: 0;
+    }
+    .brand-lockup {
+      grid-column: 2;
+      justify-self: center;
+    }
+    .menu-toggle {
+      grid-column: 1;
+      grid-row: 1;
+      justify-self: start;
+    }
+    .mobile-nav__logos {
+      position: relative;
+      display: block;
+      width: 132px;
+      height: 48px;
+    }
+    .mobile-nav__logo {
+      position: absolute;
+      inset: 50% 0 auto;
+      width: 132px;
+      height: auto;
+      transform: translateY(-50%);
+    }
+    .mobile-nav__logo--white { display: none; }
+    :global(:root[data-theme="dark"]) .mobile-nav__logo--color { display: none; }
+    :global(:root[data-theme="dark"]) .mobile-nav__logo--white { display: block; }
+    .mobile-theme-options {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--tj-space-2);
+      padding: var(--tj-space-3);
+      border-radius: var(--tj-radius-lg);
+    }
+    .mobile-theme-options legend {
+      grid-column: 1 / -1;
+    }
+    .mobile-theme-options label {
+      justify-content: center;
+      min-width: 0;
+      padding-inline: var(--tj-space-2);
+    }
+  }
+
+  @media (max-width: 359px) {
+    .header-inner {
+      gap: var(--tj-space-sm);
+    }
+    .brand-lockup {
+      width: 112px;
+      min-height: 44px;
+    }
+    .brand-lockup__logo {
+      width: 112px;
+    }
+    .header-mobile-actions {
+      gap: 2px;
+    }
+    .header-language {
+      padding-inline: 7px;
+    }
   }
 </style>

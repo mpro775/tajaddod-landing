@@ -1,23 +1,32 @@
 ---
 import Button from '../ui/Button.astro';
 import HeroTrustItem from '../ui/HeroTrustItem.astro';
-import { siteCopy } from '../../data/site-copy';
+import type { Locale } from '../../lib/api/types';
+import { dictionary } from '../../i18n';
 import '../../styles/hero.css';
 
-const { title, description, buttons } = siteCopy.hero;
+const { locale } = Astro.props as { locale: Locale };
+const hero = dictionary(locale).home.hero;
 ---
-<section class="cinematic-hero" id="hero" aria-labelledby="hero-title">
+<section class="cinematic-hero theme-inverse" id="hero" aria-labelledby="hero-title">
   <!-- Static cinematic scene: background + products only -->
-  <img
-    class="hero-bg"
-    src="/assets/hero/hero-static-scene.webp"
-    data-desktop-src="/assets/hero/hero-static-scene.webp"
-    alt=""
-    loading="eager"
-    width="1920"
-    height="1080"
-    aria-hidden="true"
-  />
+  <picture class="hero-picture" aria-hidden="true">
+    <source
+      media="(max-width: 767px)"
+      srcset="/assets/hero/hero-static-scene-mobile.webp"
+      width="960"
+      height="1200"
+    />
+    <img
+      class="hero-bg"
+      src="/assets/hero/hero-static-scene.webp"
+      alt=""
+      loading="eager"
+      fetchpriority="high"
+      width="1920"
+      height="1080"
+    />
+  </picture>
 
   <div class="hero-overlay" aria-hidden="true"></div>
   <div class="hero-center-glow" aria-hidden="true"></div>
@@ -74,6 +83,8 @@ const { title, description, buttons } = siteCopy.hero;
 
     <path
       class="energy-path energy-path-liper"
+      data-flow-role="source"
+      data-flow-target="tajaddod"
       d="M 470 260 C 610 305, 715 350, 830 435 C 910 493, 972 520, 1024 506"
       stroke="url(#flowGreen)"
       stroke-width="4"
@@ -82,44 +93,47 @@ const { title, description, buttons } = siteCopy.hero;
     />
     <path
       class="energy-path energy-path-cnc"
+      data-flow-role="source"
+      data-flow-target="tajaddod"
       d="M 420 800 C 570 760, 708 690, 820 610 C 908 548, 966 522, 1020 532"
       stroke="url(#flowCnc)"
       stroke-width="3.5"
       stroke-linecap="round"
       filter="url(#energyGlow)"
     />
-    <circle class="energy-core" cx="1024" cy="512" r="8" fill="#A7F05A" filter="url(#energyGlow)" />
+    <circle class="energy-core" data-flow-role="destination" cx="1024" cy="512" r="8" fill="#A7F05A" filter="url(#energyGlow)" />
   </svg>
 
   <!-- Brand anchors: real logos, visually tied to product zones -->
-  <div class="hero-brands-container" aria-label="العلامات التي تمثلها تجدد">
-    <div class="brand-anchor brand-anchor-liper" data-brand="liper" tabindex="0" role="button" aria-label="Liper — إضاءة ذكية وطاقة مستدامة">
+  <div class="hero-brands-container" aria-label={hero.brandsLabel}>
+    <div class="brand-anchor brand-anchor-liper" data-brand="liper" data-flow-role="source" tabindex="0" role="button" aria-label={`Liper — ${hero.brandAnchors.liper}`}>
       <img src="/logos/liper-logo.svg" alt="Liper" width="138" height="58" />
-      <span>إضاءة ذكية وطاقة مستدامة</span>
+      <span>{hero.brandAnchors.liper}</span>
     </div>
 
-    <div class="brand-anchor brand-anchor-cnc" data-brand="cnc" tabindex="0" role="button" aria-label="CNC — حماية وتحكم وتوزيع">
+    <div class="brand-anchor brand-anchor-cnc" data-brand="cnc" data-flow-role="source" tabindex="0" role="button" aria-label={`CNC — ${hero.brandAnchors.cnc}`}>
       <img src="/logos/cnc-logo.svg" alt="CNC Electric" width="138" height="70" />
-      <span>حماية وتحكم وتوزيع</span>
+      <span>{hero.brandAnchors.cnc}</span>
     </div>
   </div>
 
   <!-- Main copy -->
-  <div class="hero-content">
+  <div class="hero-content" data-flow-role="destination">
+    <p class="hero-eyebrow">{hero.eyebrow}</p>
     <img
       class="tajaddod-logo-hero"
-      src="/logos/tajaddod-logo.svg"
-      alt="تجدد"
+      src="/logos/tajaddod-logo-white.svg"
+      alt={hero.logoAlt}
       width="220"
       height="108"
     />
 
-    <h1 id="hero-title">{title}</h1>
+    <h1 id="hero-title">{hero.title}</h1>
 
-    <p>{description}</p>
+    <p>{hero.description}</p>
 
     <div class="hero-actions">
-      {buttons.map((btn) => (
+      {hero.buttons.map((btn) => (
         <Button href={btn.href} variant={btn.variant}>
           {btn.label}
         </Button>
@@ -128,11 +142,10 @@ const { title, description, buttons } = siteCopy.hero;
   </div>
 
   <!-- Unified trust panel -->
-  <div class="hero-trust-panel" aria-label="مؤشرات الثقة في تجدد">
-    <HeroTrustItem iconName="partnership" label="شراكات موثوقة" description="مع علامات عالمية رائدة" />
-    <HeroTrustItem iconName="quality" label="جودة معتمدة" description="مطابقة للمعايير الدولية" />
-    <HeroTrustItem iconName="integrated-solutions" label="حلول متكاملة" description="كهرباء | حماية | إضاءة | طاقة شمسية" />
-    <HeroTrustItem iconName="support" label="دعم فني وتجاري" description="بجانبك في كل خطوة" />
+  <div class="hero-trust-panel" aria-label={hero.trustLabel}>
+    {hero.trust.map((item) => (
+      <HeroTrustItem iconName={item.icon} label={item.label} description={item.description} />
+    ))}
   </div>
 </section>
 

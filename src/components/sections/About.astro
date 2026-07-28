@@ -4,9 +4,20 @@
  * Premium cinematic brand philosophy manifesto with
  * horizontal scroll pillars, animated energy circuit, and glassmorphism.
  */
+import type { Locale } from '../../lib/api/types';
+import { dictionary } from '../../i18n';
+
+const { locale } = Astro.props as { locale: Locale };
+const copy = dictionary(locale).home.about;
+const mobileNodes = copy.mobileNodes.map((node, index) => ({
+  ...node,
+  logo: index === 0 ? '/logos/cnc-logo-white.svg' : index === 1 ? '/logos/tajaddod-icon.svg' : '/logos/liper-logo-white.svg',
+  color: index === 0 ? 'var(--tj-green)' : index === 1 ? 'var(--tj-text-inverse)' : 'var(--tj-orange)',
+  hub: index === 1,
+}));
 ---
 
-<section class="section philosophy-section" id="about">
+<section class="section philosophy-section theme-inverse" id="about">
   <!-- Background layers -->
   <div class="ph-bg" aria-hidden="true">
     <div class="ph-bg__grid"></div>
@@ -33,19 +44,16 @@
             <path d="m13 2-2 7h7l-8 13 2-8H5l8-12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </span>
-        <span class="ph-eyebrow__text">فلسفة تجدد</span>
+        <span class="ph-eyebrow__text">{copy.eyebrow}</span>
         <span class="ph-eyebrow__line"></span>
       </div>
 
       <h2 class="ph-title">
-        <span class="ph-title__line">ليست مجرد وكالة…</span>
-        <span class="ph-title__accent">بل فلسفة في بناء المنظومة</span>
+        <span class="ph-title__line">{copy.titleLead}</span>
+        <span class="ph-title__accent">{copy.titleAccent}</span>
       </h2>
 
-      <p class="ph-lead">
-        تجدد لا تبيع منتجات، بل تبني جسرًا بين العلامات المتخصصة واحتياج السوق الحقيقي.
-        نؤمن أن كل قاطع وكل كشاف هو جزء من رحلة طاقة واحدة متكاملة؛ من الحماية إلى الإضاءة والطاقة.
-      </p>
+      <p class="ph-lead">{copy.lead}</p>
     </div>
 
     <!-- ─── Energy Circuit Visualization ──────────────────── -->
@@ -78,15 +86,15 @@
           <div class="ph-node__beacon ph-node__beacon--cnc"></div>
           <div class="ph-node__card">
             <img src="/logos/cnc-logo-white.svg" alt="CNC" loading="lazy"/>
-            <span>الحماية والتحكم</span>
+            <span>{copy.circuit.cnc}</span>
           </div>
         </div>
 
         <div class="ph-circuit__node ph-circuit__node--tajaddod" data-ph-node>
           <div class="ph-node__beacon ph-node__beacon--white"></div>
           <div class="ph-node__card ph-node__card--center">
-            <img src="/logos/tajaddod-icon.svg" alt="تجدد" loading="lazy"/>
-            <span>المنظومة</span>
+            <img src="/logos/tajaddod-icon.svg" alt={copy.mobileNodes[1].name} loading="lazy"/>
+            <span>{copy.circuit.tajaddod}</span>
           </div>
         </div>
 
@@ -94,18 +102,14 @@
           <div class="ph-node__beacon"></div>
           <div class="ph-node__card">
             <img src="/logos/liper-logo-white.svg" alt="Liper" loading="lazy"/>
-            <span>الأثر المرئي</span>
+            <span>{copy.circuit.liper}</span>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="ph-mobile-path" aria-label="مسار الطاقة بين علامات تجدد">
-      {[
-        { name: 'CNC', logo: '/logos/cnc-logo-white.svg', text: 'حماية وتحكم وتوزيع', color: 'var(--tj-green)' },
-        { name: 'تجدد', logo: '/logos/tajaddod-icon.svg', text: 'تحويل التعدد إلى منظومة', color: '#fff', hub: true },
-        { name: 'Liper', logo: '/logos/liper-logo-white.svg', text: 'ضوء وطاقة يكتمل بها المشروع', color: 'var(--tj-orange)' },
-      ].map((node) => (
+    <div class="ph-mobile-path" aria-label={copy.pathLabel}>
+      {mobileNodes.map((node) => (
         <div class={`ph-mobile-node ${node.hub ? 'ph-mobile-node--hub' : ''}`} style={`--node-color: ${node.color};`}>
           <span class="ph-mobile-node__dot"></span>
           <div class="ph-mobile-node__card">
@@ -132,10 +136,8 @@
           </div>
           <span class="ph-pillar__num">01</span>
         </div>
-        <h3 class="ph-pillar__title">الحماية</h3>
-        <p class="ph-pillar__text">
-          الطاقة بدون حماية مخاطرة. نربط المشاريع بأنظمة قواطع وتحكم تضمن استمرارية آمنة وموثوقة.
-        </p>
+        <h3 class="ph-pillar__title">{copy.pillars[0].title}</h3>
+        <p class="ph-pillar__text">{copy.pillars[0].text}</p>
         <div class="ph-pillar__brand">
           <img src="/logos/cnc-logo-white.svg" alt="CNC" loading="lazy"/>
         </div>
@@ -152,12 +154,10 @@
           </div>
           <span class="ph-pillar__num">02</span>
         </div>
-        <h3 class="ph-pillar__title">المنظومة</h3>
-        <p class="ph-pillar__text">
-          تجدد هي المظلة التي تجمع العلامات المتخصصة لتوفير مسار طاقة متكامل وموثوق يخدم احتياج السوق.
-        </p>
+        <h3 class="ph-pillar__title">{copy.pillars[1].title}</h3>
+        <p class="ph-pillar__text">{copy.pillars[1].text}</p>
         <div class="ph-pillar__brand">
-          <img src="/logos/tajaddod-icon.svg" alt="تجدد" loading="lazy" style="height: 18px;"/>
+          <img src="/logos/tajaddod-icon.svg" alt={copy.mobileNodes[1].name} loading="lazy" style="height: 18px;"/>
         </div>
         <div class="ph-pillar__glow" style="--pillar-color: var(--tj-blue);"></div>
       </div>
@@ -172,10 +172,8 @@
           </div>
           <span class="ph-pillar__num">03</span>
         </div>
-        <h3 class="ph-pillar__title">الأثر</h3>
-        <p class="ph-pillar__text">
-          حين تتحول الطاقة إلى ضوء وأمان وحضور بصري — هناك يظهر أثر المنظومة المتكاملة.
-        </p>
+        <h3 class="ph-pillar__title">{copy.pillars[2].title}</h3>
+        <p class="ph-pillar__text">{copy.pillars[2].text}</p>
         <div class="ph-pillar__brand">
           <img src="/logos/liper-logo-white.svg" alt="Liper" loading="lazy"/>
         </div>
@@ -193,7 +191,7 @@
       </div>
       <blockquote class="ph-quote">
         <span class="ph-quote__mark">"</span>
-        <p>نمثل علامات متخصصة في الكهرباء والطاقة، ونربطها باحتياج السوق عبر منظومة توريد موثوقة.</p>
+        <p>{copy.quote}</p>
         <span class="ph-quote__mark">"</span>
       </blockquote>
       <div class="ph-closing__brands">
@@ -209,13 +207,15 @@
 <script>
   import { gsap } from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { documentDirection, fromInlineStart } from '../../lib/direction';
 
   gsap.registerPlugin(ScrollTrigger);
 
   document.addEventListener('DOMContentLoaded', () => {
     const section = document.querySelector('.philosophy-section') as HTMLElement;
     if (!section) return;
-    const isMobile = window.matchMedia('(max-width: 820px)').matches;
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+    const direction = documentDirection();
 
     // ─── Hero Manifesto Animation ──────────────────────────
     const hero = section.querySelector('[data-ph-hero]');
@@ -329,7 +329,7 @@
           ease: 'back.out(2)'
         }, '-=0.3')
         .from(pillar.querySelector('.ph-pillar__brand'), {
-          x: -20,
+          x: fromInlineStart(20, direction),
           opacity: 0,
           duration: 0.4,
           ease: 'power2.out'
@@ -398,7 +398,7 @@
     #082838 70%,
     #040c14 100%
   ) !important;
-  color: #fff;
+  color: var(--tj-text-inverse);
 }
 
 /* ─── Background Effects ───────────────────────────────────── */
@@ -415,11 +415,11 @@
   inset: 0;
   opacity: 0.025;
   background-image:
-    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+    linear-gradient(var(--tj-inverse-alpha-06) 1px, transparent 1px),
+    linear-gradient(90deg, var(--tj-inverse-alpha-06) 1px, transparent 1px);
   background-size: 80px 80px;
-  mask-image: radial-gradient(ellipse at 50% 30%, #000 10%, transparent 65%);
-  -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 10%, transparent 65%);
+  mask-image: radial-gradient(ellipse at 50% 30%, var(--tj-neutral-950) 10%, transparent 65%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 30%, var(--tj-neutral-950) 10%, transparent 65%);
 }
 
 .ph-bg__aurora {
@@ -483,8 +483,8 @@
   right: -20%;
   height: 1.5px;
   width: 35vw;
-  background: linear-gradient(90deg, transparent, rgba(255,140,0,0.25), rgba(30,153,211,0.2), transparent);
-  filter: drop-shadow(0 0 8px rgba(255,140,0,0.3));
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--tj-orange) 25%, transparent), color-mix(in srgb, var(--tj-blue) 20%, transparent), transparent);
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--tj-orange) 30%, transparent));
   animation: phLineFlow 9s linear var(--delay) infinite;
   opacity: 0.4;
 }
@@ -520,8 +520,8 @@
   gap: 12px;
   margin-bottom: 28px;
   padding: 8px 20px 8px 14px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--tj-inverse-alpha-03);
+  border: 1px solid var(--tj-inverse-alpha-08);
   border-radius: 999px;
 }
 
@@ -531,7 +531,7 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(30,153,211,0.2), rgba(255,140,0,0.2));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--tj-blue) 20%, transparent), color-mix(in srgb, var(--tj-orange) 20%, transparent));
   color: var(--tj-blue-light);
 }
 
@@ -549,7 +549,7 @@
 }
 
 .ph-title {
-  color: #fff;
+  color: var(--tj-text-inverse);
   font-size: clamp(1.7rem, 4vw, 2.7rem);
   font-weight: var(--tj-font-extrabold);
   line-height: 1.25;
@@ -563,7 +563,7 @@
 
 .ph-title__accent {
   display: block;
-  background: linear-gradient(135deg, #9be8ff 0%, #1e99d3 30%, #8bc543 70%, #9be8ff 100%);
+  background: linear-gradient(135deg, var(--tj-blue-light) 0%, var(--tj-blue) 30%, var(--tj-green-light) 70%, var(--tj-blue-light) 100%);
   background-size: 250% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -577,7 +577,7 @@
 }
 
 .ph-lead {
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--tj-inverse-alpha-55);
   font-size: var(--tj-text-body-lg);
   line-height: 1.95;
   max-width: 660px;
@@ -622,7 +622,7 @@
 }
 
 .ph-circuit__dot--2 {
-  filter: drop-shadow(0 0 12px rgba(255,255,255,0.6));
+  filter: drop-shadow(0 0 12px var(--tj-inverse-alpha-60));
 }
 
 /* Circuit Nodes */
@@ -658,7 +658,7 @@
 }
 
 .ph-circuit__node--cnc .ph-node__beacon {
-  background: #e63946;
+  background: var(--tj-cnc-red);
 }
 
 .ph-circuit__node--liper .ph-node__beacon {
@@ -666,7 +666,7 @@
 }
 
 .ph-node__beacon--white {
-  background: rgba(255,255,255,0.3) !important;
+  background: var(--tj-inverse-alpha-30) !important;
 }
 
 @keyframes phBeacon {
@@ -680,12 +680,12 @@
   align-items: center;
   gap: 6px;
   padding: 14px 20px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--tj-inverse-alpha-05);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--tj-inverse-alpha-10);
   border-radius: 18px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 12px 40px color-mix(in srgb, var(--tj-neutral-950) 25%, transparent);
   position: relative;
   z-index: 1;
   transition: transform 0.4s var(--tj-ease-smooth), box-shadow 0.4s var(--tj-ease-smooth);
@@ -693,12 +693,12 @@
 
 .ph-node__card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 20px 50px color-mix(in srgb, var(--tj-neutral-950) 35%, transparent);
 }
 
 .ph-node__card--center {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.15);
+  background: var(--tj-inverse-alpha-08);
+  border-color: var(--tj-inverse-alpha-15);
 }
 
 .ph-node__card img {
@@ -709,7 +709,7 @@
 }
 
 .ph-node__card span {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--tj-inverse-alpha-60);
   font-size: var(--tj-text-nano);
   font-weight: var(--tj-font-semibold);
   white-space: nowrap;
@@ -728,10 +728,10 @@
   position: relative;
   overflow: hidden;
   padding: 36px 30px 30px;
-  background: rgba(255, 255, 255, 0.025);
+  background: var(--tj-inverse-alpha-02);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--tj-inverse-alpha-06);
   border-radius: 26px;
   transition:
     transform 0.5s var(--tj-ease-smooth),
@@ -742,10 +742,10 @@
 
 .ph-pillar:hover {
   transform: translateY(-8px);
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--tj-inverse-alpha-15);
   box-shadow:
-    0 30px 70px rgba(0, 0, 0, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    0 30px 70px color-mix(in srgb, var(--tj-neutral-950) 25%, transparent),
+    inset 0 1px 0 var(--tj-inverse-alpha-06);
 }
 
 /* Top accent line */
@@ -791,7 +791,7 @@
 }
 
 .ph-pillar__num {
-  color: rgba(255, 255, 255, 0.04);
+  color: var(--tj-inverse-alpha-04);
   font-size: 3.5rem;
   font-weight: var(--tj-font-black);
   line-height: 1;
@@ -799,18 +799,18 @@
 }
 
 .ph-pillar:hover .ph-pillar__num {
-  color: rgba(255, 255, 255, 0.08);
+  color: var(--tj-inverse-alpha-08);
 }
 
 .ph-pillar__title {
-  color: #fff;
+  color: var(--tj-text-inverse);
   font-size: 1.3rem;
   font-weight: var(--tj-font-bold);
   margin-bottom: 14px;
 }
 
 .ph-pillar__text {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--tj-inverse-alpha-50);
   font-size: var(--tj-text-body);
   line-height: 1.9;
   margin-bottom: 24px;
@@ -818,7 +818,7 @@
 }
 
 .ph-pillar:hover .ph-pillar__text {
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--tj-inverse-alpha-65);
 }
 
 /* Brand tag */
@@ -826,15 +826,15 @@
   display: inline-flex;
   align-items: center;
   padding: 10px 16px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--tj-inverse-alpha-04);
+  border: 1px solid var(--tj-inverse-alpha-06);
   border-radius: 14px;
   transition: all 0.4s ease;
 }
 
 .ph-pillar:hover .ph-pillar__brand {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.12);
+  background: var(--tj-inverse-alpha-07);
+  border-color: var(--tj-inverse-alpha-12);
 }
 
 .ph-pillar__brand img {
@@ -898,7 +898,7 @@
 .ph-closing__line {
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, var(--tj-blue), rgba(255,255,255,0.1), var(--tj-green));
+  background: linear-gradient(90deg, var(--tj-blue), var(--tj-inverse-alpha-10), var(--tj-green));
   opacity: 0.2;
 }
 
@@ -909,14 +909,14 @@
   text-align: center;
   margin: 0;
   padding: 28px 32px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--tj-inverse-alpha-02);
+  border: 1px solid var(--tj-inverse-alpha-05);
   border-radius: 22px;
   position: relative;
 }
 
 .ph-quote p {
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--tj-inverse-alpha-55);
   font-size: var(--tj-text-body-lg);
   line-height: 1.9;
   font-style: italic;
@@ -924,7 +924,7 @@
 }
 
 .ph-quote__mark {
-  color: rgba(30, 153, 211, 0.3);
+  color: color-mix(in srgb, var(--tj-blue) 30%, transparent);
   font-size: 2.5rem;
   font-weight: var(--tj-font-bold);
   line-height: 0.8;
@@ -953,7 +953,7 @@
 .ph-closing__divider {
   width: 1px;
   height: 16px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--tj-inverse-alpha-10);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -976,7 +976,7 @@
   }
 }
 
-@media (max-width: 820px) {
+@media (max-width: 767px) {
   .philosophy-section {
     padding: clamp(4rem, 12vw, 6rem) 0 !important;
   }
@@ -1006,8 +1006,8 @@
     right: 23px;
     width: 2px;
     border-radius: 999px;
-    background: linear-gradient(180deg, var(--tj-blue), rgba(255,255,255,.34), var(--tj-green), var(--tj-green-light));
-    box-shadow: 0 0 18px rgba(30,153,211,.32);
+    background: linear-gradient(180deg, var(--tj-blue), var(--tj-inverse-alpha-30), var(--tj-green), var(--tj-green-light));
+    box-shadow: 0 0 18px color-mix(in srgb, var(--tj-blue) 32%, transparent);
     opacity: .72;
   }
 
@@ -1028,7 +1028,7 @@
     height: 48px;
     border-radius: 50%;
     background: rgba(2, 11, 18, .92);
-    border: 1px solid color-mix(in srgb, var(--node-color) 52%, rgba(255,255,255,.2));
+    border: 1px solid color-mix(in srgb, var(--node-color) 52%, var(--tj-inverse-alpha-20));
     box-shadow: 0 0 22px color-mix(in srgb, var(--node-color) 28%, transparent);
   }
 
@@ -1045,13 +1045,13 @@
     width: 58px;
     height: 58px;
     transform: translateX(5px);
-    background: linear-gradient(135deg, rgba(30,153,211,.24), rgba(255,140,0,.15)), rgba(255,255,255,.08);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--tj-blue) 24%, transparent), color-mix(in srgb, var(--tj-orange) 15%, transparent)), var(--tj-inverse-alpha-08);
   }
 
   .ph-mobile-node--hub .ph-mobile-node__dot::after {
     width: 16px;
     height: 16px;
-    background: #fff;
+    background: var(--tj-bg-surface);
   }
 
   .ph-mobile-node__card {
@@ -1060,17 +1060,17 @@
     gap: 12px;
     min-height: 70px;
     padding: 12px 14px;
-    border: 1px solid rgba(255,255,255,.08);
+    border: 1px solid var(--tj-inverse-alpha-08);
     border-radius: 18px;
-    background: rgba(255,255,255,.04);
-    box-shadow: 0 18px 40px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.05);
+    background: var(--tj-inverse-alpha-04);
+    box-shadow: 0 18px 40px color-mix(in srgb, var(--tj-neutral-950) 18%, transparent), inset 0 1px 0 var(--tj-inverse-alpha-05);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
   }
 
   .ph-mobile-node--hub .ph-mobile-node__card {
-    border-color: rgba(255,255,255,.16);
-    background: rgba(255,255,255,.075);
+    border-color: var(--tj-inverse-alpha-15);
+    background: var(--tj-inverse-alpha-08);
   }
 
   .ph-mobile-node__card img {
@@ -1087,14 +1087,14 @@
 
   .ph-mobile-node__card strong {
     display: block;
-    color: #fff;
+    color: var(--tj-text-inverse);
     font-size: .92rem;
     line-height: 1.2;
   }
 
   .ph-mobile-node__card span {
     display: block;
-    color: rgba(255,255,255,.58);
+    color: var(--tj-inverse-alpha-60);
     font-size: .76rem;
     line-height: 1.55;
   }
@@ -1153,7 +1153,7 @@
     display: -webkit-box;
     margin-bottom: 14px;
     overflow: hidden;
-    color: rgba(255,255,255,.62);
+    color: var(--tj-inverse-alpha-60);
     font-size: .88rem;
     line-height: 1.65;
     -webkit-line-clamp: 2;
@@ -1178,7 +1178,7 @@
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 359px) {
   .ph-pillar {
     padding: 28px 22px 24px;
     border-radius: 22px;

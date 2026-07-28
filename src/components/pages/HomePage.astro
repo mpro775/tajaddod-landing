@@ -27,9 +27,9 @@ const brands = settings?.enableBrandsSection === false ? [] : (home?.brands || [
 ---
 
 <main>
-  <CinematicHero />
-  <About />
-  <Achievements />
+  <CinematicHero locale={locale} />
+  <About locale={locale} />
+  <Achievements locale={locale} />
 
   {error && (
     <div class="container visual-restore-error" role="status">
@@ -40,14 +40,14 @@ const brands = settings?.enableBrandsSection === false ? [] : (home?.brands || [
   {brands.length > 0 && <Brands locale={locale} brands={brands} />}
   {projects.length > 0 && <FeaturedProjects locale={locale} projects={projects} />}
 
-  <MarketRole />
-  <Coverage />
-  <Sectors />
-  <EnergyJourney />
-  <AppDownload />
+  <MarketRole locale={locale} />
+  <Coverage locale={locale} />
+  <Sectors locale={locale} />
+  <EnergyJourney locale={locale} />
+  <AppDownload locale={locale} />
 
   {articles.length > 0 && <LatestNews locale={locale} articles={articles} />}
-  <ContactCTA />
+  <ContactCTA locale={locale} />
 </main>
 
 <style>
