@@ -23,7 +23,7 @@ const contactLinks = buildContactLinks({
 });
 ---
 
-<footer class="site-footer theme-inverse" id="contact">
+<footer class="site-footer" id="contact">
   <div class="footer-bg" aria-hidden="true">
     <div class="footer-bg__grid"></div>
     <div class="footer-bg__glow"></div>
@@ -38,7 +38,8 @@ const contactLinks = buildContactLinks({
         </button>
         <div class="footer-panel" data-footer-panel>
           <a href={`${home}#hero`} class="footer-logo">
-            <img src="/logos/tajaddod-logo-white.svg" alt={footer.logoAlt} width="160" height="58" loading="lazy" />
+            <img class="footer-logo__image footer-logo__image--color" src="/logos/tajaddod-logo.svg" alt={footer.logoAlt} width="160" height="58" loading="lazy" />
+            <img class="footer-logo__image footer-logo__image--white" src="/logos/tajaddod-logo-white.svg" alt="" width="160" height="58" loading="lazy" />
           </a>
           <p class="footer-desc">{footer.about}</p>
           <span class="footer-disclaimer">{footer.note}</span>

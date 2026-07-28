@@ -16,7 +16,7 @@ const brandIcons: Record<string, string> = {
 };
 const brandSteps: Record<string, string> = { cnc: '01', liper: '02' };
 ---
-<section class="section bw-section theme-inverse" id="brands">
+<section class="section bw-section layer-corporate-alt" id="brands">
   <!-- Ambient background -->
   <div class="bw-bg" aria-hidden="true">
     <div class="bw-bg__gradient"></div>
@@ -808,12 +808,10 @@ const brandSteps: Record<string, string> = { cnc: '01', liper: '02' };
   }
 
   .bw-world__desc {
-    display: -webkit-box;
-    overflow: hidden;
+    display: block;
+    overflow: visible;
     font-size: .9rem;
     line-height: 1.7;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
   }
 
   .bw-world__story {
@@ -821,14 +819,8 @@ const brandSteps: Record<string, string> = { cnc: '01', liper: '02' };
   }
 
   .bw-world__story span {
-    display: -webkit-box;
-    overflow: hidden;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
-
-  .bw-world__cat-grid .bw-world__cat:nth-child(n+4) {
-    display: none;
+    display: block;
+    overflow: visible;
   }
 
   .bw-mobile-indicator {

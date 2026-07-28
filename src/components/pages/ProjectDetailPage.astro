@@ -31,7 +31,7 @@ const brandLogos: Record<string, string> = { CNC: '/logos/cnc-logo.svg', Liper: 
     <!-- ═══ Cinematic Hero ═══ -->
     <section class="pd-hero theme-inverse">
       <div class="pd-hero__bg">
-        <img src={project.coverImage} alt={project.title} />
+        <img src={project.coverImage} alt={project.title} width="1600" height="900" loading="eager" fetchpriority="high" decoding="async" />
         <div class="pd-hero__overlay"></div>
       </div>
       <!-- Animated grid pattern -->
@@ -152,7 +152,7 @@ const brandLogos: Record<string, string> = { CNC: '/logos/cnc-logo.svg', Liper: 
                 <div class="pd-gallery-grid">
                   {project.gallery.map((img: string) => (
                     <div class="pd-gallery-item">
-                      <img src={img} alt={labels.imageAlt} loading="lazy" />
+                      <img src={img} alt={labels.imageAlt} width="1200" height="900" loading="lazy" decoding="async" />
                     </div>
                   ))}
                 </div>
@@ -193,7 +193,7 @@ const brandLogos: Record<string, string> = { CNC: '/logos/cnc-logo.svg', Liper: 
                     <a href={localePath(locale, `/brands/${brand.toLowerCase()}`)} class="pd-brand-card" id={`brand-${brand.toLowerCase()}`}>
                       <div class="pd-brand-card__logo">
                         {brandLogos[brand] ? (
-                          <img src={brandLogos[brand]} alt={brand} />
+                          <img src={brandLogos[brand]} alt={brand} width="120" height="60" loading="lazy" decoding="async" />
                         ) : (
                           <span class="pd-brand-card__fallback">{brand}</span>
                         )}
@@ -271,7 +271,7 @@ const brandLogos: Record<string, string> = { CNC: '/logos/cnc-logo.svg', Liper: 
             {related.map((rp) => (
               <a href={localePath(locale, `/projects/${rp.slug}`)} class="pd-related-card" id={`related-${rp.slug}`}>
                 <div class="pd-related-card__img">
-                  <img src={rp.coverImage} alt={rp.title} loading="lazy" />
+                  <img src={rp.coverImage} alt={rp.title} width="1200" height="675" loading="lazy" decoding="async" />
                   <div class="pd-related-card__img-overlay"></div>
                   <div class="pd-related-card__badges">
                     <span class="pd-related-card__cat">{rp.category}</span>

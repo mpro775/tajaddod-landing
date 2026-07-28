@@ -24,7 +24,7 @@ const rgb = hexToRgb(brandColor);
   <!-- Image section -->
   <div class="product-card__image-wrap">
     <div class="product-card__image-bg"></div>
-    <img src={product.image} alt={product.name} class="product-card__image" loading="lazy" />
+    <img src={product.image} alt={product.name} class="product-card__image" width="800" height="600" loading="lazy" decoding="async" />
 
     {product.badges && product.badges.length > 0 && (
       <div class="product-card__badges">

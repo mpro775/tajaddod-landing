@@ -42,7 +42,7 @@ const dateFormatter = new Intl.DateTimeFormat(intlLocale(locale), { year: 'numer
           {news.map((item) => (
             <a href={localePath(locale, `/news/${item.slug}`)} class="news-card" data-category={item.category}>
               <div class="news-card__image-wrap">
-                <img src={item.coverImage} alt={item.title} loading="lazy" />
+                <img src={item.coverImage} alt={item.title} width="1200" height="750" loading="lazy" decoding="async" />
                 <span class="news-card__category">{item.category}</span>
               </div>
               <div class="news-card__content">

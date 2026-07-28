@@ -12,7 +12,7 @@ const sideProjects = projects.slice(1, 4);
 const copy = dictionary(locale);
 const labels = copy.home.projects;
 ---
-<section id="projects" class="featured-projects section theme-inverse">
+<section id="projects" class="featured-projects section layer-corporate">
   <!-- Ambient Background Glows -->
   <div class="fp-ambient">
     <div class="fp-ambient__orb fp-ambient__orb--blue"></div>
@@ -38,7 +38,7 @@ const labels = copy.home.projects;
       {featuredProject && (
         <a href={localePath(locale, `/projects/${featuredProject.slug}`)} class="fp-card fp-card--hero">
           <div class="fp-card__media">
-            <img src={featuredProject.coverImage} alt={featuredProject.title} loading="lazy" />
+            <img src={featuredProject.coverImage} alt={featuredProject.title} width="1200" height="750" loading="lazy" decoding="async" />
             <div class="fp-card__overlay"></div>
             <div class="fp-card__shine"></div>
           </div>
@@ -75,7 +75,7 @@ const labels = copy.home.projects;
         {sideProjects.map((project, i) => (
           <a href={localePath(locale, `/projects/${project.slug}`)} class="fp-card fp-card--side" style={`--card-delay: ${i * 100}ms`}>
             <div class="fp-card__media">
-              <img src={project.coverImage} alt={project.title} loading="lazy" />
+              <img src={project.coverImage} alt={project.title} width="1200" height="750" loading="lazy" decoding="async" />
               <div class="fp-card__overlay"></div>
               <div class="fp-card__shine"></div>
             </div>
@@ -341,10 +341,8 @@ const labels = copy.home.projects;
     font-size: 0.95rem;
     line-height: 1.7;
     margin-bottom: 20px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    display: block;
+    overflow: visible;
   }
 
   /* ─── Side Card ────────────────────────────────────────────────────── */

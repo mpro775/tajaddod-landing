@@ -357,14 +357,12 @@
   /* Featured projects: one feature plus dense thumbnail rows. */
   :root[data-theme] .fp-card--hero {
     min-height: 26rem;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: auto;
   }
 
   :root[data-theme] .fp-card--hero .fp-card__summary {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
+    display: block;
+    overflow: visible;
   }
 
   :root[data-theme] .fp-side {
@@ -406,12 +404,10 @@
   }
 
   :root[data-theme] .fp-card--side .fp-card__title {
-    display: -webkit-box;
+    display: block;
     margin-bottom: .5rem;
-    overflow: hidden;
+    overflow: visible;
     font-size: 1rem;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
   }
 
   :root[data-theme] .fp-card--side .fp-card__badge {
@@ -427,7 +423,7 @@
   :root[data-theme] .mr-mobile-flow__card {
     min-height: 0;
     padding-block: 1rem;
-    padding-inline: 1rem 4.25rem;
+    padding-inline: 4.25rem 1rem;
     border-radius: var(--tj-mobile-card-radius);
     backdrop-filter: none;
   }
@@ -446,7 +442,8 @@
 
   :root[data-theme] .mr-mobile-flow__num {
     inset-block-start: 1rem;
-    inset-inline-end: 1rem;
+    inset-inline-start: 1rem;
+    inset-inline-end: auto;
   }
 
   :root[data-theme] .mr-mobile-flow__arrow {
@@ -539,7 +536,8 @@
   }
 
   :root[data-theme] .coverage-card p {
-    -webkit-line-clamp: 3;
+    display: block;
+    overflow: visible;
   }
 
   /* Sectors: a deliberate, keyboard-operable single-panel tab rail. */
@@ -667,12 +665,10 @@
   }
 
   :root[data-theme] .ln-card:nth-child(n + 2) .ln-card__title {
-    display: -webkit-box;
+    display: block;
     margin: 0;
-    overflow: hidden;
+    overflow: visible;
     font-size: 1rem;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
   }
 
   :root[data-theme] :is(.ln-ambient__orb, .fp-ambient__orb) {
@@ -817,12 +813,10 @@
   }
 
   :root[data-theme] .news-index .news-card:nth-child(n + 2) .news-card__title {
-    display: -webkit-box;
+    display: block;
     margin: 0;
-    overflow: hidden;
+    overflow: visible;
     font-size: 1rem;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
   }
 
   /* Detail pages: compact media heroes and readable long-form content. */

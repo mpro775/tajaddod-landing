@@ -13,7 +13,7 @@ const formatDate = (dateStr: string) => dateStr
   ? new Intl.DateTimeFormat(intlLocale(locale), { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(dateStr))
   : '';
 ---
-<section id="news" class="latest-news section theme-inverse">
+<section id="news" class="latest-news section layer-corporate">
   <!-- Ambient Background -->
   <div class="ln-ambient">
     <div class="ln-ambient__grid"></div>
@@ -39,7 +39,7 @@ const formatDate = (dateStr: string) => dateStr
         <a href={localePath(locale, `/news/${item.slug}`)} class="ln-card" style={`--card-index: ${i}`}>
           <!-- Image Area -->
           <div class="ln-card__media">
-            <img src={item.coverImage} alt={item.title} loading="lazy" />
+            <img src={item.coverImage} alt={item.title} width="1200" height="750" loading="lazy" decoding="async" />
             <div class="ln-card__media-overlay"></div>
             <span class="ln-card__category">{item.category}</span>
             <!-- Floating Date Chip -->

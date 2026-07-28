@@ -22,7 +22,7 @@ const getBrandList = (brandStr: string) => {
   return brandStr.split('/').map(b => b.trim());
 };
 ---
-<section class="section coverage-section layer-cinematic" id="coverage">
+<section class="section coverage-section layer-corporate-alt" id="coverage">
   <!-- Cinematic Background Elements -->
   <div class="cv-bg" aria-hidden="true">
     <div class="cv-bg__grid"></div>
@@ -34,7 +34,6 @@ const getBrandList = (brandStr: string) => {
     <div class="cv-header-wrapper" data-reveal>
       <SectionHeader
         align="center"
-        dark
         eyebrow={coverage.eyebrow}
         title={coverage.title}
         description={coverage.description}
@@ -548,12 +547,10 @@ const getBrandList = (brandStr: string) => {
   }
 
   .coverage-card p {
-    display: -webkit-box;
-    overflow: hidden;
+    display: block;
+    overflow: visible;
     font-size: .88rem;
     line-height: 1.65;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
   }
 }
 

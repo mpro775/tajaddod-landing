@@ -343,7 +343,7 @@
   --tj-header-text: var(--tj-text-primary);
   --tj-header-border: var(--tj-border-subtle);
   --tj-mobile-nav-surface: rgb(255 255 255 / 0.97);
-  --tj-footer-surface: var(--tj-neutral-950);
+  --tj-footer-surface: var(--tj-neutral-100);
 
   --tj-gradient-blue-soft: linear-gradient(135deg, rgba(var(--tj-blue-rgb), 0.15), rgba(var(--tj-green-light-rgb), 0.12));
   --tj-gradient-corporate: linear-gradient(180deg, var(--tj-bg-section-alt) 0%, var(--tj-bg-section) 100%);

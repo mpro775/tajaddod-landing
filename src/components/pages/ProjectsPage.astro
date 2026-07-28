@@ -75,7 +75,7 @@ const categories = [allLabel, ...new Set(projects.map((p) => p.category).filter(
           {projects.map((project) => (
             <a href={localePath(locale, `/projects/${project.slug}`)} class="project-card" data-category={project.category}>
               <div class="card-image">
-                <img src={project.coverImage} alt={project.title} loading="lazy" />
+                <img src={project.coverImage} alt={project.title} width="1200" height="750" loading="lazy" decoding="async" />
                 <span class="card-badge">{project.category}</span>
               </div>
               <div class="card-content">

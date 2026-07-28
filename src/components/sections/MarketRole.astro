@@ -76,7 +76,12 @@ const brandSources = [
     </div>
 
     <!-- Flow Visualization -->
-    <div class="mr-flow" data-reveal>
+    <div
+      class="mr-flow"
+      data-reveal
+      data-flow-model={MARKET_FLOW_MODEL.id}
+      data-flow-order={MARKET_FLOW_MODEL.order.slice(0, 3).join('>')}
+    >
       
       <!-- Destination: Market Segments -->
       <div class="mr-flow__market" data-flow-role="destination">
@@ -513,7 +518,6 @@ const brandSources = [
    ──────────────────────────────────────────────────────────────────────── */
 
 .mr-flow {
-  direction: ltr;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   grid-template-areas: "market hub brands";
@@ -523,6 +527,16 @@ const brandSources = [
   max-width: 1100px;
   margin: 0 auto;
   position: relative;
+}
+
+:global([dir="ltr"]) .mr-flow {
+  grid-template-areas: "brands hub market";
+}
+
+/* Named grid areas follow the document's inline axis, so the same semantic
+   sequence places Brands at inline-start in both writing directions. */
+:global([dir="rtl"]) .mr-flow {
+  grid-template-areas: "brands hub market";
 }
 
 .mr-mobile-flow {
@@ -543,7 +557,6 @@ const brandSources = [
 /* Left: Brands */
 .mr-flow__brands {
   grid-area: brands;
-  direction: rtl;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -648,8 +661,8 @@ const brandSources = [
 /* Center Zone & SVG paths */
 .mr-flow__hub-zone {
   grid-area: hub;
-  direction: ltr;
   display: flex;
+  flex-direction: row-reverse;
   align-items: center;
   justify-content: center;
   position: relative;
@@ -661,14 +674,20 @@ const brandSources = [
   flex-shrink: 0;
 }
 
-.mr-flow__lines--in svg {
+.mr-flow__lines--brands svg {
   width: 100%;
   height: 200px;
 }
 
-.mr-flow__lines--out svg {
+.mr-flow__lines--market svg {
   width: 100%;
   height: 260px;
+}
+
+:global([dir="ltr"]) .mr-flow__lines svg {
+  transform: scaleX(-1);
+  transform-box: fill-box;
+  transform-origin: center;
 }
 
 .mr-svg-lines path {
@@ -684,9 +703,18 @@ const brandSources = [
   transition: opacity 0.4s ease, stroke-width 0.4s ease, stroke 0.4s ease;
 }
 
+.mr-flow__lines--brands .mr-path-glow {
+  animation-name: mrLaserFlowReverse;
+}
+
 @keyframes mrLaserFlow {
   from { stroke-dashoffset: 0; }
   to { stroke-dashoffset: -56; }
+}
+
+@keyframes mrLaserFlowReverse {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: 56; }
 }
 
 .mr-path-glow.is-active {
@@ -805,7 +833,6 @@ const brandSources = [
 /* Right: Market Segments */
 .mr-flow__market {
   grid-area: market;
-  direction: rtl;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1085,8 +1112,12 @@ const brandSources = [
    ──────────────────────────────────────────────────────────────────────── */
 
 @media (max-width: 1100px) {
-  .mr-flow {
+  :global([dir]) .mr-flow {
     grid-template-columns: 1fr;
+    grid-template-areas:
+      "brands"
+      "hub"
+      "market";
     gap: 40px;
     max-width: 360px;
   }
@@ -1131,7 +1162,7 @@ const brandSources = [
 
   .mr-step__connector {
     top: 48px;
-    left: 23px;
+    inset-inline-start: 23px;
     width: 2px;
     height: calc(100% + 20px - 48px);
     background: linear-gradient(180deg, color-mix(in srgb, var(--tj-blue) 30%, transparent) 0%, color-mix(in srgb, var(--tj-green) 20%, transparent) 100%);
@@ -1198,7 +1229,8 @@ const brandSources = [
     display: grid;
     gap: 10px;
     min-height: 128px;
-    padding: 18px 74px 18px 18px;
+    padding: 18px;
+    padding-inline-start: 74px;
     border: 1px solid var(--tj-inverse-alpha-08);
     border-radius: 24px;
     background: var(--tj-inverse-alpha-04);
@@ -1218,7 +1250,7 @@ const brandSources = [
   .mr-mobile-flow__num {
     position: absolute;
     top: 18px;
-    right: 16px;
+    inset-inline-start: 16px;
     z-index: 1;
     display: grid;
     place-items: center;
@@ -1321,7 +1353,7 @@ const brandSources = [
 
   .mr-step__connector {
     top: 40px;
-    left: 19px;
+    inset-inline-start: 19px;
     height: calc(100% + 12px - 40px);
   }
 

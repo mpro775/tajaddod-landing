@@ -92,7 +92,10 @@ const brandIds: Record<string, string> = {
                   src={brandLogos[step.brand]} 
                   alt={step.brand} 
                   class="ej-step__brand-logo"
+                  width="72"
+                  height="36"
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
               
@@ -115,11 +118,11 @@ const brandIds: Record<string, string> = {
     <div class="ej-summary" data-reveal>
       <div class="ej-summary__line"></div>
       <div class="ej-summary__brands">
-        <img src="/logos/cnc-logo-white.svg" alt="CNC" class="ej-summary__logo" loading="lazy" />
+        <img src="/logos/cnc-logo-white.svg" alt="CNC" class="ej-summary__logo" width="72" height="36" loading="lazy" decoding="async" />
         <span class="ej-summary__plus">+</span>
-        <img src="/logos/liper-logo-white.svg" alt="Liper" class="ej-summary__logo" loading="lazy" />
+        <img src="/logos/liper-logo-white.svg" alt="Liper" class="ej-summary__logo" width="72" height="36" loading="lazy" decoding="async" />
         <span class="ej-summary__eq">=</span>
-        <img src="/logos/tajaddod-icon.svg" alt={journey.tajaddodName} class="ej-summary__logo ej-summary__logo--main" loading="lazy" />
+        <img src="/logos/tajaddod-icon.svg" alt={journey.tajaddodName} class="ej-summary__logo ej-summary__logo--main" width="48" height="48" loading="lazy" decoding="async" />
       </div>
       <p class="ej-summary__text">{journey.summary}</p>
     </div>

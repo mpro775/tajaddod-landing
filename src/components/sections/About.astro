@@ -17,7 +17,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
 }));
 ---
 
-<section class="section philosophy-section theme-inverse" id="about">
+<section class="section philosophy-section layer-corporate" id="about">
   <!-- Background layers -->
   <div class="ph-bg" aria-hidden="true">
     <div class="ph-bg__grid"></div>
@@ -85,7 +85,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
         <div class="ph-circuit__node ph-circuit__node--cnc" data-ph-node>
           <div class="ph-node__beacon ph-node__beacon--cnc"></div>
           <div class="ph-node__card">
-            <img src="/logos/cnc-logo-white.svg" alt="CNC" loading="lazy"/>
+            <img src="/logos/cnc-logo-white.svg" alt="CNC" width="72" height="36" loading="lazy" decoding="async"/>
             <span>{copy.circuit.cnc}</span>
           </div>
         </div>
@@ -93,7 +93,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
         <div class="ph-circuit__node ph-circuit__node--tajaddod" data-ph-node>
           <div class="ph-node__beacon ph-node__beacon--white"></div>
           <div class="ph-node__card ph-node__card--center">
-            <img src="/logos/tajaddod-icon.svg" alt={copy.mobileNodes[1].name} loading="lazy"/>
+            <img src="/logos/tajaddod-icon.svg" alt={copy.mobileNodes[1].name} width="36" height="36" loading="lazy" decoding="async"/>
             <span>{copy.circuit.tajaddod}</span>
           </div>
         </div>
@@ -101,7 +101,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
         <div class="ph-circuit__node ph-circuit__node--liper" data-ph-node>
           <div class="ph-node__beacon"></div>
           <div class="ph-node__card">
-            <img src="/logos/liper-logo-white.svg" alt="Liper" loading="lazy"/>
+            <img src="/logos/liper-logo-white.svg" alt="Liper" width="72" height="36" loading="lazy" decoding="async"/>
             <span>{copy.circuit.liper}</span>
           </div>
         </div>
@@ -113,7 +113,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
         <div class={`ph-mobile-node ${node.hub ? 'ph-mobile-node--hub' : ''}`} style={`--node-color: ${node.color};`}>
           <span class="ph-mobile-node__dot"></span>
           <div class="ph-mobile-node__card">
-            <img src={node.logo} alt={node.name} loading="lazy" />
+            <img src={node.logo} alt={node.name} width="72" height="36" loading="lazy" decoding="async" />
             <div>
               <strong>{node.name}</strong>
               <span>{node.text}</span>
@@ -139,7 +139,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
         <h3 class="ph-pillar__title">{copy.pillars[0].title}</h3>
         <p class="ph-pillar__text">{copy.pillars[0].text}</p>
         <div class="ph-pillar__brand">
-          <img src="/logos/cnc-logo-white.svg" alt="CNC" loading="lazy"/>
+          <img src="/logos/cnc-logo-white.svg" alt="CNC" width="72" height="36" loading="lazy" decoding="async"/>
         </div>
         <div class="ph-pillar__glow" style="--pillar-color: var(--tj-green);"></div>
       </div>
@@ -157,7 +157,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
         <h3 class="ph-pillar__title">{copy.pillars[1].title}</h3>
         <p class="ph-pillar__text">{copy.pillars[1].text}</p>
         <div class="ph-pillar__brand">
-          <img src="/logos/tajaddod-icon.svg" alt={copy.mobileNodes[1].name} loading="lazy" style="height: 18px;"/>
+          <img src="/logos/tajaddod-icon.svg" alt={copy.mobileNodes[1].name} width="18" height="18" loading="lazy" decoding="async"/>
         </div>
         <div class="ph-pillar__glow" style="--pillar-color: var(--tj-blue);"></div>
       </div>
@@ -175,7 +175,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
         <h3 class="ph-pillar__title">{copy.pillars[2].title}</h3>
         <p class="ph-pillar__text">{copy.pillars[2].text}</p>
         <div class="ph-pillar__brand">
-          <img src="/logos/liper-logo-white.svg" alt="Liper" loading="lazy"/>
+          <img src="/logos/liper-logo-white.svg" alt="Liper" width="72" height="36" loading="lazy" decoding="async"/>
         </div>
         <div class="ph-pillar__glow" style="--pillar-color: var(--tj-orange);"></div>
       </div>
@@ -195,9 +195,9 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
         <span class="ph-quote__mark">"</span>
       </blockquote>
       <div class="ph-closing__brands">
-        <img src="/logos/cnc-logo-white.svg" alt="CNC" loading="lazy"/>
+        <img src="/logos/cnc-logo-white.svg" alt="CNC" width="72" height="36" loading="lazy" decoding="async"/>
         <span class="ph-closing__divider"></span>
-        <img src="/logos/liper-logo-white.svg" alt="Liper" loading="lazy"/>
+        <img src="/logos/liper-logo-white.svg" alt="Liper" width="72" height="36" loading="lazy" decoding="async"/>
       </div>
     </div>
 

@@ -19,7 +19,7 @@ const articleUrl = `${siteUrl}${localePath(locale, `/news/${item.slug}`)}`;
     <!-- Cinematic Hero -->
     <section class="nd-hero theme-inverse">
       <div class="nd-hero__bg">
-        <img src={item.coverImage} alt={item.title} />
+        <img src={item.coverImage} alt={item.title} width="1600" height="900" loading="eager" fetchpriority="high" decoding="async" />
         <div class="nd-hero__overlay"></div>
         <div class="nd-hero__grain"></div>
       </div>
@@ -85,7 +85,7 @@ const articleUrl = `${siteUrl}${localePath(locale, `/news/${item.slug}`)}`;
                 <div class="nd-gallery__grid">
                   {item.gallery.map((img: string) => (
                     <div class="nd-gallery__item">
-                      <img src={img} alt={labels.imageAlt} loading="lazy" />
+                      <img src={img} alt={labels.imageAlt} width="1200" height="750" loading="lazy" decoding="async" />
                     </div>
                   ))}
                 </div>
@@ -168,7 +168,7 @@ const articleUrl = `${siteUrl}${localePath(locale, `/news/${item.slug}`)}`;
             {relatedNews.map((related) => (
               <a href={localePath(locale, `/news/${related.slug}`)} class="nd-related-card" id={`related-${related.slug}`}>
                 <div class="nd-related-card__img">
-                  <img src={related.coverImage} alt={related.title} loading="lazy" />
+                  <img src={related.coverImage} alt={related.title} width="1200" height="675" loading="lazy" decoding="async" />
                   <div class="nd-related-card__overlay"></div>
                   <span class="nd-related-card__cat">{related.category}</span>
                 </div>

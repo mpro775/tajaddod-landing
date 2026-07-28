@@ -87,6 +87,264 @@
   color: var(--tj-text-muted);
 }
 
+/* Home theme-adaptive visual sections. Cinematic artwork remains reserved for
+   the hero, MarketRole, and EnergyJourney. */
+:root[data-theme] :is(
+  .philosophy-section,
+  .bw-section,
+  .featured-projects,
+  .coverage-section,
+  .sectors-section,
+  .app-section,
+  .latest-news,
+  .cta-section
+) {
+  color: var(--tj-text-primary);
+}
+
+:root[data-theme] :is(.philosophy-section, .featured-projects, .sectors-section, .latest-news) {
+  background: var(--tj-gradient-corporate) !important;
+}
+
+:root[data-theme] :is(.bw-section, .coverage-section, .app-section, .cta-section) {
+  background: var(--tj-gradient-section-alt) !important;
+}
+
+:root[data-theme] :is(
+  .ph-title,
+  .bw-header__title,
+  .fp-title,
+  .ln-title,
+  .app-title
+) {
+  color: var(--tj-text-primary);
+}
+
+:root[data-theme] :is(
+  .ph-lead,
+  .bw-header__desc,
+  .fp-subtitle,
+  .ln-subtitle,
+  .app-desc
+) {
+  color: var(--tj-text-secondary);
+}
+
+:root[data-theme] :is(
+  .ph-eyebrow__text,
+  .bw-header__eyebrow,
+  .fp-eyebrow,
+  .ln-eyebrow,
+  .app-eyebrow__text
+) {
+  color: var(--tj-text-accent);
+}
+
+:root[data-theme] :is(
+  .philosophy-section,
+  .bw-section,
+  .featured-projects,
+  .coverage-section,
+  .sectors-section,
+  .app-section,
+  .latest-news,
+  .cta-section
+) :is(.ph-bg__grid, .bw-bg__grid, .cv-bg__grid, .sc-bg__grid, .app-bg__grid, .cta-bg__grid, .ln-ambient__grid) {
+  opacity: 0.035;
+}
+
+:root[data-theme] .philosophy-section :is(.ph-pillar, .ph-quote, .ph-closing) {
+  color: var(--tj-text-primary);
+  background: color-mix(in srgb, var(--tj-bg-surface) 90%, transparent);
+  border-color: var(--tj-border-subtle);
+  box-shadow: var(--tj-shadow-1);
+}
+
+:root[data-theme] .philosophy-section :is(.ph-pillar__title, .ph-quote strong) {
+  color: var(--tj-text-primary);
+}
+
+:root[data-theme] .philosophy-section :is(.ph-pillar__text, .ph-quote, .ph-closing) {
+  color: var(--tj-text-secondary);
+}
+
+:root[data-theme] .philosophy-section :is(.ph-mobile-node, .ph-node__card) {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-surface);
+  border-color: var(--tj-border-default);
+}
+
+:root[data-theme] .bw-section :is(.bw-world, .bw-connector) {
+  border-color: var(--tj-border-default);
+  box-shadow: var(--tj-shadow-2);
+}
+
+:root[data-theme] .featured-projects .fp-btn,
+:root[data-theme] .latest-news .ln-btn {
+  color: var(--tj-text-primary);
+  border-color: var(--tj-border-default);
+  background: var(--tj-bg-surface);
+  box-shadow: var(--tj-shadow-1);
+}
+
+:root[data-theme] .featured-projects .fp-btn:hover,
+:root[data-theme] .latest-news .ln-btn:hover {
+  color: var(--tj-text-accent);
+  border-color: var(--tj-focus-ring);
+  background: var(--tj-action-soft);
+}
+
+:root[data-theme] .coverage-section .cv-tab {
+  color: var(--tj-text-secondary);
+  background: var(--tj-bg-surface);
+  border-color: var(--tj-border-subtle);
+}
+
+:root[data-theme] .coverage-section .cv-tab.is-active {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-surface-raised);
+  border-color: var(--tj-border-strong);
+  box-shadow: var(--tj-shadow-1);
+}
+
+:root[data-theme] .coverage-section .coverage-card {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-surface);
+  border-color: var(--tj-border-subtle);
+  box-shadow: var(--tj-shadow-1);
+}
+
+:root[data-theme] .coverage-section .coverage-card:hover {
+  border-color: var(--tj-border-strong);
+  box-shadow: var(--tj-shadow-3);
+}
+
+:root[data-theme] .coverage-section .coverage-card h3 {
+  color: var(--tj-text-primary);
+}
+
+:root[data-theme] .coverage-section .coverage-card p {
+  color: var(--tj-text-secondary);
+}
+
+:root[data-theme] .sectors-section :is(.sc-tab, .sc-board, .sc-mobile-card) {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-surface);
+  border-color: var(--tj-border-subtle);
+  box-shadow: var(--tj-shadow-1);
+}
+
+:root[data-theme] .sectors-section .sc-tab:is(:hover, .is-active) {
+  background: var(--tj-bg-surface-raised);
+  border-color: color-mix(in srgb, var(--tab-accent) 32%, var(--tj-border-default));
+}
+
+:root[data-theme] .sectors-section :is(
+  .sc-tab__label strong,
+  .sc-board__meta h3,
+  .sc-board__statement,
+  .sc-board__checklist-wrapper h4,
+  .sc-board__brands-wrapper h4,
+  .sc-mobile-card h3,
+  .sc-mobile-card__statement
+) {
+  color: var(--tj-text-primary);
+}
+
+:root[data-theme] .sectors-section :is(
+  .sc-tab__label span,
+  .sc-board__checklist,
+  .sc-brand-tag__role,
+  .sc-mobile-card__checklist
+) {
+  color: var(--tj-text-secondary);
+}
+
+:root[data-theme] .sectors-section :is(.sc-brand-tag, .sc-board__badge) {
+  background: var(--tj-bg-surface-soft);
+  border-color: var(--tj-border-subtle);
+}
+
+:root[data-theme] .app-section :is(.store-btn, .web-btn) {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-surface);
+  border-color: var(--tj-border-default);
+  box-shadow: var(--tj-shadow-1);
+}
+
+:root[data-theme] .app-section :is(.store-btn__sub, .app-web-action) {
+  color: var(--tj-text-secondary);
+}
+
+:root[data-theme] .latest-news .ln-card {
+  color: var(--tj-text-primary);
+  background: var(--tj-bg-surface);
+  border-color: var(--tj-border-subtle);
+  box-shadow: var(--tj-shadow-1);
+}
+
+:root[data-theme] .latest-news .ln-card:hover {
+  border-color: var(--tj-border-strong);
+  box-shadow: var(--tj-shadow-3);
+}
+
+:root[data-theme] .latest-news .ln-card__title {
+  color: var(--tj-text-primary);
+}
+
+:root[data-theme] .latest-news :is(.ln-card__excerpt, .ln-card__author) {
+  color: var(--tj-text-secondary);
+}
+
+:root[data-theme] .latest-news .ln-card__footer {
+  border-color: var(--tj-border-subtle);
+}
+
+/* Contact keeps a cinematic callout card, but the surrounding section now
+   participates in the selected theme. */
+:root[data-theme] .cta-section .cta-card {
+  border-color: var(--tj-border-inverse);
+  box-shadow: var(--tj-shadow-3);
+}
+
+/* Footer is a standard themed surface; only its decorative glow stays branded. */
+:root[data-theme] .site-footer {
+  color: var(--tj-text-primary);
+  background: var(--tj-footer-surface);
+  border-color: var(--tj-border-subtle);
+}
+
+:root[data-theme] .site-footer :is(.footer-title, .footer-subtitle, .footer-accordion-trigger) {
+  color: var(--tj-text-primary);
+}
+
+:root[data-theme] .site-footer :is(.footer-desc, .footer-link, .footer-contact, .footer-copyright) {
+  color: var(--tj-text-secondary);
+}
+
+:root[data-theme] .site-footer :is(.footer-disclaimer, .footer-back-top) {
+  color: var(--tj-text-accent);
+}
+
+:root[data-theme] .site-footer :is(.footer-bottom, .footer-accordion-item) {
+  border-color: var(--tj-border-subtle);
+}
+
+:root[data-theme] .site-footer .footer-bottom,
+:root[data-theme] .site-footer .footer-accordion-item {
+  background: color-mix(in srgb, var(--tj-bg-surface) 45%, transparent);
+}
+
+:root[data-theme="light"] .site-footer .footer-logo__image--color,
+:root[data-theme="dark"] .site-footer .footer-logo__image--white {
+  display: block;
+}
+
+:root[data-theme="light"] .site-footer .footer-logo__image--white,
+:root[data-theme="dark"] .site-footer .footer-logo__image--color {
+  display: none;
+}
+
 /* Project/news indexes */
 :root[data-theme] .projects-page > .container,
 :root[data-theme] .news-index > .container {
