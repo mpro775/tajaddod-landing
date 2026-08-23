@@ -46,15 +46,9 @@ const iconMap: Record<string, string> = {
   .achievements-section {
     position: relative;
     padding: clamp(80px, 10vw, 120px) 0;
-    background: linear-gradient(
-      170deg,
-      #081d28 0%,
-      #0c2b36 30%,
-      #0b3429 60%,
-      #091f2b 100%
-    );
+    background: var(--tj-bg-section);
     overflow: hidden;
-    color: var(--tj-text-inverse);
+    color: var(--tj-text-primary);
   }
   .achievements-bg {
     position: absolute;
@@ -105,7 +99,7 @@ const iconMap: Record<string, string> = {
   :global(.achievements-section .section-header h2) {
     font-size: clamp(2rem, 4vw, 2.8rem);
     font-weight: var(--tj-font-bold);
-    background: linear-gradient(135deg, var(--tj-text-inverse), var(--tj-inverse-alpha-70));
+    background: linear-gradient(135deg, var(--tj-text-primary), var(--tj-text-muted));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-inline: auto;
@@ -136,10 +130,10 @@ const iconMap: Record<string, string> = {
   }
 
   .achievement-card {
-    background: var(--tj-inverse-alpha-02);
+    background: var(--tj-bg-surface);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--tj-inverse-alpha-05);
+    border: 1px solid var(--tj-border-subtle);
     border-radius: 20px;
     padding: 32px 24px;
     text-align: center;
@@ -195,7 +189,7 @@ const iconMap: Record<string, string> = {
   .card-number {
     font-size: 2.8rem;
     font-weight: var(--tj-font-black);
-    color: var(--tj-text-inverse);
+    color: var(--tj-text-primary);
     line-height: 1;
     font-variant-numeric: tabular-nums;
   }
@@ -209,7 +203,7 @@ const iconMap: Record<string, string> = {
   .card-label {
     font-size: 1.1rem;
     font-weight: var(--tj-font-semibold);
-    color: var(--tj-inverse-alpha-90);
+    color: var(--tj-text-primary);
     margin-bottom: 12px;
     position: relative;
     z-index: 1;
@@ -217,7 +211,7 @@ const iconMap: Record<string, string> = {
 
   .card-desc {
     font-size: 0.85rem;
-    color: var(--tj-inverse-alpha-50);
+    color: var(--tj-text-muted);
     line-height: 1.6;
     margin: 0;
     position: relative;

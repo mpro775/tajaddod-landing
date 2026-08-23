@@ -76,7 +76,7 @@ export const serviceLabels: Record<Locale, Record<string, string>> = {
     inspection: 'فحص',
     repair: 'إصلاح',
     handover: 'تسليم',
-    payment_collection: 'تحصيل',
+    payment_collection: 'تحصيل مالي',
     power_rental: 'تأجير الطاقة',
   },
   en: {

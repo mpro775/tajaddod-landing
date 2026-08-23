@@ -288,7 +288,7 @@ export const ar = {
     empty: 'لا توجد مشاريع منشورة حاليًا.',
   },
   projectDetail: {
-    home: 'الرئيسية', projects: 'المشاريع', location: 'الموقع', year: 'السنة',
+    home: 'الرئيسية', projects: 'المشاريع', location: 'الموقع', year: 'المدة',
     overview: 'نظرة عامة', challenge: 'التحدي', solution: 'الحل المقدم', gallery: 'معرض الصور',
     scope: 'نطاق العمل', brands: 'العلامات التجارية المستخدمة', summary: 'ملخص المشروع',
     category: 'التصنيف', status: 'الحالة', similar: 'مشاريع مشابهة',
@@ -334,7 +334,7 @@ export const ar = {
       specialtiesValue: '{count} تخصصات', specialties: 'مجالات التخصص', families: 'عائلات المنتجات',
     },
     applications: {
-      eyebrow: 'مجالات التطبيق', titleLead: 'أين تستخدم منتجات', titleTail: '؟',
+      eyebrow: 'مجالات التطبيق', title: 'أين تستخدم منتجات {brand}؟',
       description: 'تغطي منتجاتنا قطاعات واسعة تلبي احتياجات مختلف المشاريع والبيئات.',
     },
     products: {

@@ -85,7 +85,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
         <div class="ph-circuit__node ph-circuit__node--cnc" data-ph-node>
           <div class="ph-node__beacon ph-node__beacon--cnc"></div>
           <div class="ph-node__card">
-            <img src="/logos/cnc-logo-white.svg" alt="CNC" width="72" height="36" loading="lazy" decoding="async"/>
+            <img src="/logos/cnc-logo-white.svg" alt="CNC" width="72" height="36" class="theme-adapt-logo" loading="lazy" decoding="async"/>
             <span>{copy.circuit.cnc}</span>
           </div>
         </div>
@@ -101,7 +101,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
         <div class="ph-circuit__node ph-circuit__node--liper" data-ph-node>
           <div class="ph-node__beacon"></div>
           <div class="ph-node__card">
-            <img src="/logos/liper-logo-white.svg" alt="Liper" width="72" height="36" loading="lazy" decoding="async"/>
+            <img src="/logos/liper-logo-white.svg" alt="Liper" width="72" height="36" class="theme-adapt-logo" loading="lazy" decoding="async"/>
             <span>{copy.circuit.liper}</span>
           </div>
         </div>
@@ -139,7 +139,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
         <h3 class="ph-pillar__title">{copy.pillars[0].title}</h3>
         <p class="ph-pillar__text">{copy.pillars[0].text}</p>
         <div class="ph-pillar__brand">
-          <img src="/logos/cnc-logo-white.svg" alt="CNC" width="72" height="36" loading="lazy" decoding="async"/>
+          <img src="/logos/cnc-logo-white.svg" alt="CNC" width="72" height="36" class="theme-adapt-logo" loading="lazy" decoding="async"/>
         </div>
         <div class="ph-pillar__glow" style="--pillar-color: var(--tj-green);"></div>
       </div>
@@ -175,7 +175,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
         <h3 class="ph-pillar__title">{copy.pillars[2].title}</h3>
         <p class="ph-pillar__text">{copy.pillars[2].text}</p>
         <div class="ph-pillar__brand">
-          <img src="/logos/liper-logo-white.svg" alt="Liper" width="72" height="36" loading="lazy" decoding="async"/>
+          <img src="/logos/liper-logo-white.svg" alt="Liper" width="72" height="36" class="theme-adapt-logo" loading="lazy" decoding="async"/>
         </div>
         <div class="ph-pillar__glow" style="--pillar-color: var(--tj-orange);"></div>
       </div>
@@ -195,9 +195,9 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
         <span class="ph-quote__mark">"</span>
       </blockquote>
       <div class="ph-closing__brands">
-        <img src="/logos/cnc-logo-white.svg" alt="CNC" width="72" height="36" loading="lazy" decoding="async"/>
+        <img src="/logos/cnc-logo-white.svg" alt="CNC" width="72" height="36" class="theme-adapt-logo" loading="lazy" decoding="async"/>
         <span class="ph-closing__divider"></span>
-        <img src="/logos/liper-logo-white.svg" alt="Liper" width="72" height="36" loading="lazy" decoding="async"/>
+        <img src="/logos/liper-logo-white.svg" alt="Liper" width="72" height="36" class="theme-adapt-logo" loading="lazy" decoding="async"/>
       </div>
     </div>
 
@@ -721,10 +721,10 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
   position: relative;
   overflow: hidden;
   padding: 36px 30px 30px;
-  background: var(--tj-inverse-alpha-02);
+  background: var(--tj-bg-surface);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid var(--tj-inverse-alpha-06);
+  border: 1px solid var(--tj-border-subtle);
   border-radius: 26px;
   transition:
     transform 0.5s var(--tj-ease-smooth),
@@ -735,10 +735,10 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
 
 .ph-pillar:hover {
   transform: translateY(-8px);
-  border-color: var(--tj-inverse-alpha-15);
+  border-color: var(--tj-border-default);
   box-shadow:
-    0 30px 70px color-mix(in srgb, var(--tj-neutral-950) 25%, transparent),
-    inset 0 1px 0 var(--tj-inverse-alpha-06);
+    var(--tj-shadow-3),
+    inset 0 1px 0 var(--tj-border-subtle);
 }
 
 /* Top accent line */
@@ -784,7 +784,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
 }
 
 .ph-pillar__num {
-  color: var(--tj-inverse-alpha-04);
+  color: color-mix(in srgb, var(--tj-text-primary) 6%, transparent);
   font-size: 3.5rem;
   font-weight: var(--tj-font-black);
   line-height: 1;
@@ -792,18 +792,18 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
 }
 
 .ph-pillar:hover .ph-pillar__num {
-  color: var(--tj-inverse-alpha-08);
+  color: color-mix(in srgb, var(--tj-text-primary) 12%, transparent);
 }
 
 .ph-pillar__title {
-  color: var(--tj-text-inverse);
+  color: var(--tj-text-primary);
   font-size: 1.3rem;
   font-weight: var(--tj-font-bold);
   margin-bottom: 14px;
 }
 
 .ph-pillar__text {
-  color: var(--tj-inverse-alpha-50);
+  color: var(--tj-text-muted);
   font-size: var(--tj-text-body);
   line-height: 1.9;
   margin-bottom: 24px;
@@ -811,7 +811,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
 }
 
 .ph-pillar:hover .ph-pillar__text {
-  color: var(--tj-inverse-alpha-65);
+  color: var(--tj-text-secondary);
 }
 
 /* Brand tag */
@@ -819,15 +819,15 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
   display: inline-flex;
   align-items: center;
   padding: 10px 16px;
-  background: var(--tj-inverse-alpha-04);
-  border: 1px solid var(--tj-inverse-alpha-06);
+  background: color-mix(in srgb, var(--tj-text-primary) 4%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tj-text-primary) 6%, transparent);
   border-radius: 14px;
   transition: all 0.4s ease;
 }
 
 .ph-pillar:hover .ph-pillar__brand {
-  background: var(--tj-inverse-alpha-07);
-  border-color: var(--tj-inverse-alpha-12);
+  background: color-mix(in srgb, var(--tj-text-primary) 7%, transparent);
+  border-color: color-mix(in srgb, var(--tj-text-primary) 12%, transparent);
 }
 
 .ph-pillar__brand img {

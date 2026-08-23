@@ -19,8 +19,9 @@ const navigation = [
   { label: copy.nav.news, href: localePath(locale, '/news') },
   { label: copy.nav.contact, href: `${home}#contact` },
 ];
+const isLightTopPage = pathname.includes('/brands') || pathname.includes('/projects') || pathname.includes('/news');
 ---
-<header class="site-header" data-header>
+<header class={`site-header ${isLightTopPage ? 'header--light-top' : ''}`} data-header>
   <div class="container header-inner">
     <a class="brand-lockup" href={home} aria-label={copy.header.homeLabel}>
       <img class="brand-lockup__logo brand-lockup__logo--color" src="/logos/tajaddod-logo.svg" alt="" width="164" height="58" />
@@ -141,8 +142,13 @@ const navigation = [
   }
   .brand-lockup__logo--color { opacity: 0; }
   .brand-lockup__logo--white { opacity: 1; }
-  :global(:root[data-theme="light"]) .site-header.is-scrolled .brand-lockup__logo--color { opacity: 1; }
-  :global(:root[data-theme="light"]) .site-header.is-scrolled .brand-lockup__logo--white { opacity: 0; }
+  :global(:root[data-theme="light"]) .site-header.is-scrolled .brand-lockup__logo--color,
+  :global(:root[data-theme="light"]) .site-header.header--light-top:not(.is-scrolled) .brand-lockup__logo--color { opacity: 1; }
+  
+  :global(:root[data-theme="light"]) .site-header.is-scrolled .brand-lockup__logo--white,
+  :global(:root[data-theme="light"]) .site-header.header--light-top:not(.is-scrolled) .brand-lockup__logo--white { opacity: 0; }
+  
+  :global(:root[data-theme="light"]) .site-header.header--light-top:not(.is-scrolled) { color: var(--tj-header-text); }
 
   .header-language {
     display: inline-flex;
@@ -163,6 +169,11 @@ const navigation = [
   .site-header.is-scrolled .header-language {
     color: var(--tj-header-text);
     border-color: var(--tj-header-border);
+    background: var(--tj-action-soft);
+  }
+  :global(:root[data-theme="light"]) .site-header.header--light-top:not(.is-scrolled) .header-language {
+    color: var(--tj-header-text);
+    border-color: var(--tj-border-default);
     background: var(--tj-action-soft);
   }
   .header-language:hover {
@@ -190,11 +201,28 @@ const navigation = [
     list-style: none;
     transition: color var(--tj-transition-base), background-color var(--tj-transition-base), border-color var(--tj-transition-base);
   }
+  .menu-toggle span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--tj-text-inverse);
+    transition: transform 220ms ease, opacity 180ms ease, background-color var(--tj-transition-base);
+  }
+  .site-header.is-scrolled .menu-toggle span,
+  .site-header.is-menu-open .menu-toggle span { background: var(--tj-header-text); }
+  :global(:root[data-theme="light"]) .site-header.header--light-top:not(.is-scrolled) .menu-toggle span { background: var(--tj-header-text); }
   .site-header.is-scrolled .theme-quick-toggle,
   .site-header.is-scrolled .theme-menu summary {
     color: var(--tj-header-text);
     background: var(--tj-action-soft);
     border-color: var(--tj-header-border);
+  }
+  :global(:root[data-theme="light"]) .site-header.header--light-top:not(.is-scrolled) .theme-quick-toggle,
+  :global(:root[data-theme="light"]) .site-header.header--light-top:not(.is-scrolled) .theme-menu summary {
+    color: var(--tj-header-text);
+    background: var(--tj-action-soft);
+    border-color: var(--tj-border-default);
   }
   .theme-quick-toggle:hover,
   .theme-menu summary:hover {

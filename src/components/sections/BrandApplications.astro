@@ -1,7 +1,7 @@
 ---
 import type { Locale } from '../../lib/api/types';
 import type { VisualBrand } from '../../lib/visual/legacy-view';
-import { dictionary } from '../../i18n';
+import { dictionary, formatMessage } from '../../i18n';
 
 interface Props {
   brand: VisualBrand;
@@ -49,7 +49,7 @@ const applicationIcons = brandApplicationIcons[brand.id] || [];
         <span class="brand-apps__eyebrow-line"></span>
       </div>
       <h2 class="brand-apps__title">
-        {labels.titleLead} <span>{brand.name}</span>{labels.titleTail}
+        {formatMessage(labels.title, { brand: brand.name })}
       </h2>
       <p class="brand-apps__desc">{labels.description}</p>
     </div>

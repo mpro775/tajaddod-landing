@@ -186,8 +186,8 @@ const getBrandList = (brandStr: string) => {
   inset: 0;
   opacity: 0.03;
   background-image:
-    linear-gradient(var(--tj-inverse-alpha-08) 1px, transparent 1px),
-    linear-gradient(90deg, var(--tj-inverse-alpha-08) 1px, transparent 1px);
+    linear-gradient(color-mix(in srgb, var(--tj-text-primary) 10%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--tj-text-primary) 10%, transparent) 1px, transparent 1px);
   background-size: 64px 64px;
 }
 
@@ -236,10 +236,10 @@ const getBrandList = (brandStr: string) => {
   gap: 12px;
   margin: 0 auto;
   padding: 8px;
-  background: var(--tj-inverse-alpha-03);
+  background: color-mix(in srgb, var(--tj-text-primary) 4%, transparent);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--tj-inverse-alpha-06);
+  border: 1px solid color-mix(in srgb, var(--tj-text-primary) 8%, transparent);
   border-radius: 100px;
   max-width: 100%;
   width: fit-content;
@@ -281,7 +281,7 @@ const getBrandList = (brandStr: string) => {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--tj-inverse-alpha-40);
+  background: color-mix(in srgb, var(--tj-text-primary) 40%, transparent);
   transition: transform 0.3s;
 }
 
@@ -411,9 +411,9 @@ const getBrandList = (brandStr: string) => {
   border-radius: 999px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  background: var(--tj-inverse-alpha-05);
-  border: 1px solid var(--tj-inverse-alpha-10);
-  color: var(--tj-inverse-alpha-70);
+  background: color-mix(in srgb, var(--tj-text-primary) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tj-text-primary) 10%, transparent);
+  color: var(--tj-text-secondary);
   transition: all 0.4s ease;
 }
 
