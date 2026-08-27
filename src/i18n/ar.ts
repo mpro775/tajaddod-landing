@@ -99,7 +99,7 @@ export const ar = {
       eyebrow: 'إنجازات تجدد',
       title: 'أرقام تعكس حضورنا في سوق الكهرباء والطاقة',
       items: [
-        { value: '11', suffix: '+', label: 'سنوات خبرة', description: 'عقد من التميز والريادة في قطاع الكهرباء.', icon: 'calendar' },
+        { value: '11', suffix: '+', label: 'سنوات خبرة', description: 'أكثر من عقد من التميز والريادة في قطاع الكهرباء.', icon: 'calendar' },
         { value: '361', suffix: '+', label: 'مشروع منفذ', description: 'مشاريع متنوعة بين سكنية وتجارية وصناعية.', icon: 'projects' },
         { value: '5.01', suffix: ' MW+', label: 'قدرة تشغيلية', description: 'إجمالي الطاقة الشمسية التي قمنا بتوريدها وتركيبها.', icon: 'energy' },
         { value: '687', suffix: '+', label: 'عميل وشريك', description: 'شركاء نجاح نعتز بثقتهم المستمرة في خدماتنا.', icon: 'clients' },

@@ -50,7 +50,7 @@ const brandLogos: Record<string, string> = { CNC: '/logos/cnc-logo.svg', Liper: 
           <svg class="pd-breadcrumb__sep directional-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
           <a href={localePath(locale, "/projects")} class="pd-breadcrumb__link">{labels.projects}</a>
           <svg class="pd-breadcrumb__sep directional-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-          <span class="pd-breadcrumb__current">{project.title.length > 35 ? project.title.slice(0, 35) + '...' : project.title}</span>
+          <span class="pd-breadcrumb__current">{project.title}</span>
         </nav>
 
         <!-- Category + Status -->
@@ -429,11 +429,22 @@ const brandLogos: Record<string, string> = { CNC: '/logos/cnc-logo.svg', Liper: 
     gap: 8px;
     margin-bottom: 28px;
     font-size: 0.85rem;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+
+  .pd-breadcrumb::-webkit-scrollbar {
+    display: none;
   }
 
   .pd-breadcrumb__link {
     color: var(--tj-inverse-alpha-50);
     transition: color 200ms ease;
+    flex-shrink: 0;
   }
 
   .pd-breadcrumb__link:hover {
@@ -448,9 +459,7 @@ const brandLogos: Record<string, string> = { CNC: '/logos/cnc-logo.svg', Liper: 
   .pd-breadcrumb__current {
     color: var(--tj-inverse-alpha-75);
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 280px;
+    flex-shrink: 0;
   }
 
   /* Badges */

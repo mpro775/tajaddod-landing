@@ -67,7 +67,7 @@ export const en = {
     achievements: {
       eyebrow: 'Tajaddod achievements', title: 'Numbers that reflect our presence in the electricity and energy market',
       items: [
-        { value: '11', suffix: '+', label: 'Years of experience', description: 'A decade of leadership in the electricity sector.', icon: 'calendar' },
+        { value: '11', suffix: '+', label: 'Years of experience', description: 'More than a decade of excellence and leadership in the electricity sector.', icon: 'calendar' },
         { value: '361', suffix: '+', label: 'Projects delivered', description: 'Residential, commercial, and industrial projects.', icon: 'projects' },
         { value: '5.01', suffix: ' MW+', label: 'Operational capacity', description: 'Solar capacity supplied and installed by our teams.', icon: 'energy' },
         { value: '687', suffix: '+', label: 'Clients and partners', description: 'Success partners whose continued trust we value.', icon: 'clients' },

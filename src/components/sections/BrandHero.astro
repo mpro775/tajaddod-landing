@@ -248,7 +248,6 @@ const accent = accentMap[brand.id] || accentMap.cnc;
     align-items: center;
   }
 
-  /* ── Breadcrumb ────────────────────────────────────────────── */
   .brand-hero__breadcrumb {
     display: flex;
     align-items: center;
@@ -256,6 +255,22 @@ const accent = accentMap[brand.id] || accentMap.cnc;
     margin-bottom: 40px;
     font-size: var(--tj-text-small);
     color: var(--tj-inverse-alpha-50);
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+    justify-content: center;
+  }
+  
+  .brand-hero__breadcrumb::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .brand-hero__breadcrumb > * {
+    flex-shrink: 0;
+    white-space: nowrap;
   }
 
   .brand-hero__breadcrumb a {

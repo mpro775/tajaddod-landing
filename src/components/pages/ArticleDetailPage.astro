@@ -35,7 +35,7 @@ const articleUrl = `${siteUrl}${localePath(locale, `/news/${item.slug}`)}`;
           <svg class="nd-breadcrumb__sep directional-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
           <a href={localePath(locale, "/news")} class="nd-breadcrumb__link">{labels.news}</a>
           <svg class="nd-breadcrumb__sep directional-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-          <span class="nd-breadcrumb__current">{item.title.length > 40 ? item.title.slice(0, 40) + '...' : item.title}</span>
+          <span class="nd-breadcrumb__current">{item.title}</span>
         </nav>
 
         <div class="nd-hero__meta-row">
@@ -315,11 +315,22 @@ const articleUrl = `${siteUrl}${localePath(locale, `/news/${item.slug}`)}`;
     gap: 8px;
     margin-bottom: 28px;
     font-size: 0.85rem;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+
+  .nd-breadcrumb::-webkit-scrollbar {
+    display: none;
   }
 
   .nd-breadcrumb__link {
     color: var(--tj-inverse-alpha-55);
     transition: color 200ms ease;
+    flex-shrink: 0;
   }
 
   .nd-breadcrumb__link:hover {
@@ -334,9 +345,7 @@ const articleUrl = `${siteUrl}${localePath(locale, `/news/${item.slug}`)}`;
   .nd-breadcrumb__current {
     color: var(--tj-inverse-alpha-80);
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 300px;
+    flex-shrink: 0;
   }
 
   /* Category & Reading Time */
