@@ -42,13 +42,13 @@ const categories = [...new Set(products.map((p) => p.category))];
 
     <!-- Category filter pills -->
     {categories.length > 1 && (
-      <div class="brand-products__filters" id="product-filters">
-        <button class="filter-pill is-active" data-filter="all">
+      <div class="brand-products__filters" id="product-filters" role="group" aria-label={locale === 'en' ? 'Filter products by category' : 'فلترة المنتجات حسب التصنيف'}>
+        <button class="filter-pill is-active" type="button" data-filter="all" aria-pressed="true">
           <span>{labels.all}</span>
           <span class="filter-pill__count">{products.length}</span>
         </button>
         {categories.map((cat) => (
-          <button class="filter-pill" data-filter={cat}>
+          <button class="filter-pill" type="button" data-filter={cat} aria-pressed="false">
             <span>{cat}</span>
             <span class="filter-pill__count">{products.filter((p) => p.category === cat).length}</span>
           </button>
@@ -138,8 +138,12 @@ const categories = [...new Set(products.map((p) => p.category))];
     pills.forEach((pill) => {
       pill.addEventListener('click', () => {
         // Update active state
-        pills.forEach((p) => p.classList.remove('is-active'));
+        pills.forEach((p) => {
+          p.classList.remove('is-active');
+          p.setAttribute('aria-pressed', 'false');
+        });
         pill.classList.add('is-active');
+        pill.setAttribute('aria-pressed', 'true');
 
         const filter = pill.getAttribute('data-filter');
 

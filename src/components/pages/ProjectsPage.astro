@@ -32,23 +32,44 @@ const tabs = [
 const countLabel = locale === 'en'
   ? `${projects.length} project${projects.length === 1 ? '' : 's'}`
   : `${projects.length} مشروع`;
+
+const categoryValue = query.category ? (categoryLabels[locale][query.category] || query.category) : '';
+const activeLabels: Record<string, string> = {
+  ...(query.category ? { category: locale === 'en' ? `Category: ${categoryValue}` : `التصنيف: ${categoryValue}` } : {}),
+  ...(query.service ? { service: locale === 'en' ? `Service: ${serviceLabels[locale][query.service] || query.service}` : `الخدمة: ${serviceLabels[locale][query.service] || query.service}` } : {}),
+  ...(query.sector ? { sector: locale === 'en' ? `Sector: ${sectorLabels[locale][query.sector] || query.sector}` : `القطاع: ${sectorLabels[locale][query.sector] || query.sector}` } : {}),
+  ...(query.client ? { client: locale === 'en' ? `Client: ${query.client}` : `العميل: ${query.client}` } : {}),
+  ...(query.year ? { year: locale === 'en' ? `Year: ${query.year}` : `السنة: ${query.year}` } : {}),
+};
 ---
 
 <main class="projects-page">
   <PageHeader title={labels.pageTitle} description={labels.pageDescription} />
   <section class="projects-content section">
     <div class="container">
-      <FilterBar locale={locale} action="/projects" query={query} searchLabel={labels.search} tabs={tabs} resultsLabel={countLabel} clearLabel={labels.reset} ariaLabel={labels.categoriesLabel}>
-        <input type="search" name="client" value={query.client || ''} placeholder={labels.clientSearch} />
-        <input type="number" name="year" min="1900" max="2100" value={query.year || ''} placeholder={labels.year} />
-        <select name="service" aria-label={labels.service}>
-          <option value="">{labels.allServices}</option>
-          {Object.entries(serviceLabels[locale]).map(([value, label]) => <option value={value} selected={query.service === value}>{label}</option>)}
-        </select>
-        <select name="sector" aria-label={labels.sector}>
-          <option value="">{labels.allSectors}</option>
-          {Object.entries(sectorLabels[locale]).map(([value, label]) => <option value={value} selected={query.sector === value}>{label}</option>)}
-        </select>
+      <FilterBar locale={locale} action="/projects" query={query} searchLabel={labels.search} tabs={tabs} resultsLabel={countLabel} clearLabel={labels.reset} ariaLabel={labels.categoriesLabel} activeLabels={activeLabels}>
+        <label class="filter-field">
+          <span class="filter-field__label">{labels.clientSearch}</span>
+          <input type="search" name="client" value={query.client || ''} placeholder={locale === 'en' ? 'Type a client name' : 'اكتب اسم العميل'} autocomplete="off" />
+        </label>
+        <label class="filter-field">
+          <span class="filter-field__label">{labels.year}</span>
+          <input type="number" name="year" min="1900" max="2100" value={query.year || ''} placeholder={locale === 'en' ? 'e.g. 2026' : 'مثال: 2026'} inputmode="numeric" />
+        </label>
+        <label class="filter-field">
+          <span class="filter-field__label">{labels.service}</span>
+          <select name="service">
+            <option value="">{labels.allServices}</option>
+            {Object.entries(serviceLabels[locale]).map(([value, label]) => <option value={value} selected={query.service === value}>{label}</option>)}
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="filter-field__label">{labels.sector}</span>
+          <select name="sector">
+            <option value="">{labels.allSectors}</option>
+            {Object.entries(sectorLabels[locale]).map(([value, label]) => <option value={value} selected={query.sector === value}>{label}</option>)}
+          </select>
+        </label>
         {query.category && <input type="hidden" name="category" value={query.category} />}
       </FilterBar>
 

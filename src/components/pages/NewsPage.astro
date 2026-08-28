@@ -33,17 +33,24 @@ const countLabel = locale === 'en'
   ? `${news.length} result${news.length === 1 ? '' : 's'}`
   : `${news.length} نتيجة`;
 const clearLabel = locale === 'en' ? 'Clear all' : 'مسح الكل';
+const activeLabels: Record<string, string> = {
+  ...(query.type ? { type: locale === 'en' ? `Type: ${tabCopy[query.type as keyof typeof tabCopy] || query.type}` : `النوع: ${tabCopy[query.type as keyof typeof tabCopy] || query.type}` } : {}),
+  ...(query.category ? { category: locale === 'en' ? `Category: ${query.category}` : `التصنيف: ${query.category}` } : {}),
+};
 ---
 
 <main class="news-index">
   <PageHeader title={labels.pageTitle} description={labels.pageDescription} />
   <section class="news-content section">
     <div class="container">
-      <FilterBar locale={locale} action="/news" query={query} searchLabel={labels.search} tabs={tabs} resultsLabel={countLabel} clearLabel={clearLabel} ariaLabel={labels.categoriesLabel}>
-        <select name="category" aria-label={locale === 'en' ? 'Category' : 'التصنيف'}>
-          <option value="">{locale === 'en' ? 'All categories' : 'كل التصنيفات'}</option>
-          {categories.map((category) => <option value={category} selected={query.category === category}>{category}</option>)}
-        </select>
+      <FilterBar locale={locale} action="/news" query={query} searchLabel={labels.search} tabs={tabs} resultsLabel={countLabel} clearLabel={clearLabel} ariaLabel={labels.categoriesLabel} activeLabels={activeLabels}>
+        <label class="filter-field">
+          <span class="filter-field__label">{locale === 'en' ? 'Category' : 'التصنيف'}</span>
+          <select name="category">
+            <option value="">{locale === 'en' ? 'All categories' : 'كل التصنيفات'}</option>
+            {categories.map((category) => <option value={category} selected={query.category === category}>{category}</option>)}
+          </select>
+        </label>
         {query.type && <input type="hidden" name="type" value={query.type} />}
       </FilterBar>
 

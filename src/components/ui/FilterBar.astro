@@ -18,264 +18,665 @@ interface Props {
   resultsLabel: string;
   clearLabel: string;
   ariaLabel: string;
+  activeLabels?: Record<string, string>;
 }
 
-const { locale, action, query, searchLabel, tabs, resultsLabel, clearLabel, ariaLabel } = Astro.props;
+const {
+  locale,
+  action,
+  query,
+  searchLabel,
+  tabs,
+  resultsLabel,
+  clearLabel,
+  ariaLabel,
+  activeLabels = {},
+} = Astro.props;
+
 const activeEntries = Object.entries(query).filter(([key, value]) => key !== 'page' && value);
 const path = localePath(locale, action);
 const hrefFor = (next: FilterQuery) => {
   const serialized = serializeFilterQuery(next);
   return serialized ? `${path}?${serialized}` : path;
 };
+
+const copy = locale === 'en'
+  ? {
+      filterTitle: 'Find what you need',
+      filterHint: 'Search first, then refine the results when needed.',
+      options: 'More filters',
+      apply: 'Apply filters',
+      active: 'Active filters',
+      searchPrefix: 'Search',
+    }
+  : {
+      filterTitle: 'اعثر على ما تبحث عنه',
+      filterHint: 'ابدأ بالبحث ثم خصّص النتائج عند الحاجة.',
+      options: 'خيارات التصفية',
+      apply: 'تطبيق الفلاتر',
+      active: 'الفلاتر النشطة',
+      searchPrefix: 'بحث',
+    };
+
+const displayValue = (key: string, value: string) => activeLabels[key] || (key === 'search' ? `${copy.searchPrefix}: ${value}` : value);
 ---
 
-<section class="filter-bar" aria-label={ariaLabel} data-filter-bar>
-  <nav class="filter-tabs" aria-label={ariaLabel}>
-    {tabs.map((tab) => (
-      <a class:list={['filter-tab', { 'is-active': tab.active }]} href={hrefFor(tab.query)} aria-current={tab.active ? 'page' : undefined}>
-        {tab.label}
-      </a>
-    ))}
-  </nav>
+<section class="tj-filter" aria-label={ariaLabel} data-filter-bar>
+  <div class="tj-filter__intro">
+    <div class="tj-filter__intro-copy">
+      <span class="tj-filter__eyebrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"></path></svg>
+      </span>
+      <div>
+        <h2>{copy.filterTitle}</h2>
+        <p>{copy.filterHint}</p>
+      </div>
+    </div>
+    <strong class="tj-filter__count" aria-live="polite">{resultsLabel}</strong>
+  </div>
 
-  <form class="filter-form" action={path} method="get">
-    <label class="filter-search">
-      <span class="sr-only">{searchLabel}</span>
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
-      <input type="search" name="search" value={query.search || ''} />
-    </label>
-    <slot />
-    <button class="filter-submit" type="submit">{locale === 'en' ? 'Apply filters' : 'تطبيق الفلاتر'}</button>
-  </form>
-
-  <div class="filter-summary">
-    <strong>{resultsLabel}</strong>
-    {activeEntries.length > 0 && (
-      <div class="active-filters" aria-label={locale === 'en' ? 'Active filters' : 'الفلاتر النشطة'}>
-        {activeEntries.map(([key, value]) => (
-          <a class="filter-chip" href={hrefFor(Object.fromEntries(Object.entries(query).filter(([entryKey]) => entryKey !== key)))}>
-            <span>{value}</span><span aria-hidden="true">×</span>
+  {tabs.length > 0 && (
+    <div class="tj-filter__tabs-shell">
+      <nav class="tj-filter__tabs" aria-label={ariaLabel}>
+        {tabs.map((tab) => (
+          <a
+            class:list={['tj-filter__tab', { 'is-active': tab.active }]}
+            href={hrefFor(tab.query)}
+            aria-current={tab.active ? 'page' : undefined}
+          >
+            {tab.label}
           </a>
         ))}
-        <a class="filter-clear" href={path}>{clearLabel}</a>
+      </nav>
+    </div>
+  )}
+
+  <form class="tj-filter__form" action={path} method="get">
+    <div class="tj-filter__search-row">
+      <label class="tj-filter__search">
+        <span class="sr-only">{searchLabel}</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m20 20-4.2-4.2"></path>
+        </svg>
+        <input
+          type="search"
+          name="search"
+          value={query.search || ''}
+          placeholder={searchLabel}
+          aria-label={searchLabel}
+          autocomplete="off"
+        />
+      </label>
+
+      <button
+        class="tj-filter__mobile-toggle"
+        type="button"
+        data-filter-toggle
+        aria-expanded="false"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M7 12h10M10 17h4"></path></svg>
+        <span>{copy.options}</span>
+        <svg class="tj-filter__toggle-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 10 4 4 4-4"></path></svg>
+      </button>
+
+      <button class="tj-filter__submit tj-filter__submit--desktop" type="submit">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+        <span>{copy.apply}</span>
+      </button>
+    </div>
+
+    <div class="tj-filter__fields" data-filter-fields>
+      <slot />
+    </div>
+
+    <div class="tj-filter__mobile-actions">
+      {activeEntries.length > 0 && <a class="tj-filter__reset-button" href={path}>{clearLabel}</a>}
+      <button class="tj-filter__submit" type="submit">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+        <span>{copy.apply}</span>
+      </button>
+    </div>
+  </form>
+
+  <div class="tj-filter__summary">
+    <div class="tj-filter__summary-leading">
+      <span class="tj-filter__summary-dot" aria-hidden="true"></span>
+      <span>{resultsLabel}</span>
+    </div>
+
+    {activeEntries.length > 0 && (
+      <div class="tj-filter__active" aria-label={copy.active}>
+        {activeEntries.map(([key, value]) => (
+          <a
+            class="tj-filter__chip"
+            href={hrefFor(Object.fromEntries(Object.entries(query).filter(([entryKey]) => entryKey !== key)))}
+            title={locale === 'en' ? `Remove ${displayValue(key, value)}` : `إزالة ${displayValue(key, value)}`}
+          >
+            <span>{displayValue(key, value)}</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 8 8 8M16 8l-8 8"></path></svg>
+          </a>
+        ))}
+        <a class="tj-filter__clear" href={path}>{clearLabel}</a>
       </div>
     )}
   </div>
 </section>
 
+<script>
+  const initializeFilterBars = () => {
+    document.querySelectorAll<HTMLElement>('[data-filter-bar]').forEach((bar) => {
+      if (bar.dataset.filterReady === 'true') return;
+      bar.dataset.filterReady = 'true';
+
+      const toggle = bar.querySelector<HTMLButtonElement>('[data-filter-toggle]');
+      const fields = bar.querySelector<HTMLElement>('[data-filter-fields]');
+      if (!toggle || !fields) return;
+
+      const setExpanded = (expanded: boolean) => {
+        bar.classList.toggle('is-mobile-expanded', expanded);
+        toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      };
+
+      toggle.addEventListener('click', () => {
+        setExpanded(toggle.getAttribute('aria-expanded') !== 'true');
+      });
+
+      const desktop = window.matchMedia('(min-width: 769px)');
+      const syncViewport = () => {
+        if (desktop.matches) setExpanded(false);
+      };
+      desktop.addEventListener?.('change', syncViewport);
+      syncViewport();
+    });
+  };
+
+  initializeFilterBars();
+  document.addEventListener('astro:page-load', initializeFilterBars);
+</script>
+
 <style>
-  .filter-bar { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 1.5rem; 
-    margin-block: 0 3rem; 
-    padding: 1.75rem; 
-    border: 1px solid var(--tj-border-subtle); 
-    border-radius: var(--tj-radius-xl); 
-    background: var(--tj-bg-surface); 
-    box-shadow: var(--tj-shadow-2, 0 4px 20px rgba(0, 0, 0, 0.05)); 
-  }
-  
-  .filter-tabs { 
-    display: flex; 
-    flex-wrap: wrap; 
-    gap: 0.5rem; 
-    padding: 0.5rem; 
-    border-radius: var(--tj-radius-pill); 
-    background: var(--tj-bg-surface-soft); 
-    width: fit-content; 
-    max-width: 100%; 
-  }
-  
-  /* Make tabs horizontally scrollable on small screens to save space and look native */
-  @media (max-width: 768px) {
-    .filter-tabs { 
-      flex-wrap: nowrap; 
-      overflow-x: auto; 
-      width: 100%;
-      -webkit-overflow-scrolling: touch; 
-      scrollbar-width: none; /* Firefox */
-      padding-bottom: 0.5rem;
-    }
-    .filter-tabs::-webkit-scrollbar { display: none; /* Chrome/Safari */ }
+  .tj-filter {
+    --filter-control-height: 3.55rem;
+    position: relative;
+    display: grid;
+    gap: 1.1rem;
+    margin-block: 0 3rem;
+    padding: clamp(1.1rem, 2.4vw, 1.65rem);
+    border: 1px solid color-mix(in srgb, var(--tj-border-default) 82%, transparent);
+    border-radius: clamp(1.25rem, 2.5vw, 1.8rem);
+    background:
+      radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--tj-action-primary) 7%, transparent), transparent 18rem),
+      var(--tj-bg-surface);
+    box-shadow: 0 22px 60px color-mix(in srgb, var(--tj-neutral-950) 8%, transparent);
+    isolation: isolate;
   }
 
-  .filter-tab { 
-    display: inline-flex; 
-    min-height: 2.75rem; 
-    align-items: center; 
-    padding-inline: 1.25rem; 
-    border: 1px solid transparent; 
-    border-radius: var(--tj-radius-pill); 
-    color: var(--tj-text-secondary); 
-    text-decoration: none; 
-    font-weight: var(--tj-font-semibold); 
-    white-space: nowrap;
-    transition: all var(--tj-transition-smooth);
-  }
-  
-  .filter-tab:hover { 
-    color: var(--tj-text-primary); 
-    background: var(--tj-action-soft); 
-  }
-  
-  .filter-tab.is-active { 
-    color: var(--tj-text-on-brand); 
-    background: var(--tj-action-primary); 
-    box-shadow: var(--tj-shadow-1); 
+  .tj-filter::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(120deg, color-mix(in srgb, var(--tj-blue) 5%, transparent), transparent 42%);
   }
 
-  /* Filter form layout - Single Line Slider */
-  .filter-form { 
-    display: flex; 
-    flex-wrap: nowrap; 
-    gap: 1rem; 
-    align-items: center; 
-    overflow-x: auto;
-    width: 100%;
-    padding-bottom: 0.5rem; /* Space for the invisible scrollbar */
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
+  .tj-filter__intro,
+  .tj-filter__intro-copy,
+  .tj-filter__summary,
+  .tj-filter__summary-leading,
+  .tj-filter__active,
+  .tj-filter__search-row,
+  .tj-filter__mobile-actions {
+    display: flex;
+    align-items: center;
   }
-  
-  .filter-form::-webkit-scrollbar { 
-    display: none; /* Chrome/Safari */ 
+
+  .tj-filter__intro {
+    justify-content: space-between;
+    gap: 1rem;
   }
-  
-  .filter-search { 
-    position: relative; 
-    display: flex; 
-    align-items: center; 
+
+  .tj-filter__intro-copy { gap: .85rem; min-width: 0; }
+
+  .tj-filter__eyebrow {
+    display: grid;
     flex: 0 0 auto;
-    width: 160px; 
-  }
-  
-  .filter-search svg { 
-    position: absolute; 
-    inset-inline-start: 1rem; 
-    width: 1.25rem; 
-    fill: none; 
-    stroke: var(--tj-text-muted); 
-    stroke-width: 2; 
-    pointer-events: none; 
-  }
-  
-  .filter-form :global(input), .filter-form :global(select) { 
-    flex: 0 0 auto; 
-    width: 160px;
-    min-height: 3.25rem; 
-    padding-inline: 1rem; 
-    color: var(--tj-text-primary); 
-    background: var(--tj-bg-surface-soft); 
-    border: 1px solid var(--tj-border-default); 
-    border-radius: var(--tj-radius-md); 
-    font: inherit; 
-    transition: border-color var(--tj-transition-smooth), box-shadow var(--tj-transition-smooth);
-  }
-  
-  .filter-search input { 
-    width: 100% !important;
-    padding-inline-start: 3rem !important; 
-  }
-  
-  .filter-form :global(input:focus), .filter-form :global(select:focus) { 
-    border-color: var(--tj-action-primary); 
-    outline: none; 
-    box-shadow: 0 0 0 3px var(--tj-focus-ring); 
+    width: 2.75rem;
+    height: 2.75rem;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--tj-action-primary) 18%, var(--tj-border-subtle));
+    border-radius: .95rem;
+    color: var(--tj-text-accent);
+    background: var(--tj-action-soft);
   }
 
-  .filter-submit { 
-    flex: 0 0 auto; 
-    min-height: 3.25rem; 
-    padding-inline: 1.75rem; 
-    border: 0; 
-    border-radius: var(--tj-radius-md); 
-    color: var(--tj-text-on-brand); 
-    background: var(--tj-action-primary); 
-    font: inherit; 
-    font-weight: var(--tj-font-bold); 
-    cursor: pointer; 
-    transition: transform 0.2s ease, opacity 0.2s ease;
+  .tj-filter__eyebrow svg { width: 1.25rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+
+  .tj-filter__intro h2 {
+    margin: 0 0 .2rem;
+    font-size: clamp(1.03rem, 1.6vw, 1.2rem);
+    line-height: 1.35;
+  }
+
+  .tj-filter__intro p {
+    margin: 0;
+    color: var(--tj-text-muted);
+    font-size: .88rem;
+  }
+
+  .tj-filter__count {
+    flex: 0 0 auto;
+    padding: .62rem .9rem;
+    border: 1px solid var(--tj-border-subtle);
+    border-radius: 999px;
+    color: var(--tj-text-accent);
+    background: var(--tj-action-soft);
+    font-size: .86rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tj-filter__tabs-shell {
+    position: relative;
+    min-width: 0;
+  }
+
+  .tj-filter__tabs {
+    display: flex;
+    gap: .45rem;
+    max-width: 100%;
+    padding: .42rem;
+    overflow-x: auto;
+    border: 1px solid var(--tj-border-subtle);
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--tj-bg-surface-soft) 88%, transparent);
+    scrollbar-width: none;
+    overscroll-behavior-inline: contain;
+  }
+
+  .tj-filter__tabs::-webkit-scrollbar { display: none; }
+
+  .tj-filter__tab {
+    display: inline-flex;
+    flex: 0 0 auto;
+    min-height: 2.65rem;
+    align-items: center;
+    justify-content: center;
+    padding-inline: 1rem;
+    border: 1px solid transparent;
+    border-radius: .78rem;
+    color: var(--tj-text-secondary);
+    font-size: .9rem;
+    font-weight: var(--tj-font-semibold);
+    text-decoration: none;
     white-space: nowrap;
-  }
-  
-  .filter-submit:hover { 
-    opacity: 0.9;
-    transform: translateY(-2px);
+    transition: transform .2s ease, color .2s ease, background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
   }
 
-  .filter-summary { 
-    display: flex; 
-    flex-wrap: wrap; 
-    align-items: center; 
-    justify-content: space-between; 
-    gap: 1.25rem; 
-    color: var(--tj-text-secondary); 
-    padding-block-start: 1.25rem;
-    border-block-start: 1px solid var(--tj-border-subtle);
-  }
-  
-  .active-filters { 
-    display: flex; 
-    flex-wrap: wrap; 
-    gap: 0.5rem; 
-    align-items: center; 
-  }
-  
-  .filter-chip, .filter-clear { 
-    display: inline-flex; 
-    align-items: center; 
-    gap: 0.5rem; 
-    min-height: 2.25rem; 
-    padding-inline: 1rem; 
-    border-radius: var(--tj-radius-pill); 
-    text-decoration: none; 
-    font-size: var(--tj-type-caption); 
-    transition: all var(--tj-transition-smooth);
-  }
-  
-  .filter-chip { 
-    color: var(--tj-text-primary); 
-    background: var(--tj-bg-surface-soft); 
-    border: 1px solid var(--tj-border-default); 
-  }
-  
-  .filter-chip:hover { 
-    background: var(--tj-action-soft); 
-    border-color: var(--tj-border-strong);
+  .tj-filter__tab:hover {
+    color: var(--tj-text-primary);
+    border-color: var(--tj-border-default);
+    background: var(--tj-bg-surface-raised);
   }
 
-  .filter-clear { 
-    color: var(--tj-text-accent); 
-    font-weight: var(--tj-font-bold); 
-    background: transparent;
-  }
-  
-  .filter-clear:hover { 
-    text-decoration: underline; 
+  .tj-filter__tab.is-active {
+    color: var(--tj-text-on-brand);
+    border-color: color-mix(in srgb, var(--tj-action-primary) 88%, white);
+    background: linear-gradient(135deg, var(--tj-action-primary), color-mix(in srgb, var(--tj-action-primary) 82%, var(--tj-green)));
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--tj-action-primary) 22%, transparent);
   }
 
-  :is(.filter-tab, .filter-chip, .filter-clear, .filter-submit, .filter-form input, .filter-form select):focus-visible { 
-    outline: 3px solid var(--tj-focus-ring); 
-    outline-offset: 2px; 
+  .tj-filter__form {
+    display: grid;
+    gap: .8rem;
+    margin: 0;
+    padding: .9rem;
+    border: 1px solid var(--tj-border-subtle);
+    border-radius: 1.15rem;
+    background: color-mix(in srgb, var(--tj-bg-surface-soft) 58%, var(--tj-bg-surface));
+    box-shadow: none;
   }
 
-  /* Mobile & Tablet Optimizations */
-  @media (max-width: 600px) {
-    .filter-bar { 
-      padding: 1.25rem; 
-      gap: 1.25rem;
-      border-radius: var(--tj-radius-lg); 
+  .tj-filter__search-row { gap: .75rem; }
+
+  .tj-filter__search {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+    align-items: center;
+  }
+
+  .tj-filter__search > svg {
+    position: absolute;
+    inset-inline-start: 1.05rem;
+    width: 1.18rem;
+    fill: none;
+    stroke: var(--tj-text-muted);
+    stroke-width: 1.9;
+    pointer-events: none;
+  }
+
+  .tj-filter__search input {
+    width: 100%;
+    min-width: 0;
+    height: var(--filter-control-height);
+    padding-inline: 3rem 1rem;
+    border: 1px solid var(--tj-border-default);
+    border-radius: .9rem;
+    color: var(--tj-text-primary);
+    background: var(--tj-bg-surface);
+    box-shadow: 0 1px 0 color-mix(in srgb, var(--tj-text-primary) 3%, transparent);
+    font: inherit;
+    transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
+  }
+
+  .tj-filter__search input::placeholder { color: var(--tj-text-muted); opacity: .88; }
+
+  .tj-filter__search input:focus {
+    border-color: var(--tj-action-primary);
+    outline: none;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--tj-action-primary) 13%, transparent);
+  }
+
+  .tj-filter__fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    gap: .7rem;
+  }
+
+  .tj-filter__fields :global(.filter-field) {
+    display: grid;
+    gap: .4rem;
+    min-width: 0;
+  }
+
+  .tj-filter__fields :global(.filter-field__label) {
+    padding-inline: .15rem;
+    color: var(--tj-text-secondary);
+    font-size: .78rem;
+    font-weight: var(--tj-font-semibold);
+  }
+
+  .tj-filter__fields :global(input:not([type='hidden'])),
+  .tj-filter__fields :global(select) {
+    width: 100%;
+    min-width: 0;
+    height: 3.15rem;
+    padding-inline: .9rem;
+    border: 1px solid var(--tj-border-default);
+    border-radius: .82rem;
+    color: var(--tj-text-primary);
+    background: var(--tj-bg-surface);
+    box-shadow: none;
+    font: inherit;
+    font-size: .9rem;
+    transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
+  }
+
+  .tj-filter__fields :global(select) {
+    cursor: pointer;
+  }
+
+  .tj-filter__fields :global(input::placeholder) { color: var(--tj-text-muted); }
+
+  .tj-filter__fields :global(input:focus),
+  .tj-filter__fields :global(select:focus) {
+    border-color: var(--tj-action-primary);
+    outline: none;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--tj-action-primary) 12%, transparent);
+  }
+
+  .tj-filter__submit,
+  .tj-filter__mobile-toggle,
+  .tj-filter__reset-button {
+    display: inline-flex;
+    min-height: var(--filter-control-height);
+    align-items: center;
+    justify-content: center;
+    gap: .55rem;
+    border-radius: .9rem;
+    font: inherit;
+    font-weight: var(--tj-font-bold);
+    text-decoration: none;
+  }
+
+  .tj-filter__submit {
+    flex: 0 0 auto;
+    min-width: 10.3rem;
+    padding-inline: 1.2rem;
+    border: 1px solid color-mix(in srgb, var(--tj-action-primary) 84%, white);
+    color: var(--tj-text-on-brand);
+    background: linear-gradient(135deg, var(--tj-action-primary), color-mix(in srgb, var(--tj-action-primary) 84%, var(--tj-green)));
+    box-shadow: 0 10px 28px color-mix(in srgb, var(--tj-action-primary) 20%, transparent);
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+  }
+
+  .tj-filter__submit:hover { transform: translateY(-1px); filter: brightness(1.03); box-shadow: 0 14px 34px color-mix(in srgb, var(--tj-action-primary) 25%, transparent); }
+  .tj-filter__submit svg { width: 1.15rem; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+  .tj-filter__mobile-toggle,
+  .tj-filter__mobile-actions { display: none; }
+
+  .tj-filter__summary {
+    min-height: 2.35rem;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: .15rem;
+  }
+
+  .tj-filter__summary-leading {
+    gap: .5rem;
+    color: var(--tj-text-secondary);
+    font-size: .86rem;
+  }
+
+  .tj-filter__summary-dot {
+    width: .5rem;
+    height: .5rem;
+    border-radius: 999px;
+    background: var(--tj-green);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--tj-green) 12%, transparent);
+  }
+
+  .tj-filter__active {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: .45rem;
+  }
+
+  .tj-filter__chip,
+  .tj-filter__clear {
+    display: inline-flex;
+    min-height: 2.2rem;
+    align-items: center;
+    justify-content: center;
+    gap: .42rem;
+    padding-inline: .8rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: .78rem;
+    transition: color .2s ease, background-color .2s ease, border-color .2s ease;
+  }
+
+  .tj-filter__chip {
+    border: 1px solid var(--tj-border-default);
+    color: var(--tj-text-secondary);
+    background: var(--tj-bg-surface-soft);
+  }
+
+  .tj-filter__chip:hover { color: var(--tj-text-primary); border-color: var(--tj-border-strong); background: var(--tj-bg-surface-raised); }
+  .tj-filter__chip svg { width: .85rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+
+  .tj-filter__clear {
+    color: var(--tj-text-accent);
+    font-weight: var(--tj-font-bold);
+  }
+
+  .tj-filter__clear:hover { background: var(--tj-action-soft); }
+
+  :is(.tj-filter__tab, .tj-filter__chip, .tj-filter__clear, .tj-filter__submit, .tj-filter__mobile-toggle, .tj-filter__reset-button):focus-visible {
+    outline: 3px solid var(--tj-focus-ring);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 900px) {
+    .tj-filter__intro p { display: none; }
+    .tj-filter__fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 768px) {
+    .tj-filter {
+      --filter-control-height: 3.25rem;
+      gap: .9rem;
+      margin-inline: calc(var(--tj-page-gutter) * -0.35);
+      margin-bottom: 2rem;
+      padding: 1rem;
+      border-radius: 1.2rem;
+      box-shadow: 0 14px 36px color-mix(in srgb, var(--tj-neutral-950) 7%, transparent);
     }
-    .filter-summary { 
-      flex-direction: column; 
-      align-items: flex-start; 
+
+    .tj-filter__intro { align-items: flex-start; }
+    .tj-filter__eyebrow { width: 2.45rem; height: 2.45rem; border-radius: .78rem; }
+    .tj-filter__intro h2 { font-size: 1rem; }
+    .tj-filter__count { padding: .5rem .7rem; font-size: .75rem; }
+
+    .tj-filter__tabs-shell {
+      margin-inline: -1rem;
     }
-    .filter-search { 
-      width: 140px; 
+
+    .tj-filter__tabs {
+      gap: .38rem;
+      padding: .25rem 1rem .55rem;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      scroll-padding-inline: 1rem;
     }
-    .filter-form :global(input), .filter-form :global(select) {
-      width: 140px;
+
+    .tj-filter__tab {
+      min-height: 2.6rem;
+      padding-inline: .9rem;
+      border-color: var(--tj-border-default);
+      border-radius: 999px;
+      background: var(--tj-bg-surface-soft);
+      font-size: .82rem;
     }
+
+    .tj-filter__tab.is-active {
+      border-color: transparent;
+    }
+
+    .tj-filter__form {
+      gap: .7rem;
+      padding: .7rem;
+      border-radius: 1rem;
+    }
+
+    .tj-filter__search-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: .55rem;
+    }
+
+    .tj-filter__search input { border-radius: .82rem; }
+    .tj-filter__submit--desktop { display: none; }
+
+    .tj-filter__mobile-toggle {
+      display: inline-flex;
+      flex: 0 0 auto;
+      min-width: var(--filter-control-height);
+      padding-inline: .8rem;
+      border: 1px solid var(--tj-border-default);
+      color: var(--tj-text-primary);
+      background: var(--tj-bg-surface);
+      font-size: .8rem;
+    }
+
+    .tj-filter__mobile-toggle svg { width: 1.05rem; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+    .tj-filter__mobile-toggle .tj-filter__toggle-chevron { width: .9rem; transition: transform .2s ease; }
+    .tj-filter.is-mobile-expanded .tj-filter__toggle-chevron { transform: rotate(180deg); }
+
+    :global(.js) .tj-filter__fields {
+      display: none;
+    }
+
+    :global(.js) .tj-filter.is-mobile-expanded .tj-filter__fields {
+      display: grid;
+      animation: filterReveal .22s ease both;
+    }
+
+    .tj-filter__fields { grid-template-columns: 1fr; }
+
+    .tj-filter__mobile-actions {
+      display: flex;
+      gap: .55rem;
+    }
+
+    .tj-filter__mobile-actions .tj-filter__submit { flex: 1 1 auto; min-width: 0; }
+
+    .tj-filter__reset-button {
+      flex: 0 0 auto;
+      padding-inline: .9rem;
+      border: 1px solid var(--tj-border-default);
+      color: var(--tj-text-secondary);
+      background: var(--tj-bg-surface);
+      font-size: .82rem;
+    }
+
+    .tj-filter__summary {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: .65rem;
+    }
+
+    .tj-filter__active {
+      width: 100%;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      overflow-x: auto;
+      padding-bottom: .2rem;
+      scrollbar-width: none;
+    }
+
+    .tj-filter__active::-webkit-scrollbar { display: none; }
+    .tj-filter__chip, .tj-filter__clear { flex: 0 0 auto; }
+  }
+
+  @media (max-width: 480px) {
+    .tj-filter__mobile-toggle {
+      width: var(--filter-control-height);
+      padding: 0;
+    }
+    .tj-filter__mobile-toggle > span,
+    .tj-filter__mobile-toggle .tj-filter__toggle-chevron {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .tj-filter { margin-inline: 0; padding: .8rem; }
+    .tj-filter__intro-copy { gap: .6rem; }
+    .tj-filter__eyebrow { display: none; }
+  }
+
+  @keyframes filterReveal {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tj-filter__tab,
+    .tj-filter__submit,
+    .tj-filter__chip { transition: none; }
+    :global(.js) .tj-filter.is-mobile-expanded .tj-filter__fields { animation: none; }
   }
 </style>
