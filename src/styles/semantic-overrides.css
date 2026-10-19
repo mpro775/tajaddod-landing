@@ -308,27 +308,29 @@
   border-color: var(--tj-border-subtle);
 }
 
-@media (max-width: 767px) {
-  /* These rows place copy outside the thumbnail; the hero stays inverse. */
-  :root[data-theme] .featured-projects .fp-card--side {
+@media (max-width: 1023px) {
+  /* All compact project tiles place their copy below the image. */
+  :root[data-theme] .featured-projects .fp-card {
     color: var(--tj-text-primary);
     background: var(--tj-bg-surface);
     border-color: var(--tj-border-default);
     box-shadow: var(--tj-shadow-1);
   }
 
-  :root[data-theme] .featured-projects .fp-card--side .fp-card__title {
+  :root[data-theme] .featured-projects .fp-card .fp-card__title {
     color: var(--tj-text-primary);
   }
 
-  :root[data-theme] .featured-projects .fp-card--side .fp-card__meta-item {
+  :root[data-theme] .featured-projects .fp-card .fp-card__meta-item,
+  :root[data-theme] .featured-projects .fp-card .fp-card__summary {
     color: var(--tj-text-secondary);
   }
 
-  :root[data-theme] .featured-projects .fp-card--side .fp-card__badge {
+  :root[data-theme] .featured-projects .fp-card .fp-card__badge,
+  :root[data-theme] .featured-projects .fp-card .fp-card__cta {
     color: var(--tj-text-accent);
     background: var(--tj-action-soft);
-    border-color: var(--tj-border-default);
+    border: 1px solid var(--tj-border-default);
   }
 
   :root[data-theme] .featured-projects .fp-card--side .fp-card__arrow {
@@ -343,6 +345,14 @@
     border-color: var(--tj-focus-ring);
   }
 
+  :root[data-theme] .featured-projects .fp-card--hero:hover .fp-card__cta {
+    background: var(--tj-action-soft);
+    border-color: var(--tj-focus-ring);
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 767px) {
   :root[data-theme] .sectors-section :is(
     .sc-mobile-card__checklist-title,
     .sc-mobile-card__brands-title

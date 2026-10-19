@@ -46,6 +46,43 @@
     display: contents;
   }
 
+  :root[data-theme] .featured-projects .fp-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 0;
+    aspect-ratio: auto;
+  }
+
+  :root[data-theme] .featured-projects .fp-card .fp-card__media {
+    position: relative;
+    flex-shrink: 0;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+  }
+
+  :root[data-theme] .featured-projects .fp-card .fp-card__overlay {
+    background: none;
+  }
+
+  :root[data-theme] .featured-projects .fp-card .fp-card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+  }
+
+  :root[data-theme] .fp-card--hero .fp-card__meta {
+    margin-bottom: .75rem;
+  }
+
+  :root[data-theme] .fp-card--hero .fp-card__cta {
+    max-width: 100%;
+    margin-top: auto;
+    box-shadow: none;
+  }
+
   :root[data-theme] .brand-index-card {
     grid-template-columns: minmax(0, 1fr);
     min-height: 0;
@@ -60,10 +97,6 @@
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
-  :root[data-theme] .fp-card--hero {
-    min-height: 20rem;
-  }
-
   :root[data-theme] .featured-projects .fp-card .fp-card__body {
     padding: 1rem;
   }
@@ -424,34 +457,12 @@
   }
 
   /* Featured projects: compact tiles in the shared two-column grid. */
-  :root[data-theme] .fp-card--hero {
-    min-height: 0;
-    aspect-ratio: auto;
-  }
-
   :root[data-theme] .fp-card--hero .fp-card__summary {
     display: block;
     overflow: visible;
     font-size: .78rem;
     line-height: 1.6;
     margin-bottom: .75rem;
-  }
-
-  :root[data-theme] .fp-card--side {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    min-height: 0;
-  }
-
-  :root[data-theme] .fp-card--side .fp-card__media {
-    position: relative;
-    flex-shrink: 0;
-    aspect-ratio: 16 / 10;
-  }
-
-  :root[data-theme] .fp-card--side .fp-card__overlay {
-    background: linear-gradient(to top, rgb(2 11 18 / .35), transparent);
   }
 
   :root[data-theme] .featured-projects .fp-card .fp-card__body {
