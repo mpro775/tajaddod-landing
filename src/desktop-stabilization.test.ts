@@ -36,11 +36,19 @@ describe('desktop final stabilization contracts', () => {
     ]) {
       expect(existsSync(join(root, ...path))).toBe(true);
     }
-    const brandRoute = read('pages', 'brands', '[slug].astro');
-    expect(brandRoute).toContain('getProducts');
-    expect(brandRoute).toContain('brandId');
-    expect(brandRoute).not.toContain('getWebsiteHome');
-    expect(read('components', 'cards', 'BrandProductCard.astro')).toContain('<a class="product-card"');
+    for (const parts of [
+      ['pages', 'brands', '[slug]', 'products.astro'],
+      ['pages', 'en', 'brands', '[slug]', 'products.astro'],
+    ]) {
+      const catalogRoute = read(...parts);
+      expect(catalogRoute).toContain('loadBrandCatalog(slug, locale, Astro.url.searchParams)');
+      expect(catalogRoute).toContain('Astro.response.status = catalog.status');
+      expect(catalogRoute).not.toContain('getWebsiteHome');
+    }
+    const catalog = read('components', 'pages', 'BrandProductsCatalogPage.astro');
+    expect(catalog).toContain('method="get"');
+    expect(catalog).toContain('meta.total');
+    expect(read('components', 'cards', 'BrandProductCard.astro')).toContain('href={localePath(locale, `/products/');
   });
 
   it('maps and renders the distinct project description', () => {

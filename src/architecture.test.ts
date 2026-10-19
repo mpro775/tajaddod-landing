@@ -20,22 +20,29 @@ describe('Astro production architecture', () => {
   it('renders the restored home design from the website aggregator and keeps landing products dynamic', () => {
     const homePage = readFileSync(join(sourceRoot, 'pages', 'index.astro'), 'utf8');
     const homeComponent = readFileSync(join(sourceRoot, 'components', 'pages', 'HomePage.astro'), 'utf8');
-    const brandRoute = readFileSync(join(sourceRoot, 'pages', 'brands', '[slug].astro'), 'utf8');
     const brandComponent = readFileSync(join(sourceRoot, 'components', 'pages', 'BrandPage.astro'), 'utf8');
 
     expect(homePage).toContain('getWebsiteHome');
     expect(homeComponent).toContain('home?.brands');
     expect(homeComponent).toContain('home?.projects');
     expect(homeComponent).toContain('home?.articles');
+    expect(homeComponent).toContain('home?.products');
+    expect(homeComponent).toContain('settings?.enableProductsSection === false');
     expect(homeComponent).toContain('<Brands');
     expect(homeComponent).toContain('<FeaturedProjects');
     expect(homeComponent).toContain('<LatestNews');
+    expect(homeComponent).toContain('<FeaturedBrandProducts');
 
     // Brand details are resilient: the brand is mandatory while products are
-    // loaded independently from the public products endpoint by brand id.
-    expect(brandRoute).not.toContain('getWebsiteHome');
-    expect(brandRoute).toContain('getProducts');
-    expect(brandRoute).toContain('brandId');
+    // loaded through the shared, brand-scoped preview loader. Its API queries
+    // and fallback behavior are covered in lib/brand-catalog.test.ts.
+    for (const parts of [['brands', '[slug].astro'], ['en', 'brands', '[slug].astro']]) {
+      const brandRoute = readFileSync(join(sourceRoot, 'pages', ...parts), 'utf8');
+      expect(brandRoute).not.toContain('getWebsiteHome');
+      expect(brandRoute).toContain('getBrandPreview(brand, locale)');
+      expect(brandRoute).toContain('productsError = true');
+      expect(brandRoute).toContain('productsError={productsError}');
+    }
     expect(brandComponent).toContain('<BrandProducts');
   });
 
