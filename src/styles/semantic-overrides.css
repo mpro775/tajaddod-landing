@@ -133,6 +133,7 @@
 :root[data-theme] :is(
   .ph-eyebrow__text,
   .bw-header__eyebrow,
+  .bw-header__tag,
   .fp-eyebrow,
   .ln-eyebrow,
   .app-eyebrow__text
@@ -174,9 +175,46 @@
   border-color: var(--tj-border-default);
 }
 
+:root[data-theme] .philosophy-section :is(.ph-node__card, .ph-mobile-node__card) span {
+  color: var(--tj-text-secondary);
+}
+
+:root[data-theme] .philosophy-section .ph-mobile-node__card strong {
+  color: var(--tj-text-primary);
+}
+
 :root[data-theme] .bw-section :is(.bw-world, .bw-connector) {
   border-color: var(--tj-border-default);
   box-shadow: var(--tj-shadow-2);
+}
+
+/* Brand cards keep their existing inverse treatment in dark mode. */
+:root[data-theme="light"] .bw-section .bw-world {
+  background: var(--tj-bg-surface);
+}
+
+:root[data-theme="light"] .bw-section :is(
+  .bw-world__name,
+  .bw-world__cta,
+  .bw-connector__text strong
+) {
+  color: var(--tj-text-primary);
+}
+
+:root[data-theme="light"] .bw-section :is(
+  .bw-world__name-ar,
+  .bw-world__desc,
+  .bw-world__story span,
+  .bw-world__cat-label,
+  .bw-world__cat,
+  .bw-connector__text
+) {
+  color: var(--tj-text-secondary);
+}
+
+:root[data-theme="light"] .bw-section .bw-world__logo-wrap img,
+:root[data-theme="light"] .sectors-section .sc-brand-tag img {
+  filter: none;
 }
 
 :root[data-theme] .featured-projects .fp-btn,
@@ -254,6 +292,7 @@
 :root[data-theme] .sectors-section :is(
   .sc-tab__label span,
   .sc-board__checklist,
+  .sc-board__checklist li,
   .sc-brand-tag__role,
   .sc-mobile-card__checklist
 ) {
@@ -263,6 +302,76 @@
 :root[data-theme] .sectors-section :is(.sc-brand-tag, .sc-board__badge) {
   background: var(--tj-bg-surface-soft);
   border-color: var(--tj-border-subtle);
+}
+
+@media (max-width: 767px) {
+  /* These rows place copy outside the thumbnail; the hero stays inverse. */
+  :root[data-theme] .featured-projects .fp-card--side {
+    color: var(--tj-text-primary);
+    background: var(--tj-bg-surface);
+    border-color: var(--tj-border-default);
+    box-shadow: var(--tj-shadow-1);
+  }
+
+  :root[data-theme] .featured-projects .fp-card--side .fp-card__title {
+    color: var(--tj-text-primary);
+  }
+
+  :root[data-theme] .featured-projects .fp-card--side .fp-card__meta-item {
+    color: var(--tj-text-secondary);
+  }
+
+  :root[data-theme] .featured-projects .fp-card--side .fp-card__badge {
+    color: var(--tj-text-accent);
+    background: var(--tj-action-soft);
+    border-color: var(--tj-border-default);
+  }
+
+  :root[data-theme] .featured-projects .fp-card--side .fp-card__arrow {
+    color: var(--tj-text-primary);
+    background: var(--tj-bg-surface-soft);
+    border-color: var(--tj-border-default);
+  }
+
+  :root[data-theme] .featured-projects .fp-card--side:hover .fp-card__arrow {
+    color: var(--tj-text-accent);
+    background: var(--tj-action-soft);
+    border-color: var(--tj-focus-ring);
+  }
+
+  :root[data-theme] .sectors-section :is(
+    .sc-mobile-card__checklist-title,
+    .sc-mobile-card__brands-title
+  ) {
+    color: var(--tj-text-primary);
+  }
+
+  :root[data-theme] .sectors-section .sc-mobile-card__checklist li {
+    color: var(--tj-text-secondary);
+  }
+
+  :root[data-theme] .sectors-section .sc-mobile-tab {
+    color: var(--tj-text-secondary);
+    background: var(--tj-bg-surface);
+    border-color: var(--tj-border-default);
+  }
+
+  :root[data-theme] .sectors-section .sc-mobile-tab:hover {
+    color: var(--tj-text-primary);
+    background: var(--tj-bg-surface-raised);
+    border-color: color-mix(in srgb, var(--tab-accent) 40%, var(--tj-border-default));
+  }
+
+  :root[data-theme] .sectors-section .sc-mobile-tab.is-active {
+    color: var(--tj-text-primary);
+    background: color-mix(in srgb, var(--tab-accent) 14%, var(--tj-bg-surface));
+    border-color: color-mix(in srgb, var(--tab-accent) 60%, var(--tj-border-strong));
+  }
+
+  :root[data-theme] .sectors-section .sc-mobile-tab:focus-visible {
+    outline: 2px solid var(--tj-focus-ring);
+    outline-offset: 3px;
+  }
 }
 
 :root[data-theme] .app-section :is(.store-btn, .web-btn) {

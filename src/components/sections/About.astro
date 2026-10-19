@@ -113,7 +113,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
         <div class={`ph-mobile-node ${node.hub ? 'ph-mobile-node--hub' : ''}`} style={`--node-color: ${node.color};`}>
           <span class="ph-mobile-node__dot"></span>
           <div class="ph-mobile-node__card">
-            <img src={node.logo} alt={node.name} width="72" height="36" loading="lazy" decoding="async" />
+            <img src={node.logo} alt={node.name} width="72" height="36" class:list={{ 'theme-adapt-logo': !node.hub }} loading="lazy" decoding="async" />
             <div>
               <strong>{node.name}</strong>
               <span>{node.text}</span>
