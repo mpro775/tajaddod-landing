@@ -11,7 +11,7 @@ const { locale } = Astro.props as { locale: Locale };
 const copy = dictionary(locale).home.about;
 const mobileNodes = copy.mobileNodes.map((node, index) => ({
   ...node,
-  logo: index === 0 ? '/logos/cnc-logo-white.svg' : index === 1 ? '/logos/tajaddod-icon.svg' : '/logos/liper-logo-white.svg',
+  logo: index === 0 ? '/logos/cnc-logo.svg' : index === 1 ? '/logos/tajaddod-icon.svg' : '/logos/liper-logo.svg',
   color: index === 0 ? 'var(--tj-green)' : index === 1 ? 'var(--tj-text-inverse)' : 'var(--tj-orange)',
   hub: index === 1,
 }));
@@ -85,7 +85,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
         <div class="ph-circuit__node ph-circuit__node--cnc" data-ph-node>
           <div class="ph-node__beacon ph-node__beacon--cnc"></div>
           <div class="ph-node__card">
-            <img src="/logos/cnc-logo-white.svg" alt="CNC" width="72" height="36" class="theme-adapt-logo" loading="lazy" decoding="async"/>
+            <img src="/logos/cnc-logo.svg" alt="CNC" width="72" height="36" class="theme-adapt-logo" loading="lazy" decoding="async"/>
             <span>{copy.circuit.cnc}</span>
           </div>
         </div>
@@ -101,7 +101,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
         <div class="ph-circuit__node ph-circuit__node--liper" data-ph-node>
           <div class="ph-node__beacon"></div>
           <div class="ph-node__card">
-            <img src="/logos/liper-logo-white.svg" alt="Liper" width="72" height="36" class="theme-adapt-logo" loading="lazy" decoding="async"/>
+            <img src="/logos/liper-logo.svg" alt="Liper" width="72" height="36" class="theme-adapt-logo" loading="lazy" decoding="async"/>
             <span>{copy.circuit.liper}</span>
           </div>
         </div>
@@ -139,7 +139,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
         <h3 class="ph-pillar__title">{copy.pillars[0].title}</h3>
         <p class="ph-pillar__text">{copy.pillars[0].text}</p>
         <div class="ph-pillar__brand">
-          <img src="/logos/cnc-logo-white.svg" alt="CNC" width="72" height="36" class="theme-adapt-logo" loading="lazy" decoding="async"/>
+          <img src="/logos/cnc-logo.svg" alt="CNC" width="72" height="36" class="theme-adapt-logo" loading="lazy" decoding="async"/>
         </div>
         <div class="ph-pillar__glow" style="--pillar-color: var(--tj-green);"></div>
       </div>
@@ -175,7 +175,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
         <h3 class="ph-pillar__title">{copy.pillars[2].title}</h3>
         <p class="ph-pillar__text">{copy.pillars[2].text}</p>
         <div class="ph-pillar__brand">
-          <img src="/logos/liper-logo-white.svg" alt="Liper" width="72" height="36" class="theme-adapt-logo" loading="lazy" decoding="async"/>
+          <img src="/logos/liper-logo.svg" alt="Liper" width="72" height="36" class="theme-adapt-logo" loading="lazy" decoding="async"/>
         </div>
         <div class="ph-pillar__glow" style="--pillar-color: var(--tj-orange);"></div>
       </div>
@@ -195,9 +195,9 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
         <span class="ph-quote__mark">"</span>
       </blockquote>
       <div class="ph-closing__brands">
-        <img src="/logos/cnc-logo-white.svg" alt="CNC" width="72" height="36" class="theme-adapt-logo" loading="lazy" decoding="async"/>
+        <img src="/logos/cnc-logo.svg" alt="CNC" width="72" height="36" class="theme-adapt-logo" loading="lazy" decoding="async"/>
         <span class="ph-closing__divider"></span>
-        <img src="/logos/liper-logo-white.svg" alt="Liper" width="72" height="36" class="theme-adapt-logo" loading="lazy" decoding="async"/>
+        <img src="/logos/liper-logo.svg" alt="Liper" width="72" height="36" class="theme-adapt-logo" loading="lazy" decoding="async"/>
       </div>
     </div>
 
@@ -698,7 +698,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
   height: 26px;
   width: auto;
   object-fit: contain;
-  opacity: 0.85;
+  opacity: var(--ph-logo-opacity, 0.85);
 }
 
 .ph-node__card span {
@@ -834,12 +834,12 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
   height: 22px;
   width: auto;
   object-fit: contain;
-  opacity: 0.45;
+  opacity: var(--ph-logo-opacity, 0.45);
   transition: opacity 0.4s ease;
 }
 
 .ph-pillar:hover .ph-pillar__brand img {
-  opacity: 0.85;
+  opacity: var(--ph-logo-opacity, 0.85);
 }
 
 /* Glow effect */
@@ -940,7 +940,7 @@ const mobileNodes = copy.mobileNodes.map((node, index) => ({
   height: 20px;
   width: auto;
   object-fit: contain;
-  opacity: 0.7;
+  opacity: var(--ph-logo-opacity, 0.7);
   transition: opacity 0.4s ease;
 }
 

@@ -154,6 +154,10 @@
   opacity: 0.035;
 }
 
+:root[data-theme="light"] .philosophy-section {
+  --ph-logo-opacity: 1;
+}
+
 :root[data-theme] .philosophy-section :is(.ph-pillar, .ph-quote) {
   color: var(--tj-text-primary);
   background: color-mix(in srgb, var(--tj-bg-surface) 90%, transparent);
