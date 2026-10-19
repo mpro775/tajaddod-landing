@@ -1,0 +1,46 @@
+---
+import type { LandingProduct, Locale, PublicBrand } from '../../lib/api/types';
+import { dictionary, formatMessage } from '../../i18n';
+import { localePath } from '../../lib/content';
+import { productView } from '../../lib/product-view';
+import BrandProductCard from '../cards/BrandProductCard.astro';
+interface Props { products: LandingProduct[]; brands: PublicBrand[]; locale: Locale; }
+const { products, brands, locale } = Astro.props;
+const labels = dictionary(locale).catalog;
+const groups = new Map<string, LandingProduct[]>();
+for (const product of products) {
+  if (!productView(product, locale).identifier) continue;
+  const key = product.brand?.slug || product.brand?.id || '';
+  groups.set(key, [...(groups.get(key) || []), product]);
+}
+const queues = [...groups.values()];
+const selected: LandingProduct[] = [];
+while (selected.length < 6 && queues.some((queue) => queue.length)) {
+  for (const queue of queues) {
+    const product = queue.shift();
+    if (product) selected.push(product);
+    if (selected.length === 6) break;
+  }
+}
+const availableBrands = new Map<string, string>();
+for (const brand of brands) {
+  if (brand.slug) availableBrands.set(brand.slug, locale === 'en' ? brand.nameEn || brand.name || brand.slug : brand.nameAr || brand.name || brand.slug);
+}
+for (const product of products) {
+  const view = productView(product, locale);
+  if (view.brandSlug) availableBrands.set(view.brandSlug, view.brandName || view.brandSlug);
+}
+---
+{selected.length > 0 && (
+  <section class="product-showcase section" id="products">
+    <div class="container">
+      <header class="catalog-section-heading"><p class="eyebrow">{labels.preview}</p><h2>{labels.homeTitle}</h2><p>{labels.homeDescription}</p></header>
+      <div class="catalog-grid catalog-grid--preview">
+        {selected.map((product) => <BrandProductCard product={product} locale={locale} />)}
+      </div>
+      <nav class="catalog-actions" aria-label={labels.products}>
+        {[...availableBrands].map(([slug, name]) => <a class="catalog-button catalog-button--soft" href={localePath(locale, `/brands/${slug}/products`)}>{formatMessage(labels.allProducts, { brand: name })}<span class="directional-icon" aria-hidden="true">←</span></a>)}
+      </nav>
+    </div>
+  </section>
+)}

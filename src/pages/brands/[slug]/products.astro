@@ -1,0 +1,19 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import CatalogPage from '../../../components/pages/BrandProductsCatalogPage.astro';
+import NotFound from '../../../components/pages/NotFound.astro';
+import { loadBrandCatalog, catalogSearch } from '../../../lib/brand-catalog';
+import { dictionary, formatMessage } from '../../../i18n';
+import { text } from '../../../lib/content';
+const locale = 'ar' as const;
+const slug = Astro.params.slug || '';
+const catalog = await loadBrandCatalog(slug, locale, Astro.url.searchParams);
+Astro.response.status = catalog.status;
+const copy = dictionary(locale);
+const name = text(catalog.brand, 'name', locale, slug);
+const path = `/brands/${slug}/products`;
+const canonical = catalog.query.page > 1 ? `${path}?${catalogSearch(catalog.query)}` : path;
+---
+<Layout locale={locale} title={`${formatMessage(copy.catalog.title, { brand: name })} | ${copy.brand}`} description={formatMessage(copy.catalog.description, { brand: name })} canonicalPath={canonical} noindex={catalog.error || Boolean(catalog.query.search || catalog.query.categoryId || catalog.query.sortOrder !== 'desc')}>
+  {catalog.brand ? <CatalogPage locale={locale} catalog={catalog} /> : <NotFound locale={locale} message={catalog.status === 404 ? copy.notFound.description : copy.common.unavailable} />}
+</Layout>

@@ -1,23 +1,23 @@
 ---
 import type { Locale, PublicBrand, PublicProductSummary } from '../../lib/api/types';
-import { toLegacyProduct, toVisualBrand } from '../../lib/visual/legacy-view';
+import { toVisualBrand } from '../../lib/visual/legacy-view';
 import BrandHero from '../sections/BrandHero.astro';
 import BrandOverview from '../sections/BrandOverview.astro';
 import BrandApplications from '../sections/BrandApplications.astro';
 import BrandProducts from '../sections/BrandProducts.astro';
 
-const { locale, brand: sourceBrand, products: sourceProducts = [] } = Astro.props as {
+const { locale, brand: sourceBrand, products = [], productsError = false } = Astro.props as {
   locale: Locale;
   brand: PublicBrand;
   products?: PublicProductSummary[];
+  productsError?: boolean;
 };
 const brand = toVisualBrand(sourceBrand, sourceBrand.slug, locale);
-const products = sourceProducts.map((product) => toLegacyProduct(product, locale));
 ---
 
 <main class="brand-page">
   <BrandHero brand={brand} locale={locale} />
   <BrandOverview brand={brand} locale={locale} />
   <BrandApplications brand={brand} locale={locale} />
-  <BrandProducts brand={brand} products={products} locale={locale} />
+  <BrandProducts brand={brand} products={products} locale={locale} error={productsError} />
 </main>

@@ -1,295 +1,36 @@
 ---
-import type { Locale } from '../../lib/api/types';
-import { dictionary, formatMessage } from '../../i18n';
+import type { LandingProduct, Locale, PublicProductSummary } from '../../lib/api/types';
+import { dictionary } from '../../i18n';
+import { formatWarrantyDuration } from '../../i18n/format';
 import { localePath } from '../../lib/content';
+import { brandAccent, productView, PRODUCT_PLACEHOLDER } from '../../lib/product-view';
 
 interface Props {
-  product: any;
-  brandColor: string;
+  product: LandingProduct | PublicProductSummary;
   locale: Locale;
+  brand?: { name: string; slug: string };
 }
-
-const { product, brandColor, locale } = Astro.props;
-const labels = dictionary(locale).brands.productCard;
-
-// Extract RGB from hex
-const hexToRgb = (hex: string) => {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '230, 57, 70';
-};
-
-const rgb = hexToRgb(brandColor);
-const href = localePath(locale, `/products/${product.slug}`);
+const { product, locale, brand } = Astro.props;
+const view = productView(product, locale);
+const labels = dictionary(locale);
+const warranty = formatWarrantyDuration(view.warrantyYears, locale);
+const brandName = view.brandName || brand?.name;
+const accent = brandAccent(view.brandSlug || brand?.slug);
 ---
-
-<a class="product-card" href={href} style={`--brand: ${brandColor}; --brand-rgb: ${rgb};`}>
-  <!-- Image section -->
-  <div class="product-card__image-wrap">
-    <div class="product-card__image-bg"></div>
-    <img src={product.image} alt={product.name} class="product-card__image" width="800" height="600" loading="lazy" decoding="async" />
-
-    {product.badges && product.badges.length > 0 && (
-      <div class="product-card__badges">
-        {product.badges.map((badge: string) => (
-          <span class="product-card__badge">{badge}</span>
-        ))}
+{view.identifier && (
+  <a class="product-tile" href={localePath(locale, `/products/${encodeURIComponent(view.identifier)}`)} style={`--product-accent: ${accent}`}>
+    <div class="product-tile__media">
+      <img src={view.image} alt={view.image === PRODUCT_PLACEHOLDER ? labels.catalog.imageUnavailable : view.name} width="640" height="480" loading="lazy" decoding="async" data-image-fallback={PRODUCT_PLACEHOLDER} />
+    </div>
+    <div class="product-tile__body">
+      <div class="product-tile__meta">
+        {brandName && <span class="product-tile__brand">{brandName}</span>}
+        {view.category && <span>{view.category}</span>}
       </div>
-    )}
-
-    <!-- Hover overlay -->
-    <div class="product-card__overlay">
-      <span class="product-card__view-text">{labels.details}</span>
+      <h3>{view.name}</h3>
+      {view.description && <p class="product-tile__description">{view.description}</p>}
+      {warranty && <p class="product-tile__warranty">{warranty}</p>}
+      <span class="product-tile__details">{labels.brands.productCard.details}<span class="directional-icon" aria-hidden="true">←</span></span>
     </div>
-  </div>
-
-  <!-- Content -->
-  <div class="product-card__content">
-    <div class="product-card__meta">
-      <span class="product-card__category">{product.category}</span>
-      {product.type && product.type !== product.category && (
-        <span class="product-card__type">{product.type}</span>
-      )}
-    </div>
-
-    <h3 class="product-card__title">{product.name}</h3>
-    <p class="product-card__desc">{product.description}</p>
-
-    <!-- Footer info -->
-    <div class="product-card__footer">
-      {product.warrantyYears && (
-        <div class="product-card__warranty">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          </svg>
-          <span>{formatMessage(labels.warranty, { count: product.warrantyYears })}</span>
-        </div>
-      )}
-    </div>
-  </div>
-
-  <!-- Energy bar -->
-  <div class="product-card__energy">
-    <div class="product-card__energy-fill"></div>
-  </div>
-</a>
-
-<style>
-  .product-card {
-    position: relative;
-    overflow: hidden;
-    background: var(--tj-bg-surface);
-    border: 1px solid var(--tj-border-subtle);
-    border-radius: 22px;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    color: var(--tj-text-primary);
-    text-decoration: none;
-    transition: all 0.4s var(--tj-ease-smooth);
-  }
-
-  .product-card:hover {
-    transform: translateY(-6px);
-    border-color: rgba(var(--brand-rgb), 0.25);
-    box-shadow:
-      0 20px 50px color-mix(in srgb, var(--tj-neutral-950) 30%, transparent),
-      0 0 30px rgba(var(--brand-rgb), 0.06);
-  }
-
-  .product-card:focus-visible {
-    outline: 3px solid var(--tj-focus-ring);
-    outline-offset: 4px;
-  }
-
-  /* ── Image section ─────────────────────────────────────────── */
-  .product-card__image-wrap {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 4/3;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 28px;
-  }
-
-  .product-card__image-bg {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      145deg,
-      rgba(var(--brand-rgb), 0.04),
-      var(--tj-inverse-alpha-02)
-    );
-    transition: background 0.4s ease;
-  }
-
-  .product-card:hover .product-card__image-bg {
-    background: linear-gradient(
-      145deg,
-      rgba(var(--brand-rgb), 0.08),
-      var(--tj-inverse-alpha-03)
-    );
-  }
-
-  .product-card__image {
-    position: relative;
-    z-index: 1;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    transition: transform 0.5s var(--tj-ease-smooth);
-    filter: drop-shadow(0 8px 20px color-mix(in srgb, var(--tj-neutral-950) 15%, transparent));
-  }
-
-  .product-card:hover .product-card__image {
-    transform: scale(1.06);
-  }
-
-  /* Badges */
-  .product-card__badges {
-    position: absolute;
-    z-index: 2;
-    top: 14px;
-    right: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .product-card__badge {
-    background: rgba(var(--brand-rgb), 0.85);
-    color: var(--tj-text-inverse);
-    font-size: var(--tj-text-micro);
-    padding: 4px 10px;
-    border-radius: 8px;
-    font-weight: var(--tj-font-semibold);
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(var(--brand-rgb), 0.2);
-  }
-
-  /* Overlay */
-  .product-card__overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 3;
-    display: grid;
-    place-items: center;
-    background: color-mix(in srgb, var(--tj-neutral-950) 50%, transparent);
-    backdrop-filter: blur(4px);
-    opacity: 0;
-    transition: opacity 0.35s ease;
-    pointer-events: none;
-  }
-
-  .product-card:hover .product-card__overlay {
-    opacity: 1;
-  }
-
-  .product-card__view-text {
-    padding: 10px 24px;
-    border-radius: 999px;
-    background: rgba(var(--brand-rgb), 0.85);
-    color: var(--tj-text-inverse);
-    font-size: var(--tj-text-small);
-    font-weight: var(--tj-font-semibold);
-    box-shadow: 0 8px 24px rgba(var(--brand-rgb), 0.3);
-    transform: translateY(10px);
-    transition: transform 0.35s ease;
-  }
-
-  .product-card:hover .product-card__view-text {
-    transform: translateY(0);
-  }
-
-  /* ── Content section ───────────────────────────────────────── */
-  .product-card__content {
-    padding: 22px 24px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .product-card__meta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .product-card__category {
-    font-size: var(--tj-text-micro);
-    color: var(--brand);
-    font-weight: var(--tj-font-semibold);
-    padding: 3px 10px;
-    border-radius: 6px;
-    background: rgba(var(--brand-rgb), 0.08);
-  }
-
-  .product-card__type {
-    font-size: var(--tj-text-micro);
-    color: var(--tj-text-muted);
-  }
-
-  .product-card__title {
-    font-size: 1.05rem;
-    color: var(--tj-text-primary);
-    margin: 0;
-    line-height: 1.45;
-    font-weight: var(--tj-font-semibold);
-  }
-
-  .product-card__desc {
-    color: var(--tj-text-secondary);
-    font-size: var(--tj-text-small);
-    line-height: 1.7;
-    margin: 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .product-card__footer {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-top: auto;
-    padding-top: 14px;
-    border-top: 1px solid var(--tj-border-subtle);
-  }
-
-  .product-card__warranty {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: var(--tj-text-micro);
-    color: var(--tj-text-secondary);
-  }
-
-  .product-card__warranty svg {
-    width: 14px;
-    height: 14px;
-    color: var(--brand);
-    opacity: 0.7;
-  }
-
-  /* ── Energy bar ────────────────────────────────────────────── */
-  .product-card__energy {
-    height: 2px;
-    background: var(--tj-inverse-alpha-03);
-    overflow: hidden;
-  }
-
-  .product-card__energy-fill {
-    height: 100%;
-    width: 0;
-    background: linear-gradient(90deg, transparent, var(--brand), transparent);
-    transition: width 0.6s var(--tj-ease-energy);
-  }
-
-  .product-card:hover .product-card__energy-fill {
-    width: 100%;
-  }
-</style>
+  </a>
+)}

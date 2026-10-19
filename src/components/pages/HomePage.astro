@@ -4,6 +4,7 @@ import CinematicHero from '../sections/CinematicHero.astro';
 import About from '../sections/About.astro';
 import Achievements from '../sections/Achievements.astro';
 import Brands from '../sections/Brands.astro';
+import FeaturedBrandProducts from '../sections/FeaturedBrandProducts.astro';
 import FeaturedProjects from '../sections/FeaturedProjects.astro';
 import MarketRole from '../sections/MarketRole.astro';
 import Coverage from '../sections/Coverage.astro';
@@ -24,6 +25,7 @@ const settings = home?.settings;
 const projects = settings?.enableProjectsSection === false ? [] : (home?.projects || []);
 const articles = settings?.enableArticlesSection === false ? [] : (home?.articles || []);
 const brands = settings?.enableBrandsSection === false ? [] : (home?.brands || []);
+const products = settings?.enableProductsSection === false ? [] : (home?.products || []);
 ---
 
 <main>
@@ -38,6 +40,7 @@ const brands = settings?.enableBrandsSection === false ? [] : (home?.brands || [
   )}
 
   {brands.length > 0 && <Brands locale={locale} brands={brands} />}
+  {products.length > 0 && <FeaturedBrandProducts locale={locale} products={products} brands={home?.brands || []} />}
   {projects.length > 0 && <FeaturedProjects locale={locale} projects={projects} />}
 
   <MarketRole locale={locale} />

@@ -3,7 +3,7 @@ import { getArticles, getBrands, getProjects } from '../lib/api';
 
 export const GET: APIRoute = async ({ site }) => {
   const origin = (import.meta.env.PUBLIC_SITE_URL || site?.toString() || 'https://tagadodgroup.com').replace(/\/+$/, '');
-  const paths = new Set(['/', '/en', '/projects', '/en/projects', '/news', '/en/news']);
+  const paths = new Set(['/', '/en', '/projects', '/en/projects', '/news', '/en/news', '/brands', '/en/brands']);
 
   try {
     const [projects, articles, brands] = await Promise.all([
@@ -22,6 +22,8 @@ export const GET: APIRoute = async ({ site }) => {
     brands.brands.forEach(({ slug }) => {
       paths.add(`/brands/${slug}`);
       paths.add(`/en/brands/${slug}`);
+      paths.add(`/brands/${slug}/products`);
+      paths.add(`/en/brands/${slug}/products`);
     });
   } catch {
     // Keep the static routes available when the CMS is temporarily unavailable.

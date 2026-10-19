@@ -1,0 +1,59 @@
+---
+import type { Locale } from '../../lib/api/types';
+import type { CatalogData } from '../../lib/brand-catalog';
+import { catalogSearch } from '../../lib/brand-catalog';
+import { dictionary, formatMessage } from '../../i18n';
+import { localePath, text } from '../../lib/content';
+import { toVisualBrand } from '../../lib/visual/legacy-view';
+import BrandLogo from '../ui/BrandLogo.astro';
+import BrandProductCard from '../cards/BrandProductCard.astro';
+interface Props { locale: Locale; catalog: CatalogData; }
+const { locale, catalog } = Astro.props;
+const { brand: source, products, meta, query, categories, error } = catalog;
+const brand = toVisualBrand(source, source?.slug || '', locale);
+const labels = dictionary(locale);
+const copy = labels.catalog;
+const name = text(source, 'name', locale, brand.name);
+const path = localePath(locale, `/brands/${brand.slug}/products`);
+const pageLink = (page: number) => `${path}?${catalogSearch(query, page)}`;
+const clearSearchLink = `${path}?${catalogSearch({ ...query, search: '', page: 1 })}`;
+const page = meta?.page || query.page;
+const totalPages = meta?.totalPages || 0;
+const pages = totalPages > 0 ? [...new Set([1, ...Array.from({ length: 5 }, (_, i) => page - 2 + i), totalPages])].filter((n) => n > 0 && n <= totalPages).sort((a, b) => a - b) : [];
+---
+<main class="brand-catalog">
+  <div class="container">
+    <nav class="catalog-breadcrumb" aria-label={labels.common.breadcrumb}>
+      <a href={localePath(locale, '/')}>{labels.nav.home}</a><span aria-hidden="true">/</span>
+      <a href={localePath(locale, '/brands')}>{labels.nav.brands}</a><span aria-hidden="true">/</span>
+      <a href={localePath(locale, `/brands/${brand.slug}`)}>{name}</a><span aria-hidden="true">/</span><span aria-current="page">{copy.products}</span>
+    </nav>
+    <header class="catalog-header">
+      <div class="catalog-header__logo"><BrandLogo src={brand.logo} slug={brand.id} name={name} /></div>
+      <div><p class="eyebrow">{copy.products}</p><h1>{formatMessage(copy.title, { brand: name })}</h1><p>{formatMessage(copy.description, { brand: name })}</p></div>
+    </header>
+    <form class="catalog-toolbar" method="get" action={path}>
+      <label class="catalog-search"><span>{copy.search}</span><input type="search" name="search" value={query.search} placeholder={copy.searchPlaceholder} maxlength="120" /></label>
+      {categories.length > 0 && <label><span>{copy.category}</span><select name="categoryId" aria-describedby="catalog-category-note"><option value="">{copy.allCategories}</option>{categories.map((category) => <option value={category.id} selected={query.categoryId === category.id}>{category.name}</option>)}{query.categoryId && !categories.some((category) => category.id === query.categoryId) && <option value={query.categoryId} selected>{query.categoryId}</option>}</select></label>}
+      {categories.length === 0 && query.categoryId && <input type="hidden" name="categoryId" value={query.categoryId} />}
+      <input type="hidden" name="sortBy" value="createdAt" />
+      <label><span>{copy.sort}</span><select name="sortOrder"><option value="desc" selected={query.sortOrder === 'desc'}>{copy.newest}</option><option value="asc" selected={query.sortOrder === 'asc'}>{copy.oldest}</option></select></label>
+      <button class="catalog-button" type="submit">{copy.submit}</button>
+      <a class="catalog-text-link" href={path}>{copy.clear}</a>
+      {query.search && <a class="catalog-text-link" href={clearSearchLink}>{copy.clearSearch}</a>}
+      {categories.length > 0 && <p class="catalog-category-note" id="catalog-category-note">{copy.categoryNote}</p>}
+    </form>
+    {!error && meta && <p class="catalog-result-count" role="status">{formatMessage(copy.results, { count: meta.total })}</p>}
+    {error ? <div class="catalog-state" role="alert"><p>{copy.error}</p><a class="catalog-button" href={pageLink(page)}>{copy.retry}</a><a class="catalog-text-link" href={localePath(locale, `/brands/${brand.slug}`)}>{copy.backBrand}</a></div>
+      : products.length > 0 ? <div class="catalog-grid">{products.map((product) => <BrandProductCard product={product} brand={brand} locale={locale} />)}</div>
+      : <div class="catalog-state"><p>{query.search || query.categoryId ? copy.noMatches : copy.empty}</p>{(query.search || query.categoryId) && <a href={path}>{copy.clear}</a>}</div>}
+    {!error && meta && totalPages > 1 && (
+      <nav class="catalog-pagination" aria-label={copy.pagination}>
+        {page > 1 ? <a href={pageLink(page - 1)} rel="prev">{labels.common.previous}</a> : <span aria-disabled="true">{labels.common.previous}</span>}
+        {pages.map((number, index) => <>{index > 0 && number - pages[index - 1] > 1 && <span aria-hidden="true">…</span>}<a href={pageLink(number)} aria-current={number === page ? 'page' : undefined} aria-label={formatMessage(copy.page, { page: number })}>{number}</a></>)}
+        {page < totalPages ? <a href={pageLink(page + 1)} rel="next">{labels.common.next}</a> : <span aria-disabled="true">{labels.common.next}</span>}
+        <p>{formatMessage(copy.pageOf, { page, total: totalPages })}</p>
+      </nav>
+    )}
+  </div>
+</main>

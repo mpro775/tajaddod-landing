@@ -721,89 +721,6 @@
   border-color: color-mix(in srgb, var(--accent) 28%, var(--tj-border-default));
 }
 
-:root[data-theme] .brand-products {
-  color: var(--tj-text-primary);
-  background: var(--tj-bg-section-alt);
-}
-
-:root[data-theme] .brand-products .brand-products__title,
-:root[data-theme] .brand-products .brand-products__cta-text h3 {
-  color: var(--tj-text-primary);
-}
-
-:root[data-theme] .brand-products .brand-products__desc,
-:root[data-theme] .brand-products .brand-products__cta-text p,
-:root[data-theme] .brand-products .brand-products__empty p {
-  color: var(--tj-text-secondary);
-}
-
-:root[data-theme] .brand-products .brand-products__empty span {
-  color: var(--tj-text-muted);
-}
-
-:root[data-theme] .brand-products .filter-pill,
-:root[data-theme] .brand-products .brand-products__empty,
-:root[data-theme] .brand-products .brand-products__cta-card {
-  color: var(--tj-text-secondary);
-  background: var(--tj-bg-surface);
-  border-color: var(--tj-border-subtle);
-}
-
-:root[data-theme] .brand-products .filter-pill:hover {
-  color: var(--tj-text-primary);
-  background: var(--tj-bg-surface-raised);
-}
-
-:root[data-theme] .brand-products .filter-pill.is-active {
-  color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 12%, var(--tj-bg-surface));
-  border-color: color-mix(in srgb, var(--accent) 32%, var(--tj-border-default));
-}
-
-:root[data-theme] .brand-products .filter-pill__count {
-  background: var(--tj-bg-surface-soft);
-}
-
-:root[data-theme] .brand-products .brand-products__cta-btn--outline {
-  color: var(--tj-text-primary);
-  border-color: var(--tj-border-default);
-}
-
-:root[data-theme] .brand-products .brand-products__cta-btn--outline:hover {
-  background: var(--tj-bg-surface-soft);
-  border-color: var(--tj-border-strong);
-}
-
-:root[data-theme] .brand-products .product-card {
-  color: var(--tj-text-primary);
-  background: var(--tj-bg-surface);
-  border-color: var(--tj-border-subtle);
-  box-shadow: var(--tj-shadow-1);
-}
-
-:root[data-theme] .brand-products .product-card:hover {
-  border-color: color-mix(in srgb, var(--brand) 30%, var(--tj-border-default));
-  box-shadow: var(--tj-shadow-3);
-}
-
-:root[data-theme] .brand-products .product-card__type,
-:root[data-theme] .brand-products .product-card__desc,
-:root[data-theme] .brand-products .product-card__warranty {
-  color: var(--tj-text-muted);
-}
-
-:root[data-theme] .brand-products .product-card__title {
-  color: var(--tj-text-primary);
-}
-
-:root[data-theme] .brand-products .product-card__footer {
-  border-color: var(--tj-border-subtle);
-}
-
-:root[data-theme] .brand-products .product-card__energy {
-  background: var(--tj-bg-surface-soft);
-}
-
 /* Controls and fields share a visible focus/disabled contract in both themes. */
 :root[data-theme] :is(button, a, input, select, summary):focus-visible {
   outline-color: var(--tj-focus-ring);
@@ -819,7 +736,6 @@
 @media (prefers-reduced-motion: reduce) {
   :root[data-theme-ready] .achievements-section,
   :root[data-theme-ready] .brand-overview,
-  :root[data-theme-ready] .brand-products,
   :root[data-theme-ready] .pd-page,
   :root[data-theme-ready] .news-detail {
     transition: none;

@@ -3,6 +3,7 @@ import '../styles/global.css';
 import '../styles/content.css';
 import '../styles/semantic-overrides.css';
 import '../styles/mobile-redesign.css';
+import '../styles/catalog.css';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import type { Locale } from '../lib/api/types';
@@ -94,6 +95,10 @@ const altUrl = absolute(alternatePath(canonicalPath, locale));
       import { initializeTheme } from '../scripts/theme';
       import '../scripts/animations';
       initializeTheme();
+    </script>
+    <script>
+      import { initProductMedia } from '../scripts/productMedia';
+      initProductMedia();
     </script>
   </body>
 </html>

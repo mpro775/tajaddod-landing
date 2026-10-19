@@ -1,0 +1,12 @@
+---
+interface Props { src?: string; slug: string; name: string; }
+const { src, slug, name } = Astro.props;
+const fallback = ['cnc', 'liper'].includes(slug.toLowerCase()) ? `/logos/${slug.toLowerCase()}-logo.svg` : undefined;
+---
+<span class="brand-logo-stage">
+  <img src={src || fallback} alt={name} width="360" height="144" data-brand-logo data-image-fallback={fallback} decoding="async" />
+</span>
+<style>
+  .brand-logo-stage { display:grid; place-items:center; width:100%; min-width:0; padding:clamp(1rem,3vw,2rem); border:1px solid #dde6e9; border-radius:1.25rem; background:#fff; }
+  .brand-logo-stage img { width:100%; height:auto; max-width:22rem; max-height:9rem; object-fit:contain; filter:none; }
+</style>

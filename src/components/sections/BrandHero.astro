@@ -3,6 +3,7 @@ import type { Locale } from '../../lib/api/types';
 import type { VisualBrand } from '../../lib/visual/legacy-view';
 import { localePath } from '../../lib/content';
 import { dictionary, formatMessage } from '../../i18n';
+import BrandLogo from '../ui/BrandLogo.astro';
 
 interface Props {
   brand: VisualBrand;
@@ -47,19 +48,14 @@ const accent = accentMap[brand.id] || accentMap.cnc;
     <nav class="brand-hero__breadcrumb" aria-label={labels.breadcrumb}>
       <a href={localePath(locale, '/')}>{labels.home}</a>
       <svg class="directional-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-      <a href={`${localePath(locale, '/')}#brands`}>{labels.brands}</a>
+      <a href={localePath(locale, '/brands')}>{labels.brands}</a>
       <svg class="directional-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
       <span>{brand.displayName}</span>
     </nav>
 
     <div class="brand-hero__content">
-      <!-- Logo with orbit ring -->
-      <div class="brand-hero__logo-orbit">
-        <div class="brand-hero__orbit-ring"></div>
-        <div class="brand-hero__orbit-ring brand-hero__orbit-ring--2"></div>
-        <div class="brand-hero__logo-wrapper">
-          <img src={brand.whiteLogo} alt={brand.name} class="brand-hero__logo" width="120" height="120" />
-        </div>
+      <div class="brand-hero__identity">
+        <BrandLogo src={brand.logo} slug={brand.id} name={brand.name} />
       </div>
 
       <!-- Category pill -->
@@ -302,83 +298,7 @@ const accent = accentMap[brand.id] || accentMap.cnc;
     align-items: center;
   }
 
-  /* ── Logo with orbit ───────────────────────────────────────── */
-  .brand-hero__logo-orbit {
-    position: relative;
-    width: 180px;
-    height: 180px;
-    margin-bottom: 36px;
-  }
-
-  .brand-hero__orbit-ring {
-    position: absolute;
-    inset: -8px;
-    border-radius: 50%;
-    border: 1px solid rgba(var(--accent-rgb), 0.15);
-    animation: orbitSpin 20s linear infinite;
-  }
-
-  .brand-hero__orbit-ring::after {
-    content: '';
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.6);
-  }
-
-  .brand-hero__orbit-ring--2 {
-    inset: -22px;
-    border-color: var(--tj-inverse-alpha-06);
-    animation-duration: 30s;
-    animation-direction: reverse;
-  }
-
-  .brand-hero__orbit-ring--2::after {
-    width: 5px;
-    height: 5px;
-    background: rgba(155, 232, 255, 0.5);
-    box-shadow: 0 0 8px rgba(155, 232, 255, 0.4);
-  }
-
-  @keyframes orbitSpin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-
-  .brand-hero__logo-wrapper {
-    position: absolute;
-    inset: 0;
-    background: var(--tj-inverse-alpha-04);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 50%;
-    border: 1px solid rgba(var(--accent-rgb), 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 36px;
-    box-shadow:
-      0 0 40px rgba(var(--accent-rgb), 0.1),
-      inset 0 0 30px rgba(var(--accent-rgb), 0.05);
-    transition: box-shadow 0.5s ease;
-  }
-
-  .brand-hero__logo-orbit:hover .brand-hero__logo-wrapper {
-    box-shadow:
-      0 0 60px rgba(var(--accent-rgb), 0.2),
-      inset 0 0 40px rgba(var(--accent-rgb), 0.08);
-  }
-
-  .brand-hero__logo {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    filter: drop-shadow(0 4px 20px rgba(var(--accent-rgb), 0.15));
-  }
+  .brand-hero__identity { width: min(100%, 24rem); margin-bottom: 2rem; }
 
   /* ── Category pill ─────────────────────────────────────────── */
   .brand-hero__category {
@@ -527,16 +447,6 @@ const accent = accentMap[brand.id] || accentMap.cnc;
     .brand-hero {
       min-height: auto;
       padding: 120px 0 60px;
-    }
-
-    .brand-hero__logo-orbit {
-      width: 140px;
-      height: 140px;
-      margin-bottom: 28px;
-    }
-
-    .brand-hero__logo-wrapper {
-      padding: 28px;
     }
 
     .brand-hero__badges {

@@ -13,7 +13,6 @@
     .fp-bento,
     .pd-related__grid,
     .nd-related__grid,
-    .brand-products__grid,
     .related-products__grid,
     .brands-list__grid,
     .cards-grid,
@@ -32,7 +31,6 @@
     .fp-bento,
     .pd-related__grid,
     .nd-related__grid,
-    .brand-products__grid,
     .related-products__grid,
     .brands-list__grid,
     .cards-grid,
@@ -83,24 +81,6 @@
     box-shadow: none;
   }
 
-  :root[data-theme] .brand-index-card {
-    grid-template-columns: minmax(0, 1fr);
-    min-height: 0;
-    padding: 1.25rem;
-    gap: 1rem;
-  }
-
-  :root[data-theme] .brand-index-card__logo {
-    min-height: 6rem;
-    padding: 1rem;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
-  :root[data-theme] .featured-projects .fp-card .fp-card__body {
-    padding: 1rem;
-  }
-
   :root[data-theme] .featured-projects .fp-card .fp-card__title {
     font-size: 1.15rem;
   }
@@ -116,7 +96,7 @@
     margin-bottom: 1.75rem;
   }
 
-  :root[data-theme] :is(.fp-title, .ln-title, .mr-title, .ej-header__title, .brand-products__title) {
+  :root[data-theme] :is(.fp-title, .ln-title, .mr-title, .ej-header__title) {
     font-size: clamp(1.75rem, 8vw, 2.35rem);
   }
 
@@ -860,7 +840,7 @@
 
   :root[data-theme] :is(
     .projects-grid, .news-grid, .ln-grid, .fp-bento,
-    .pd-related__grid, .nd-related__grid, .brand-products__grid,
+    .pd-related__grid, .nd-related__grid,
     .related-products__grid, .brands-list__grid, .cards-grid,
     .pd-brands-grid, .brand-apps__grid
   ) {
@@ -869,8 +849,8 @@
 
   :root[data-theme] :is(
     .project-card, .news-card, .ln-card, .fp-card,
-    .pd-related-card, .nd-related-card, .product-card,
-    .brand-index-card, .content-card
+    .pd-related-card, .nd-related-card,
+    .content-card
   ) {
     min-width: 0;
     border-radius: .875rem;
@@ -887,7 +867,7 @@
   :root[data-theme] :is(
     .project-card .card-content h2, .news-card__content h2,
     .pd-related-card__title, .nd-related-card__title,
-    .content-card__body h2, .content-card__body h3, .brand-index-card h2
+    .content-card__body h2, .content-card__body h3
   ) {
     font-size: .95rem;
     line-height: 1.45;
@@ -897,7 +877,7 @@
     .project-card .card-content p, .project-card .card-content > span,
     .news-card__content p, .news-card__content > span,
     .pd-related-card__summary, .nd-related-card__excerpt,
-    .content-card__body p, .brand-index-card p, .brand-index-card span
+    .content-card__body p
   ) {
     font-size: .78rem;
     line-height: 1.6;
@@ -941,20 +921,6 @@
   ) {
     flex-wrap: wrap;
     font-size: .72rem;
-  }
-
-  :root[data-theme] .brand-index-card {
-    padding: .75rem;
-    gap: .75rem;
-  }
-
-  :root[data-theme] .brand-index-card__logo {
-    min-height: 4.5rem;
-    padding: .625rem;
-  }
-
-  :root[data-theme] .brand-index-card > strong {
-    font-size: .78rem;
   }
 
   :root[data-theme] .related-products__grid a {
@@ -1096,15 +1062,6 @@
     padding-block: calc(var(--tj-header-height) + 2rem) 3rem;
   }
 
-  :root[data-theme] .brand-hero__logo-orbit {
-    width: 7rem;
-    height: 7rem;
-  }
-
-  :root[data-theme] .brand-hero__logo-wrapper {
-    padding: 1.25rem;
-  }
-
   :root[data-theme] .brand-hero__title {
     font-size: clamp(2rem, 10vw, 2.75rem);
   }
@@ -1169,54 +1126,7 @@
     height: 3rem;
   }
 
-  :root[data-theme] .brand-products__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: .75rem;
-  }
 
-  :root[data-theme] .product-card {
-    border-radius: 1rem;
-  }
-
-  :root[data-theme] .product-card__image-wrap {
-    padding: 1rem;
-  }
-
-  :root[data-theme] .product-card__content {
-    padding: .875rem;
-  }
-
-  :root[data-theme] .product-card__title {
-    font-size: .95rem;
-  }
-
-  :root[data-theme] .product-card__desc {
-    display: -webkit-box;
-    overflow: hidden;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    font-size: .78rem;
-  }
-
-  :root[data-theme] .product-card__overlay {
-    display: none;
-  }
-
-  :root[data-theme] .brand-products__cta-card {
-    padding: 1.25rem;
-  }
-
-  :root[data-theme] .brand-products__cta-actions {
-    display: grid;
-    grid-template-columns: 1fr;
-    width: 100%;
-  }
-
-  :root[data-theme] .brand-products__cta-btn {
-    width: 100%;
-    min-height: var(--tj-touch-target);
-    justify-content: center;
-  }
 }
 
 @media (min-width: 390px) and (max-width: 767px) {
@@ -1283,7 +1193,7 @@
     grid-column: 3;
   }
 
-  :root[data-theme] :is(.projects-grid, .news-grid, .brand-products__grid) {
+  :root[data-theme] :is(.projects-grid, .news-grid) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 

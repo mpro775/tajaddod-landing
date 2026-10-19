@@ -107,10 +107,12 @@ export interface ArticleCollection {
 }
 
 export interface ProductReference {
-  id: string;
+  id?: string;
+  _id?: string;
   slug?: string;
-  nameAr: string;
-  nameEn: string;
+  name?: string;
+  nameAr?: string;
+  nameEn?: string;
   image?: string;
 }
 
@@ -155,6 +157,7 @@ export interface ProductAttributeValue {
   id?: string;
   label?: string;
   value?: string;
+  valueEn?: string;
   name?: string;
   nameEn?: string;
   hexCode?: string;

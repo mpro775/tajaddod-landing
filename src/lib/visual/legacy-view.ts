@@ -10,8 +10,8 @@ import type {
 } from '../api/types';
 import { categoryLabels } from '../../i18n';
 import { adaptArticle } from '../adapters/article.adapter';
-import { adaptProduct, adaptPublicProduct } from '../adapters/product.adapter';
 import { adaptProject, formatProjectPeriod } from '../adapters/project.adapter';
+import { productView } from '../product-view';
 
 export const DEFAULT_PROJECT_IMAGE = '/assets/projects/project.webp';
 export const DEFAULT_NEWS_IMAGE = '/assets/news/news.webp';
@@ -204,23 +204,15 @@ export function toLegacyArticle(article: ArticleSummary | ArticleDetail, locale:
 }
 
 export function toLegacyProduct(product: LandingProduct | PublicProductSummary, locale: Locale) {
-  const isLanding = 'landingOrder' in product;
-  const adapted = isLanding
-    ? adaptProduct(product as LandingProduct, locale)
-    : adaptPublicProduct(product as PublicProductSummary, locale);
-  const mainImage = product.mainImage;
+  const view = productView(product, locale);
   return {
-    slug: product.slug || product.id || (product as any)._id,
-    name: adapted.name,
-    description: adapted.description,
-    image: typeof mainImage === 'string' ? mainImage : mainImage?.url || '/assets/projects/project.webp',
-    category: product.category
-      ? (locale === 'en' ? product.category.nameEn || product.category.nameAr : product.category.nameAr || product.category.nameEn)
-      : (locale === 'en' ? 'Products' : 'منتجات'),
-    type: product.brand
-      ? (locale === 'en' ? product.brand.nameEn || product.brand.nameAr : product.brand.nameAr || product.brand.nameEn)
-      : '',
+    slug: view.identifier,
+    name: view.name,
+    description: view.description,
+    image: view.image,
+    category: view.category || (locale === 'en' ? 'Products' : 'منتجات'),
+    type: view.brandName,
     badges: [],
-    warrantyYears: 'warrantyDurationYears' in product ? product.warrantyDurationYears : undefined,
+    warrantyYears: view.warrantyYears,
   };
 }
