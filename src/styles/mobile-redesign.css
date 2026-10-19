@@ -113,12 +113,12 @@
   }
 
   :root[data-theme] .brand-lockup {
-    width: 7.25rem;
+    width: clamp(8.5rem, 38vw, 10.5rem);
     min-height: 2.75rem;
   }
 
   :root[data-theme] .brand-lockup__logo {
-    width: 7.25rem;
+    width: 100%;
   }
 
   :root[data-theme] .menu-toggle,
@@ -241,7 +241,8 @@
   }
 
   :root[data-theme] .tajaddod-logo-hero {
-    width: 7.75rem;
+    width: clamp(12rem, 58vw, 18rem);
+    max-width: 100%;
     height: auto;
     margin-bottom: .75rem;
     filter: none;
@@ -1138,12 +1139,11 @@
 
 @media (max-width: 359px) {
   :root[data-theme] .header-inner {
-    grid-template-columns: minmax(44px, 1fr) 6.5rem minmax(88px, 1fr);
+    grid-template-columns: minmax(44px, 1fr) 8.25rem minmax(100px, 1fr);
   }
 
-  :root[data-theme] .brand-lockup,
-  :root[data-theme] .brand-lockup__logo {
-    width: 6.5rem;
+  :root[data-theme] .brand-lockup {
+    width: 8.25rem;
   }
 
   :root[data-theme] .theme-quick-toggle--mobile {
