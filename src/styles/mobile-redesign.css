@@ -4,6 +4,75 @@
  * screens while preserving one DOM, one data source, and the desktop layouts.
  */
 
+/* Collection cards keep two columns throughout phone and small-tablet sizes. */
+@media (max-width: 1023px) {
+  :root[data-theme] :is(
+    .projects-grid,
+    .news-grid,
+    .ln-grid,
+    .fp-bento,
+    .pd-related__grid,
+    .nd-related__grid,
+    .brand-products__grid,
+    .related-products__grid,
+    .brands-list__grid,
+    .cards-grid,
+    .pd-brands-grid,
+    .brand-apps__grid
+  ) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  :root[data-theme] :is(
+    .projects-grid,
+    .news-grid,
+    .ln-grid,
+    .fp-bento,
+    .pd-related__grid,
+    .nd-related__grid,
+    .brand-products__grid,
+    .related-products__grid,
+    .brands-list__grid,
+    .cards-grid,
+    .pd-brands-grid,
+    .brand-apps__grid
+  ) > * {
+    min-width: 0;
+  }
+
+  :root[data-theme] .fp-side {
+    display: contents;
+  }
+
+  :root[data-theme] .brand-index-card {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+    padding: 1.25rem;
+    gap: 1rem;
+  }
+
+  :root[data-theme] .brand-index-card__logo {
+    min-height: 6rem;
+    padding: 1rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root[data-theme] .fp-card--hero {
+    min-height: 20rem;
+  }
+
+  :root[data-theme] .featured-projects .fp-card .fp-card__body {
+    padding: 1rem;
+  }
+
+  :root[data-theme] .featured-projects .fp-card .fp-card__title {
+    font-size: 1.15rem;
+  }
+}
+
 @media (max-width: 767px) {
   :root[data-theme] {
     --tj-mobile-card-radius: 1.25rem;
@@ -354,65 +423,81 @@
     flex-wrap: wrap;
   }
 
-  /* Featured projects: one feature plus dense thumbnail rows. */
+  /* Featured projects: compact tiles in the shared two-column grid. */
   :root[data-theme] .fp-card--hero {
-    min-height: 26rem;
+    min-height: 0;
     aspect-ratio: auto;
   }
 
   :root[data-theme] .fp-card--hero .fp-card__summary {
     display: block;
     overflow: visible;
-  }
-
-  :root[data-theme] .fp-side {
-    gap: .75rem;
+    font-size: .78rem;
+    line-height: 1.6;
+    margin-bottom: .75rem;
   }
 
   :root[data-theme] .fp-card--side {
-    display: grid;
-    grid-template-columns: 7rem minmax(0, 1fr) 2.75rem;
-    min-height: 7.5rem;
-    border-radius: var(--tj-mobile-card-radius);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 0;
   }
 
   :root[data-theme] .fp-card--side .fp-card__media {
     position: relative;
-    grid-column: 1;
-    grid-row: 1;
-    aspect-ratio: 1;
+    flex-shrink: 0;
+    aspect-ratio: 16 / 10;
   }
 
   :root[data-theme] .fp-card--side .fp-card__overlay {
     background: linear-gradient(to top, rgb(2 11 18 / .35), transparent);
   }
 
-  :root[data-theme] .fp-card--side .fp-card__body {
-    grid-column: 2;
-    grid-row: 1;
-    align-self: center;
-    padding: .875rem;
+  :root[data-theme] .featured-projects .fp-card .fp-card__body {
+    padding: .75rem;
   }
 
   :root[data-theme] .fp-card--side .fp-card__arrow {
-    position: relative;
-    inset: auto;
-    grid-column: 3;
-    grid-row: 1;
-    align-self: center;
-    justify-self: center;
+    inset: .375rem auto auto .375rem;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: .5rem;
   }
 
-  :root[data-theme] .fp-card--side .fp-card__title {
+  :root[data-theme] .featured-projects .fp-card .fp-card__title {
     display: block;
     margin-bottom: .5rem;
     overflow: visible;
-    font-size: 1rem;
+    font-size: .95rem;
   }
 
-  :root[data-theme] .fp-card--side .fp-card__badge {
+  :root[data-theme] .featured-projects .fp-card .fp-card__badge {
     position: static;
     width: fit-content;
+    max-width: 100%;
+    margin-bottom: .5rem;
+    padding: .25rem .5rem;
+    font-size: .65rem;
+  }
+
+  :root[data-theme] .fp-card__meta {
+    gap: .375rem .625rem;
+  }
+
+  :root[data-theme] .fp-card__meta-item {
+    min-width: 0;
+    font-size: .72rem;
+    overflow-wrap: anywhere;
+  }
+
+  :root[data-theme] .fp-card__meta-item svg {
+    flex-shrink: 0;
+  }
+
+  :root[data-theme] .fp-card__cta {
+    padding: .5rem .625rem;
+    font-size: .75rem;
   }
 
   /* MarketRole: semantic source -> hub -> destination -> audiences. */
@@ -620,55 +705,51 @@
     filter: blur(72px);
   }
 
-  /* Latest news: featured story followed by compact rows. */
-  :root[data-theme] .ln-grid {
-    gap: .75rem;
-  }
-
-  :root[data-theme] .ln-card:first-child .ln-card__media {
+  /* Latest news uses the same compact vertical cards in both columns. */
+  :root[data-theme] .ln-card .ln-card__media {
     aspect-ratio: 16 / 10;
   }
 
-  :root[data-theme] .ln-card:nth-child(n + 2) {
-    display: grid;
-    grid-template-columns: 7rem minmax(0, 1fr);
-    min-height: 7.5rem;
-    border-radius: var(--tj-mobile-card-radius);
+  :root[data-theme] .ln-card .ln-card__category {
+    inset: .375rem .375rem auto auto;
+    max-width: calc(100% - .75rem);
+    padding: .2rem .4rem;
+    font-size: .65rem;
   }
 
-  :root[data-theme] .ln-card:nth-child(n + 2) .ln-card__media {
-    grid-column: 1;
-    grid-row: 1;
-    min-height: 100%;
-    aspect-ratio: 1;
-  }
-
-  :root[data-theme] .ln-card:nth-child(n + 2) .ln-card__category,
-  :root[data-theme] .ln-card:nth-child(n + 2) .ln-card__author,
-  :root[data-theme] .ln-card:nth-child(n + 2) .ln-card__excerpt,
-  :root[data-theme] .ln-card:nth-child(n + 2) .ln-card__footer {
-    display: none;
-  }
-
-  :root[data-theme] .ln-card:nth-child(n + 2) .ln-card__date-chip {
+  :root[data-theme] .ln-card .ln-card__date-chip {
     inset: auto .4rem .4rem;
     max-width: calc(100% - .8rem);
     padding: .3rem .4rem;
     font-size: .65rem;
   }
 
-  :root[data-theme] .ln-card:nth-child(n + 2) .ln-card__content {
-    grid-column: 2;
-    grid-row: 1;
-    align-self: center;
-    padding: .875rem;
+  :root[data-theme] .ln-card .ln-card__content {
+    padding: .75rem;
   }
 
-  :root[data-theme] .ln-card:nth-child(n + 2) .ln-card__title {
+  :root[data-theme] .ln-card .ln-card__title {
     display: block;
-    margin: 0;
+    margin: 0 0 .5rem;
     overflow: visible;
-    font-size: 1rem;
+    font-size: .95rem;
+  }
+
+  :root[data-theme] .ln-card__author {
+    gap: .375rem;
+    font-size: .7rem;
+  }
+
+  :root[data-theme] .ln-card__excerpt {
+    font-size: .78rem;
+  }
+
+  :root[data-theme] .ln-card__footer {
+    padding-top: .625rem;
+  }
+
+  :root[data-theme] .ln-card__read-more {
+    font-size: .75rem;
   }
 
   :root[data-theme] :is(.ln-ambient__orb, .fp-ambient__orb) {
@@ -762,61 +843,132 @@
     margin: 0 0 1.5rem;
   }
 
-  :root[data-theme] .project-card {
-    border-radius: var(--tj-mobile-card-radius);
-  }
-
   :root[data-theme] .project-card .card-image {
     aspect-ratio: 16 / 10;
   }
 
-  :root[data-theme] .project-card .card-content {
-    padding: 1.125rem;
+  :root[data-theme] :is(
+    .projects-grid, .news-grid, .ln-grid, .fp-bento,
+    .pd-related__grid, .nd-related__grid, .brand-products__grid,
+    .related-products__grid, .brands-list__grid, .cards-grid,
+    .pd-brands-grid, .brand-apps__grid
+  ) {
+    gap: .625rem;
   }
 
-  :root[data-theme] .project-card .card-title {
-    font-size: 1.15rem;
+  :root[data-theme] :is(
+    .project-card, .news-card, .ln-card, .fp-card,
+    .pd-related-card, .nd-related-card, .product-card,
+    .brand-index-card, .content-card
+  ) {
+    min-width: 0;
+    border-radius: .875rem;
   }
 
-  :root[data-theme] .news-index .news-grid {
+  :root[data-theme] :is(
+    .project-card .card-content, .news-card__content,
+    .pd-related-card__body, .nd-related-card__body, .content-card__body
+  ) {
+    padding: .75rem;
+    gap: .5rem;
+  }
+
+  :root[data-theme] :is(
+    .project-card .card-content h2, .news-card__content h2,
+    .pd-related-card__title, .nd-related-card__title,
+    .content-card__body h2, .content-card__body h3, .brand-index-card h2
+  ) {
+    font-size: .95rem;
+    line-height: 1.45;
+  }
+
+  :root[data-theme] :is(
+    .project-card .card-content p, .project-card .card-content > span,
+    .news-card__content p, .news-card__content > span,
+    .pd-related-card__summary, .nd-related-card__excerpt,
+    .content-card__body p, .brand-index-card p, .brand-index-card span
+  ) {
+    font-size: .78rem;
+    line-height: 1.6;
+  }
+
+  :root[data-theme] :is(
+    .project-card .card-content > span, .news-card__content > span,
+    .fp-card--hero .fp-card__summary
+  ) {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+
+  :root[data-theme] :is(
+    .project-card .card-image > span, .news-card__image > span,
+    .nd-related-card__cat
+  ) {
+    inset-block-start: .375rem;
+    inset-inline-end: .375rem;
+    max-width: calc(100% - .75rem);
+    padding: .2rem .4rem;
+    font-size: .65rem;
+  }
+
+  :root[data-theme] .pd-related-card__badges {
+    inset: .375rem .375rem auto;
+    flex-wrap: wrap;
+    gap: .25rem;
+  }
+
+  :root[data-theme] :is(.pd-related-card__cat, .pd-related-card__year) {
+    padding: .2rem .4rem;
+    font-size: .65rem;
+  }
+
+  :root[data-theme] :is(
+    .pd-related-card__meta, .nd-related-card__date,
+    .pd-related-card__cta, .nd-related-card__cta
+  ) {
+    flex-wrap: wrap;
+    font-size: .72rem;
+  }
+
+  :root[data-theme] .brand-index-card {
+    padding: .75rem;
     gap: .75rem;
   }
 
-  :root[data-theme] .news-index .news-card:first-child {
-    border-radius: var(--tj-mobile-card-radius);
+  :root[data-theme] .brand-index-card__logo {
+    min-height: 4.5rem;
+    padding: .625rem;
   }
 
-  :root[data-theme] .news-index .news-card:nth-child(n + 2) {
-    display: grid;
-    grid-template-columns: 7rem minmax(0, 1fr);
-    min-height: 7.5rem;
-    border-radius: 1rem;
+  :root[data-theme] .brand-index-card > strong {
+    font-size: .78rem;
   }
 
-  :root[data-theme] .news-index .news-card:nth-child(n + 2) .news-card__image-wrap {
-    grid-column: 1;
-    grid-row: 1;
-    height: 100%;
-    aspect-ratio: 1;
+  :root[data-theme] .related-products__grid a {
+    min-width: 0;
+    padding: .625rem;
+    gap: .625rem;
+    font-size: .85rem;
   }
 
-  :root[data-theme] .news-index .news-card:nth-child(n + 2) .news-card__category,
-  :root[data-theme] .news-index .news-card:nth-child(n + 2) .news-card__excerpt {
-    display: none;
+  :root[data-theme] .pd-brand-card {
+    position: relative;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .5rem;
+    padding: .625rem;
   }
 
-  :root[data-theme] .news-index .news-card:nth-child(n + 2) .news-card__content {
-    grid-column: 2;
-    grid-row: 1;
-    align-self: center;
-    padding: .875rem;
+  :root[data-theme] .pd-brand-card__name {
+    font-size: .8rem;
   }
 
-  :root[data-theme] .news-index .news-card:nth-child(n + 2) .news-card__title {
-    display: block;
-    margin: 0;
-    overflow: visible;
-    font-size: 1rem;
+  :root[data-theme] .pd-brand-card__arrow {
+    position: absolute;
+    inset-block-start: .625rem;
+    inset-inline-end: .625rem;
   }
 
   /* Detail pages: compact media heroes and readable long-form content. */
@@ -1086,24 +1238,12 @@
   :root[data-theme] .achievements-grid,
   :root[data-theme] .coverage-grid,
   :root[data-theme] .mr-mobile-flow__audiences,
-  :root[data-theme] .overview-stats,
-  :root[data-theme] .brand-apps__grid,
-  :root[data-theme] .brand-products__grid {
+  :root[data-theme] .overview-stats {
     grid-template-columns: 1fr;
   }
 
   :root[data-theme] .achievement-card:last-child {
     grid-column: auto;
-  }
-
-  :root[data-theme] .fp-card--side,
-  :root[data-theme] .ln-card:nth-child(n + 2),
-  :root[data-theme] .news-index .news-card:nth-child(n + 2) {
-    grid-template-columns: 6rem minmax(0, 1fr);
-  }
-
-  :root[data-theme] .fp-card--side .fp-card__arrow {
-    display: none;
   }
 
   :root[data-theme] .pd-stats-bar {
